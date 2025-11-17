@@ -9,14 +9,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 
 export const Header = () => {
-  const [currency, setCurrency] = useState("USD");
-  const [language, setLanguage] = useState("EN");
+  const { currency, language, setCurrency, setLanguage } = useCurrency();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const currencies = ["ZAR", "USD", "EUR", "GBP"];
-  const languages = ["EN", "ES", "FR", "DE"];
+  const currencies: Currency[] = ["ZAR", "USD", "EUR", "GBP"];
+  const languages: Language[] = ["EN", "ES", "FR", "DE"];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-b border-border">

@@ -1,67 +1,80 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import tutorialBundles from "@/assets/tutorial-bundles.jpg";
+import tutorialWigs from "@/assets/tutorial-wigs.jpg";
+import tutorialFrontals from "@/assets/tutorial-frontals.jpg";
 
 const reels = [
   {
     id: 1,
     title: "Hair Bundle Unboxing",
-    image: "/placeholder.svg",
-    topic: "Bundles Collection"
+    image: tutorialBundles,
+    topic: "Bundles Collection",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 2,
     title: "Wig Installation Tutorial",
-    image: "/placeholder.svg",
-    topic: "Installation Guide"
+    image: tutorialWigs,
+    topic: "Installation Guide",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 3,
     title: "Frontal Lace Styling",
-    image: "/placeholder.svg",
-    topic: "Styling Tips"
+    image: tutorialFrontals,
+    topic: "Styling Tips",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 4,
     title: "Customer Transformation",
-    image: "/placeholder.svg",
-    topic: "Before & After"
+    image: tutorialBundles,
+    topic: "Before & After",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 5,
     title: "Hair Care Routine",
-    image: "/placeholder.svg",
-    topic: "Maintenance Tips"
+    image: tutorialWigs,
+    topic: "Maintenance Tips",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 6,
     title: "Color Matching Guide",
-    image: "/placeholder.svg",
-    topic: "How To"
+    image: tutorialFrontals,
+    topic: "How To",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 7,
     title: "Custom Wig Making",
-    image: "/placeholder.svg",
-    topic: "Behind the Scenes"
+    image: tutorialBundles,
+    topic: "Behind the Scenes",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 8,
     title: "Ponytail Install",
-    image: "/placeholder.svg",
-    topic: "Quick Style"
+    image: tutorialWigs,
+    topic: "Quick Style",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 9,
     title: "Virgin Hair Quality",
-    image: "/placeholder.svg",
-    topic: "Product Showcase"
+    image: tutorialFrontals,
+    topic: "Product Showcase",
+    link: "https://www.instagram.com/reel/"
   },
   {
     id: 10,
     title: "Curling Techniques",
-    image: "/placeholder.svg",
-    topic: "Styling Tutorial"
+    image: tutorialBundles,
+    topic: "Styling Tutorial",
+    link: "https://www.instagram.com/reel/"
   }
 ];
 
@@ -117,9 +130,12 @@ export const InstagramReels = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 max-w-5xl">
               {visibleReels.map((reel, idx) => (
-                <div
+                <a
                   key={reel.id}
-                  className={`relative aspect-[9/16] rounded-lg overflow-hidden transition-all duration-500 ${
+                  href={reel.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group relative aspect-[9/16] rounded-lg overflow-hidden transition-all duration-500 cursor-pointer ${
                     idx === 1 
                       ? 'scale-100 md:scale-110 z-10 shadow-2xl shadow-primary/20' 
                       : 'scale-90 opacity-50 md:opacity-70'
@@ -128,14 +144,20 @@ export const InstagramReels = () => {
                   <img
                     src={reel.image}
                     alt={reel.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="bg-primary/90 rounded-full p-2">
+                      <ExternalLink className="h-4 w-4 text-primary-foreground" />
+                    </div>
+                  </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                     <p className="text-xs text-primary mb-1">{reel.topic}</p>
                     <h3 className="font-semibold">{reel.title}</h3>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
 
