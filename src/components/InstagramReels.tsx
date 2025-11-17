@@ -1,84 +1,87 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import tutorialBundles from "@/assets/tutorial-bundles.jpg";
 import tutorialWigs from "@/assets/tutorial-wigs.jpg";
 import tutorialFrontals from "@/assets/tutorial-frontals.jpg";
 
-const reels = [
-  {
-    id: 1,
-    title: "Hair Bundle Unboxing",
-    image: tutorialBundles,
-    topic: "Bundles Collection",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 2,
-    title: "Wig Installation Tutorial",
-    image: tutorialWigs,
-    topic: "Installation Guide",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 3,
-    title: "Frontal Lace Styling",
-    image: tutorialFrontals,
-    topic: "Styling Tips",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 4,
-    title: "Customer Transformation",
-    image: tutorialBundles,
-    topic: "Before & After",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 5,
-    title: "Hair Care Routine",
-    image: tutorialWigs,
-    topic: "Maintenance Tips",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 6,
-    title: "Color Matching Guide",
-    image: tutorialFrontals,
-    topic: "How To",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 7,
-    title: "Custom Wig Making",
-    image: tutorialBundles,
-    topic: "Behind the Scenes",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 8,
-    title: "Ponytail Install",
-    image: tutorialWigs,
-    topic: "Quick Style",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 9,
-    title: "Virgin Hair Quality",
-    image: tutorialFrontals,
-    topic: "Product Showcase",
-    link: "https://www.instagram.com/reel/"
-  },
-  {
-    id: 10,
-    title: "Curling Techniques",
-    image: tutorialBundles,
-    topic: "Styling Tutorial",
-    link: "https://www.instagram.com/reel/"
-  }
-];
-
 export const InstagramReels = () => {
+  const { t } = useCurrency();
+  
+  const reels = [
+    {
+      id: 1,
+      title: "Hair Bundle Unboxing",
+      image: tutorialBundles,
+      topic: "Bundles Collection",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 2,
+      title: "Wig Installation Tutorial",
+      image: tutorialWigs,
+      topic: "Installation Guide",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 3,
+      title: "Frontal Lace Styling",
+      image: tutorialFrontals,
+      topic: "Styling Tips",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 4,
+      title: "Customer Transformation",
+      image: tutorialBundles,
+      topic: "Before & After",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 5,
+      title: "Hair Care Routine",
+      image: tutorialWigs,
+      topic: "Maintenance Tips",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 6,
+      title: "Color Matching Guide",
+      image: tutorialFrontals,
+      topic: "How To",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 7,
+      title: "Custom Wig Making",
+      image: tutorialBundles,
+      topic: "Behind the Scenes",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 8,
+      title: "Ponytail Install",
+      image: tutorialWigs,
+      topic: "Quick Style",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 9,
+      title: "Virgin Hair Quality",
+      image: tutorialFrontals,
+      topic: "Product Showcase",
+      link: "https://www.instagram.com/reel/"
+    },
+    {
+      id: 10,
+      title: "Curling Techniques",
+      image: tutorialBundles,
+      topic: "Styling Tutorial",
+      link: "https://www.instagram.com/reel/"
+    }
+  ];
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -110,7 +113,7 @@ export const InstagramReels = () => {
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-serif text-center mb-12 tracking-wider">
-          FEATURED STORIES & <span className="text-primary">TUTORIALS</span>
+          {t('featuredStories').toUpperCase()}
         </h2>
 
         <div 

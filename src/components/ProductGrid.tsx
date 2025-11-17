@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { ProductCard } from "./ProductCard";
 import { Loader2 } from "lucide-react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import productPlaceholder from "@/assets/product-placeholder.webp";
 
 interface ProductGridProps {
@@ -51,7 +52,9 @@ const createSampleProducts = (count: number): ShopifyProduct[] => {
   }));
 };
 
-export const ProductGrid = ({ title = "Bestsellers", searchQuery, limit = 8 }: ProductGridProps) => {
+export const ProductGrid = ({ title, searchQuery, limit = 8 }: ProductGridProps) => {
+  const { t } = useCurrency();
+  const displayTitle = title || t('bestsellers');
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -91,8 +94,8 @@ export const ProductGrid = ({ title = "Bestsellers", searchQuery, limit = 8 }: P
     return (
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-serif text-center mb-12">{title}</h2>
-          <p className="text-center text-muted-foreground">No products found</p>
+          <h2 className="text-3xl font-serif text-center mb-12">{displayTitle}</h2>
+          <p className="text-center text-muted-foreground">{t('noProductsFound')}</p>
         </div>
       </section>
     );
@@ -102,10 +105,10 @@ export const ProductGrid = ({ title = "Bestsellers", searchQuery, limit = 8 }: P
     <section className="py-20 bg-card">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-serif text-center mb-4 tracking-wider">
-          {title}
+          {displayTitle}
         </h2>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          From discovery to loyalty, these are your most-loved products, best sellers, and newest drops.
+          {t('bestsellerDescription')}
         </p>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

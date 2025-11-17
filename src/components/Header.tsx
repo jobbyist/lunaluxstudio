@@ -12,7 +12,7 @@ import {
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 
 export const Header = () => {
-  const { currency, language, setCurrency, setLanguage } = useCurrency();
+  const { currency, language, setCurrency, setLanguage, t } = useCurrency();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const currencies: Currency[] = ["ZAR", "USD", "EUR", "GBP"];
@@ -23,7 +23,7 @@ export const Header = () => {
       <div className="container mx-auto px-4">
         {/* Top Bar */}
         <div className="py-2 border-b border-border/50 text-center text-sm text-muted-foreground">
-          Free Shipping + 10% OFF your first order above $100 with code NEWLUNA25
+          {t('topBanner')}
         </div>
 
         {/* Main Header */}
@@ -49,19 +49,19 @@ export const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
             <Link to="/shop" className="text-foreground hover:text-primary transition-colors">
-              Shop All
+              {t('shopAll')}
             </Link>
             <Link to="/bundles" className="text-foreground hover:text-primary transition-colors">
-              Hair Bundles
+              {t('hairBundles')}
             </Link>
             <Link to="/wigs" className="text-foreground hover:text-primary transition-colors">
-              Wigs
+              {t('wigs')}
             </Link>
             <Link to="/frontals" className="text-foreground hover:text-primary transition-colors">
-              Frontals
+              {t('frontals')}
             </Link>
             <Link to="/booking" className="text-foreground hover:text-primary transition-colors">
-              Book Now
+              {t('bookNow')}
             </Link>
           </nav>
 
@@ -127,35 +127,35 @@ export const Header = () => {
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Shop All
+                {t('shopAll')}
               </Link>
               <Link
                 to="/bundles"
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Hair Bundles
+                {t('hairBundles')}
               </Link>
               <Link
                 to="/wigs"
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Wigs
+                {t('wigs')}
               </Link>
               <Link
                 to="/frontals"
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Frontals
+                {t('frontals')}
               </Link>
               <Link
                 to="/booking"
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Book Now
+                {t('bookNow')}
               </Link>
             </div>
           </nav>

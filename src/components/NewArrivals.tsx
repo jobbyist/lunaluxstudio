@@ -6,39 +6,39 @@ import newArrival1 from "@/assets/new-arrival-1.jpg";
 import newArrival2 from "@/assets/new-arrival-2.jpg";
 import newArrival3 from "@/assets/new-arrival-3.jpg";
 
-const products = [
-  {
-    id: 1,
-    title: "Brazilian Straight Bundle",
-    price: 999.99,
-    image: newArrival1,
-    handle: "brazilian-straight-bundle",
-  },
-  {
-    id: 2,
-    title: "Lace Front Wave Wig",
-    price: 999.99,
-    image: newArrival2,
-    handle: "lace-front-wave-wig",
-  },
-  {
-    id: 3,
-    title: "HD Lace Frontal",
-    price: 999.99,
-    image: newArrival3,
-    handle: "hd-lace-frontal",
-  },
-];
-
 export const NewArrivals = () => {
-  const { formatPrice } = useCurrency();
+  const { formatPrice, t } = useCurrency();
+
+  const products = [
+    {
+      id: 1,
+      title: t('newArrival1Title'),
+      price: 999.99,
+      image: newArrival1,
+      handle: "brazilian-straight-bundle",
+    },
+    {
+      id: 2,
+      title: t('newArrival2Title'),
+      price: 999.99,
+      image: newArrival2,
+      handle: "lace-front-wave-wig",
+    },
+    {
+      id: 3,
+      title: t('newArrival3Title'),
+      price: 999.99,
+      image: newArrival3,
+      handle: "hd-lace-frontal",
+    },
+  ];
 
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-serif mb-4 tracking-wider">
-            NEW <span className="text-primary">ARRIVALS</span>
+            {t('newArrivals').toUpperCase()}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Discover our latest collection of premium hair products
@@ -96,7 +96,7 @@ export const NewArrivals = () => {
                   {formatPrice(product.price)}
                 </p>
                 <Button className="w-full" variant="default">
-                  View Product
+                  {t('shopNow')}
                 </Button>
               </div>
             </div>
