@@ -6,8 +6,11 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { InstagramReels } from "@/components/InstagramReels";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const Index = () => {
+  const { t } = useCurrency();
+  
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -17,10 +20,10 @@ const Index = () => {
         <section className="py-16 text-center bg-card">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-serif mb-4 tracking-wider">
-              TREAT YOURSELF TO TRUE LUXURY
+              {t('luxuryTitle')}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              At Luna Studio, we are confident that our premium hair products and accessories are of the best possible quality. If you're unhappy with your purchase, let us know and we'll refund you or replace your item with another product or service of the same value.
+              {t('luxuryDescription')}
             </p>
           </div>
         </section>

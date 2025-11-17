@@ -1,8 +1,11 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Calendar } from "lucide-react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const Booking = () => {
+  const { t } = useCurrency();
+  
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -10,10 +13,10 @@ const Booking = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-serif mb-4">
-              Book Your <span className="text-primary">Appointment</span>
+              {t('bookingTitle')} <span className="text-primary">{t('bookingTitleHighlight')}</span>
             </h1>
             <p className="text-muted-foreground">
-              Schedule a consultation or installation service with our expert stylists
+              {t('bookingDescription')}
             </p>
           </div>
 
@@ -21,20 +24,19 @@ const Booking = () => {
             <div className="flex items-center justify-center py-12">
               <div className="text-center space-y-4">
                 <Calendar className="h-16 w-16 text-primary mx-auto" />
-                <h3 className="text-xl font-semibold">Coming Soon</h3>
+                <h3 className="text-xl font-semibold">{t('comingSoon')}</h3>
                 <p className="text-muted-foreground max-w-md">
-                  Our online booking system will be integrated with Cal.com or Calendly soon.
-                  In the meantime, please contact us directly to schedule your appointment.
+                  {t('bookingComingSoonText')}
                 </p>
                 <div className="pt-6 space-y-2">
                   <p className="text-sm">
-                    <span className="font-semibold">Phone:</span> +27 12 880 6560
+                    <span className="font-semibold">{t('phone')}</span> +27 12 880 6560
                   </p>
                   <p className="text-sm">
-                    <span className="font-semibold">WhatsApp:</span> +27 66 286 9181
+                    <span className="font-semibold">{t('whatsapp')}</span> +27 66 286 9181
                   </p>
                   <p className="text-sm">
-                    <span className="font-semibold">Email:</span> hi@lunaluxhair.com
+                    <span className="font-semibold">{t('email')}</span> hi@lunaluxhair.com
                   </p>
                 </div>
               </div>

@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import heroImage1 from "@/assets/hero-1.jpg";
 import heroImage2 from "@/assets/hero-2.jpg";
 import heroImage3 from "@/assets/hero-3.jpg";
 
 export const Hero = () => {
+  const { t } = useCurrency();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const heroImages = [heroImage1, heroImage2, heroImage3];
 
@@ -40,15 +42,15 @@ export const Hero = () => {
           {/* Small caption */}
           <div className="space-y-4">
             <p className="text-primary text-sm md:text-base tracking-[0.3em] uppercase">
-              Where Quality Hair Resides
+              {t('heroTagline')}
             </p>
 
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif tracking-tight">
-              THE NEW HOME OF <span className="text-primary">LUXURY HAIR</span>
+              {t('heroTitle')} <span className="text-primary">{t('heroTitleHighlight')}</span>
             </h1>
             <p className="text-2xl md:text-3xl font-serif italic text-muted-foreground">
-              TRUSTED SINCE 2021
+              {t('heroSubtitle')}
             </p>
           </div>
 
@@ -59,7 +61,7 @@ export const Hero = () => {
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
             >
-              <Link to="/shop">DISCOVER OUR CATALOG</Link>
+              <Link to="/shop">{t('discoverCatalog')}</Link>
             </Button>
           </div>
 
@@ -71,14 +73,14 @@ export const Hero = () => {
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
             >
-              <Link to="/shop">BOOK YOUR EXPERIENCE</Link>
+              <Link to="/shop">{t('bookExperience')}</Link>
             </Button>
           </div>
 
           {/* Feature Text */}
           <div className="pt-12">
             <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-              From our exclusive line of ethically sourced hair to our personalized in-studio styling and maintenance treatments, every Luna experience is crafted with care, quality, and a touch of celestial grace.
+              {t('heroDescription')}
             </p>
           </div>
         </div>

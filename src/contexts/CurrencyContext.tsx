@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { translations } from "@/lib/translations";
 
 export type Currency = "ZAR" | "USD" | "EUR" | "GBP";
 export type Language = "EN" | "ES" | "FR" | "DE";
@@ -10,6 +11,7 @@ interface CurrencyContextType {
   setLanguage: (language: Language) => void;
   convertPrice: (price: number) => string;
   formatPrice: (price: number) => string;
+  t: (key: keyof typeof translations.EN) => string;
 }
 
 const exchangeRates: Record<Currency, number> = {
@@ -42,6 +44,10 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
     return `${currencySymbols[currency]}${converted}`;
   };
 
+  const t = (key: keyof typeof translations.EN): string => {
+    return translations[language][key] || translations.EN[key];
+  };
+
   return (
     <CurrencyContext.Provider
       value={{
@@ -51,6 +57,7 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
         setLanguage,
         convertPrice,
         formatPrice,
+        t,
       }}
     >
       {children}

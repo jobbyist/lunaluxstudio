@@ -4,15 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export const Newsletter = () => {
+  const { t } = useCurrency();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      toast.error("Please enter your email");
+      toast.error(t('enterEmailError'));
       return;
     }
 
@@ -24,17 +26,17 @@ export const Newsletter = () => {
 
       if (error) {
         if (error.code === "23505") {
-          toast.error("You're already subscribed!");
+          toast.error(t('alreadySubscribed'));
         } else {
           throw error;
         }
       } else {
-        toast.success("Successfully subscribed to our newsletter!");
+        toast.success(t('subscribeSuccess'));
         setEmail("");
       }
     } catch (error) {
       console.error("Newsletter subscription error:", error);
-      toast.error("Failed to subscribe. Please try again.");
+      toast.error(t('subscribeError'));
     } finally {
       setIsLoading(false);
     }
@@ -47,17 +49,17 @@ export const Newsletter = () => {
           <div className="space-y-4">
             <Mail className="h-12 w-12 mx-auto text-primary" />
             <h2 className="text-3xl md:text-4xl font-serif tracking-wider">
-              Join Our Mailing List
+              {t('joinMailingList')}
             </h2>
             <p className="text-muted-foreground">
-              Subscribe to receive exclusive offers, new product launches, and hair care tips straight to your inbox.
+              {t('newsletterDescription')}
             </p>
           </div>
 
           <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <Input
               type="email"
-              placeholder="Enter your email"
+              placeholder={t('enterEmail')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1"
@@ -68,12 +70,12 @@ export const Newsletter = () => {
               disabled={isLoading}
               className="bg-primary hover:bg-primary/90"
             >
-              {isLoading ? "Subscribing..." : "Subscribe"}
+              {isLoading ? t('subscribing') : t('subscribe')}
             </Button>
           </form>
 
           <p className="text-xs text-muted-foreground">
-            We respect your privacy. Unsubscribe at any time.
+            {t('privacyNote')}
           </p>
         </div>
       </div>
