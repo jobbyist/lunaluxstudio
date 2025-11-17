@@ -97,7 +97,7 @@ export const InstagramReels = () => {
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-serif text-center mb-12 tracking-wider">
-          DISCOVER OUR <span className="text-primary">COMMUNITY</span>
+          FEATURED STORIES & <span className="text-primary">TUTORIALS</span>
         </h2>
 
         <div 
