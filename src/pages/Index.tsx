@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Categories } from "@/components/Categories";
-import { BrowseCategories } from "@/components/BrowseCategories";
+import { NewArrivals } from "@/components/NewArrivals";
 import { ProductGrid } from "@/components/ProductGrid";
 import { InstagramReels } from "@/components/InstagramReels";
 import { Newsletter } from "@/components/Newsletter";
@@ -26,7 +26,7 @@ const Index = () => {
         </section>
 
         <ProductGrid />
-        <BrowseCategories />
+        <NewArrivals />
         <Categories />
         <InstagramReels />
         <Newsletter />
