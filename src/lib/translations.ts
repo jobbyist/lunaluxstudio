@@ -16,7 +16,7 @@ export const translations = {
     heroTitleHighlight: "LUXURY HAIR",
     heroSubtitle: "TRUSTED SINCE 2021",
     discoverCatalog: "DISCOVER OUR CATALOG",
-    bookExperience: "BOOK YOUR EXPERIENCE",
+    bookExperience: "BUILD YOUR PERFECT LOOK",
     heroDescription: "From our exclusive line of ethically sourced hair to our personalized in-studio styling and maintenance treatments, every Luna experience is crafted with care, quality, and a touch of celestial grace.",
     
     // Index Page
@@ -125,7 +125,7 @@ export const translations = {
     heroTitleHighlight: "CABELLO DE LUJO",
     heroSubtitle: "CONFIANZA DESDE 2021",
     discoverCatalog: "DESCUBRE NUESTRO CATÁLOGO",
-    bookExperience: "RESERVA TU EXPERIENCIA",
+    bookExperience: "CREA TU LOOK PERFECTO",
     heroDescription: "Desde nuestra línea exclusiva de cabello de origen ético hasta nuestros tratamientos personalizados de estilismo y mantenimiento en el estudio, cada experiencia Luna está elaborada con cuidado, calidad y un toque de gracia celestial.",
     
     // Index Page
@@ -234,7 +234,7 @@ export const translations = {
     heroTitleHighlight: "CHEVEUX DE LUXE",
     heroSubtitle: "DE CONFIANCE DEPUIS 2021",
     discoverCatalog: "DÉCOUVREZ NOTRE CATALOGUE",
-    bookExperience: "RÉSERVEZ VOTRE EXPÉRIENCE",
+    bookExperience: "CRÉEZ VOTRE LOOK PARFAIT",
     heroDescription: "De notre gamme exclusive de cheveux d'origine éthique à nos traitements de coiffure et d'entretien personnalisés en studio, chaque expérience Luna est conçue avec soin, qualité et une touche de grâce céleste.",
     
     // Index Page
@@ -343,7 +343,7 @@ export const translations = {
     heroTitleHighlight: "LUXUSHAAR",
     heroSubtitle: "VERTRAUT SEIT 2021",
     discoverCatalog: "ENTDECKEN SIE UNSEREN KATALOG",
-    bookExperience: "BUCHEN SIE IHR ERLEBNIS",
+    bookExperience: "GESTALTEN SIE IHREN PERFEKTEN LOOK",
     heroDescription: "Von unserer exklusiven Linie ethisch bezogenen Haares bis zu unseren personalisierten Studio-Styling- und Pflegebehandlungen wird jedes Luna-Erlebnis mit Sorgfalt, Qualität und einem Hauch himmlischer Anmut gestaltet.",
     
     // Index Page
