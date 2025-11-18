@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChatBot } from "@/components/ChatBot";
 import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
+import CustomizeProduct from "./pages/CustomizeProduct";
 import Auth from "./pages/Auth";
 import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/product/:handle" element={<ProductDetail />} />
+          <Route path="/customize" element={<CustomizeProduct />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/shop" element={<Index />} />
