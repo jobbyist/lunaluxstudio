@@ -14,23 +14,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-32">
+      <main className="pt-20">
         <Hero />
-        
-        <section className="py-16 text-center bg-card">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl md:text-3xl font-serif mb-4 tracking-wider">
-              {t('luxuryTitle')}
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              {t('luxuryDescription')}
-            </p>
-          </div>
-        </section>
-
-        <ProductGrid />
         <NewArrivals />
-        <Categories />
+        <ProductGrid />
         <InstagramReels />
         <Newsletter />
       </main>

@@ -73,7 +73,7 @@ export const Hero = () => {
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
             >
-              <Link to="/shop">{t('bookExperience')}</Link>
+              <Link to="/customize">{t('bookExperience')}</Link>
             </Button>
           </div>
 
