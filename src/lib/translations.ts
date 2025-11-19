@@ -4,7 +4,7 @@ export const translations = {
   EN: {
     // Header
     topBanner: "Free Shipping + 10% OFF your first order above $100 with code NEWLUNA25",
-    shopAll: "Shop All",
+    shopAll: "Home",
     hairBundles: "Hair Bundles",
     wigs: "Wigs",
     frontals: "Frontals",
@@ -131,7 +131,7 @@ export const translations = {
   ES: {
     // Header
     topBanner: "Envío gratis + 10% DE DESCUENTO en tu primer pedido superior a $100 con el código NEWLUNA25",
-    shopAll: "Ver Todo",
+    shopAll: "Inicio",
     hairBundles: "Extensiones",
     wigs: "Pelucas",
     frontals: "Frontales",
@@ -258,7 +258,7 @@ export const translations = {
   FR: {
     // Header
     topBanner: "Livraison gratuite + 10% DE RÉDUCTION sur votre première commande de plus de 100 $ avec le code NEWLUNA25",
-    shopAll: "Tout Voir",
+    shopAll: "Accueil",
     hairBundles: "Extensions",
     wigs: "Perruques",
     frontals: "Frontaux",
@@ -385,7 +385,7 @@ export const translations = {
   DE: {
     // Header
     topBanner: "Kostenloser Versand + 10% RABATT auf Ihre erste Bestellung über 100 $ mit Code NEWLUNA25",
-    shopAll: "Alle Anzeigen",
+    shopAll: "Startseite",
     hairBundles: "Haarverlängerungen",
     wigs: "Perücken",
     frontals: "Frontals",
