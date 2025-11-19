@@ -14,8 +14,12 @@ export default {
     },
     extend: {
       fontFamily: {
-        serif: ['Cormorant Garamond', 'serif'],
-        sans: ['Inter', 'sans-serif'],
+        /* Titles / display font: The Seasons
+           Body / UI font: Helvetica World
+           Make sure to add the matching font files to public/fonts or update the @font-face src paths in src/index.css.
+        */
+        serif: ['"The Seasons"', 'serif'],
+        sans: ['"Helvetica World"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
