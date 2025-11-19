@@ -8,58 +8,50 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Background: black */
-    --background: 0 0% 0%;
-    /* Foreground (general text) - keep light for contrast */
-    --foreground: 0 0% 95%;
+    --background: 0 0% 8%;
+    --foreground: 340 20% 95%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 10%;
+    --card-foreground: 340 20% 95%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 340 20% 95%;
 
-    /* Primary = titles/logo color: #BAA799 -> approx HSL(26 19% 66%) */
-    --primary: 26 19% 66%;
-    /* Primary foreground (text on primary) -> black for contrast */
-    --primary-foreground: 0 0% 0%;
+    --primary: 340 75% 85%;
+    --primary-foreground: 0 0% 8%;
 
-    /* Secondary stays but can be adjusted if needed */
     --secondary: 340 40% 25%;
-    --secondary-foreground: 0 0% 95%;
+    --secondary-foreground: 340 20% 95%;
 
-    /* Muted / subtle UI */
     --muted: 0 0% 15%;
     --muted-foreground: 340 10% 60%;
 
-    /* Accent = soft pink variant #E0C0C7 -> approx HSL(347 34% 82%) */
-    --accent: 347 34% 82%;
+    --accent: 340 75% 85%;
     --accent-foreground: 0 0% 8%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 95%;
+    --destructive-foreground: 340 20% 95%;
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 26 19% 66%;
+    --ring: 340 75% 85%;
 
     --radius: 0.5rem;
 
     --gold: 45 100% 70%;
-    --rose: 26 19% 66%;
-    --dark: 0 0% 0%;
+    --rose: 340 75% 85%;
+    --dark: 0 0% 8%;
     
-    /* Gradients (kept dark-themed but biased toward primary/accent) */
-    --gradient-hero: linear-gradient(135deg, hsl(26 19% 40%), hsl(0 0% 0%));
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 8%), hsl(0 0% 0%));
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(340, 40%, 15%), hsl(0, 0%, 8%));
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 10%), hsl(0, 0%, 8%));
     
     /* Shadows */
-    --shadow-glow: 0 0 40px hsl(26 19% 66% / 0.3);
+    --shadow-glow: 0 0 40px hsl(340 75% 85% / 0.3);
     --shadow-card: 0 10px 30px -10px hsl(0 0% 0% / 0.5);
   }
 
   .light {
-    /* Light theme variants: keep primary/palette visually consistent but darker on light bg */
     --background: 0 0% 98%;
     --foreground: 0 0% 10%;
 
@@ -69,8 +61,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
 
-    /* Primary for light mode uses same hue but darker value for contrast: ~HSL(26 19% 45%) */
-    --primary: 26 19% 45%;
+    --primary: 340 75% 45%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 340 20% 90%;
@@ -79,7 +70,7 @@ All colors MUST be HSL.
     --muted: 0 0% 95%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 347 34% 65%;
+    --accent: 340 75% 45%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -87,6 +78,16 @@ All colors MUST be HSL.
 
     --border: 0 0% 85%;
     --input: 0 0% 85%;
-    --ring: 26 19% 45%;
+    --ring: 340 75% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
   }
 }
