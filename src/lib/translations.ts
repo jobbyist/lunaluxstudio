@@ -109,6 +109,24 @@ export const translations = {
     notFoundTitle: "404",
     notFoundMessage: "Oops! Page not found",
     returnHome: "Return to Home",
+    
+    // About Page
+    aboutTitle: 'About Luna Studio',
+    aboutSubtitle: 'Crafting Confidence Through Premium Hair Solutions',
+    aboutStoryTitle: 'Our Story',
+    aboutStoryPara1: 'Luna Studio was born from a passion for helping people feel their absolute best. Founded in 2020, we recognized a gap in the market for truly premium, ethically-sourced hair extensions and wigs that didn\'t compromise on quality or sustainability.',
+    aboutStoryPara2: 'What started as a small boutique has grown into a trusted brand serving thousands of satisfied customers worldwide. Our commitment to excellence means every strand of hair is carefully selected, processed, and quality-checked to ensure it meets our exacting standards.',
+    aboutStoryPara3: 'Today, Luna Studio stands as a beacon of quality in the hair extension industry, combining traditional craftsmanship with modern innovation to deliver products that transform not just appearances, but confidence and self-expression.',
+    aboutMissionTitle: 'Our Mission',
+    aboutMissionStatement: 'To empower individuals to express their unique beauty through premium, ethically-sourced hair products. We believe everyone deserves to feel confident and beautiful, and we\'re committed to making that possible through exceptional quality, sustainable practices, and personalized service.',
+    aboutGalleryTitle: 'Our Work',
+    aboutValuesTitle: 'Our Values',
+    aboutValue1Title: 'Quality First',
+    aboutValue1Desc: 'We never compromise on the quality of our products. Every piece is carefully crafted and inspected to ensure it meets our high standards.',
+    aboutValue2Title: 'Customer Care',
+    aboutValue2Desc: 'Your satisfaction is our priority. We provide personalized consultations and ongoing support to ensure you love your purchase.',
+    aboutValue3Title: 'Sustainability',
+    aboutValue3Desc: 'We are committed to ethical sourcing and sustainable practices, ensuring our products are as good for the planet as they are for you.',
   },
   ES: {
     // Header
@@ -218,6 +236,24 @@ export const translations = {
     notFoundTitle: "404",
     notFoundMessage: "¡Ups! Página no encontrada",
     returnHome: "Volver al Inicio",
+    
+    // About Page
+    aboutTitle: 'Acerca de Luna Studio',
+    aboutSubtitle: 'Creando Confianza a Través de Soluciones de Cabello Premium',
+    aboutStoryTitle: 'Nuestra Historia',
+    aboutStoryPara1: 'Luna Studio nació de una pasión por ayudar a las personas a sentirse lo mejor posible. Fundado en 2020, reconocimos un vacío en el mercado de extensiones de cabello y pelucas verdaderamente premium y de origen ético que no comprometieran la calidad o la sostenibilidad.',
+    aboutStoryPara2: 'Lo que comenzó como una pequeña boutique ha crecido hasta convertirse en una marca de confianza que atiende a miles de clientes satisfechos en todo el mundo. Nuestro compromiso con la excelencia significa que cada hebra de cabello se selecciona, procesa y verifica cuidadosamente para garantizar que cumpla con nuestros estándares exigentes.',
+    aboutStoryPara3: 'Hoy, Luna Studio se erige como un faro de calidad en la industria de extensiones de cabello, combinando la artesanía tradicional con la innovación moderna para ofrecer productos que transforman no solo las apariencias, sino la confianza y la autoexpresión.',
+    aboutMissionTitle: 'Nuestra Misión',
+    aboutMissionStatement: 'Empoderar a las personas para expresar su belleza única a través de productos capilares premium y de origen ético. Creemos que todos merecen sentirse seguros y hermosos, y estamos comprometidos a hacer eso posible a través de una calidad excepcional, prácticas sostenibles y servicio personalizado.',
+    aboutGalleryTitle: 'Nuestro Trabajo',
+    aboutValuesTitle: 'Nuestros Valores',
+    aboutValue1Title: 'Calidad Primero',
+    aboutValue1Desc: 'Nunca comprometemos la calidad de nuestros productos. Cada pieza se fabrica e inspecciona cuidadosamente para garantizar que cumpla con nuestros altos estándares.',
+    aboutValue2Title: 'Atención al Cliente',
+    aboutValue2Desc: 'Su satisfacción es nuestra prioridad. Proporcionamos consultas personalizadas y apoyo continuo para garantizar que ame su compra.',
+    aboutValue3Title: 'Sostenibilidad',
+    aboutValue3Desc: 'Estamos comprometidos con el abastecimiento ético y las prácticas sostenibles, asegurando que nuestros productos sean tan buenos para el planeta como para usted.',
   },
   FR: {
     // Header
@@ -327,6 +363,24 @@ export const translations = {
     notFoundTitle: "404",
     notFoundMessage: "Oups! Page non trouvée",
     returnHome: "Retour à l'Accueil",
+    
+    // About Page
+    aboutTitle: 'À Propos de Luna Studio',
+    aboutSubtitle: 'Créer la Confiance Grâce à des Solutions Capillaires Premium',
+    aboutStoryTitle: 'Notre Histoire',
+    aboutStoryPara1: 'Luna Studio est né d\'une passion pour aider les gens à se sentir au mieux de leur forme. Fondé en 2020, nous avons reconnu un vide sur le marché pour des extensions de cheveux et des perruques véritablement premium et d\'origine éthique qui ne compromettaient ni la qualité ni la durabilité.',
+    aboutStoryPara2: 'Ce qui a commencé comme une petite boutique est devenu une marque de confiance desservant des milliers de clients satisfaits dans le monde entier. Notre engagement envers l\'excellence signifie que chaque mèche de cheveux est soigneusement sélectionnée, traitée et vérifiée pour s\'assurer qu\'elle répond à nos normes strictes.',
+    aboutStoryPara3: 'Aujourd\'hui, Luna Studio se présente comme un phare de qualité dans l\'industrie des extensions capillaires, combinant l\'artisanat traditionnel avec l\'innovation moderne pour offrir des produits qui transforment non seulement les apparences, mais aussi la confiance et l\'expression de soi.',
+    aboutMissionTitle: 'Notre Mission',
+    aboutMissionStatement: 'Permettre aux individus d\'exprimer leur beauté unique à travers des produits capillaires premium et d\'origine éthique. Nous croyons que tout le monde mérite de se sentir confiant et beau, et nous nous engageons à rendre cela possible grâce à une qualité exceptionnelle, des pratiques durables et un service personnalisé.',
+    aboutGalleryTitle: 'Notre Travail',
+    aboutValuesTitle: 'Nos Valeurs',
+    aboutValue1Title: 'Qualité d\'Abord',
+    aboutValue1Desc: 'Nous ne faisons jamais de compromis sur la qualité de nos produits. Chaque pièce est soigneusement fabriquée et inspectée pour s\'assurer qu\'elle répond à nos normes élevées.',
+    aboutValue2Title: 'Service Client',
+    aboutValue2Desc: 'Votre satisfaction est notre priorité. Nous offrons des consultations personnalisées et un soutien continu pour vous assurer d\'aimer votre achat.',
+    aboutValue3Title: 'Durabilité',
+    aboutValue3Desc: 'Nous nous engageons dans l\'approvisionnement éthique et les pratiques durables, garantissant que nos produits sont aussi bons pour la planète que pour vous.',
   },
   DE: {
     // Header
@@ -436,6 +490,24 @@ export const translations = {
     notFoundTitle: "404",
     notFoundMessage: "Hoppla! Seite nicht gefunden",
     returnHome: "Zurück zur Startseite",
+    
+    // About Page
+    aboutTitle: 'Über Luna Studio',
+    aboutSubtitle: 'Vertrauen Schaffen Durch Premium Haarlösungen',
+    aboutStoryTitle: 'Unsere Geschichte',
+    aboutStoryPara1: 'Luna Studio wurde aus der Leidenschaft geboren, Menschen dabei zu helfen, sich absolut am besten zu fühlen. Gegründet im Jahr 2020, erkannten wir eine Lücke auf dem Markt für wirklich premium, ethisch bezogene Haarverlängerungen und Perücken, die weder bei Qualität noch bei Nachhaltigkeit Kompromisse eingehen.',
+    aboutStoryPara2: 'Was als kleine Boutique begann, ist zu einer vertrauenswürdigen Marke geworden, die Tausende zufriedener Kunden weltweit bedient. Unser Engagement für Exzellenz bedeutet, dass jede Haarsträhne sorgfältig ausgewählt, verarbeitet und qualitätsgeprüft wird, um sicherzustellen, dass sie unseren hohen Standards entspricht.',
+    aboutStoryPara3: 'Heute steht Luna Studio als Leuchtturm der Qualität in der Haarverlängerungsindustrie und kombiniert traditionelles Handwerk mit moderner Innovation, um Produkte zu liefern, die nicht nur das Aussehen, sondern auch das Selbstvertrauen und die Selbstdarstellung transformieren.',
+    aboutMissionTitle: 'Unsere Mission',
+    aboutMissionStatement: 'Individuen zu befähigen, ihre einzigartige Schönheit durch premium, ethisch bezogene Haarprodukte auszudrücken. Wir glauben, dass jeder es verdient, sich selbstbewusst und schön zu fühlen, und wir sind entschlossen, dies durch außergewöhnliche Qualität, nachhaltige Praktiken und personalisierten Service möglich zu machen.',
+    aboutGalleryTitle: 'Unsere Arbeit',
+    aboutValuesTitle: 'Unsere Werte',
+    aboutValue1Title: 'Qualität Zuerst',
+    aboutValue1Desc: 'Wir machen niemals Kompromisse bei der Qualität unserer Produkte. Jedes Stück wird sorgfältig hergestellt und überprüft, um sicherzustellen, dass es unseren hohen Standards entspricht.',
+    aboutValue2Title: 'Kundenbetreuung',
+    aboutValue2Desc: 'Ihre Zufriedenheit ist unsere Priorität. Wir bieten personalisierte Beratungen und kontinuierliche Unterstützung, um sicherzustellen, dass Sie Ihren Kauf lieben.',
+    aboutValue3Title: 'Nachhaltigkeit',
+    aboutValue3Desc: 'Wir sind verpflichtet zu ethischer Beschaffung und nachhaltigen Praktiken und stellen sicher, dass unsere Produkte so gut für den Planeten sind wie für Sie.',
   },
 };
 
