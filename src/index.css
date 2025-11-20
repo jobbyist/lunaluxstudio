@@ -6,6 +6,15 @@
 All colors MUST be HSL.
 */
 
+@font-face {
+  font-family: 'BDSans';
+  src: url('/fonts/BDSans-Regular.woff2') format('woff2'),
+       url('/fonts/BDSans-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 8%;
@@ -88,6 +97,11 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground;
+    font-family: 'BDSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', serif;
   }
 }

@@ -1,20 +1,19 @@
+import { Facebook, Instagram, Twitter } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Mail, Phone, MessageCircle, CreditCard, Instagram, Twitter, Facebook } from "lucide-react";
-import { LegalDialog, TermsContent, PrivacyContent, RefundsContent, ShippingContent, ContactContent } from "./LegalDialog";
-import { FaTiktok } from "react-icons/fa";
+import lunaLogo from "@/assets/luna.svg";
 
 export const Footer = () => {
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-serif tracking-wider">
-              <span className="text-primary">LUNA</span> STUDIO
-            </h3>
+          <div>
+            <img src={lunaLogo} alt="Luna Lux Studio" className="h-12 w-auto mb-4" />
+            <p className="text-sm text-muted-foreground mb-4">
+              Premium hair extensions and accessories
+            </p>
             <p className="text-sm text-muted-foreground">
-              Premium hair extensions and wigs for the modern woman. Experience luxury that lasts.
+              info@lunaluxhair.com
             </p>
           </div>
 
@@ -31,32 +30,26 @@ export const Footer = () => {
 
           {/* Customer Service */}
           <div>
-            <h4 className="font-semibold mb-4 text-primary">Support</h4>
+            <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/booking" className="text-muted-foreground hover:text-foreground transition-colors">Book Appointment</Link></li>
-              <li><Link to="/faq" className="text-muted-foreground hover:text-foreground transition-colors">FAQs</Link></li>
-              <li><Link to="/shipping" className="text-muted-foreground hover:text-foreground transition-colors">Shipping Info</Link></li>
-              <li><Link to="/returns" className="text-muted-foreground hover:text-foreground transition-colors">Returns</Link></li>
+              <li><Link to="/community" className="text-muted-foreground hover:text-foreground transition-colors">Community</Link></li>
+              <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">About Us</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
+              <li><Link to="/policies" className="text-muted-foreground hover:text-foreground transition-colors">Store Policies</Link></li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Payment Methods */}
           <div>
-            <h4 className="font-semibold mb-4 text-primary">Contact</h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2 text-muted-foreground">
-                <Mail className="h-4 w-4 text-primary" />
-                hi@lunaluxhair.com
-              </li>
-              <li className="flex items-center gap-2 text-muted-foreground">
-                <Phone className="h-4 w-4 text-primary" />
-                +27 12 880 6560
-              </li>
-              <li className="flex items-center gap-2 text-muted-foreground">
-                <MessageCircle className="h-4 w-4 text-primary" />
-                +27 66 286 9181
-              </li>
-            </ul>
+            <h4 className="font-semibold mb-4">We Accept</h4>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-card p-2 rounded text-xs text-center border border-border">Visa</div>
+              <div className="bg-card p-2 rounded text-xs text-center border border-border">Mastercard</div>
+              <div className="bg-card p-2 rounded text-xs text-center border border-border">Apple Pay</div>
+              <div className="bg-card p-2 rounded text-xs text-center border border-border">Zapper</div>
+              <div className="bg-card p-2 rounded text-xs text-center border border-border">Samsung Pay</div>
+              <div className="bg-card p-2 rounded text-xs text-center border border-border">PayPal</div>
+            </div>
           </div>
         </div>
 

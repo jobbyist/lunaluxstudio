@@ -14,10 +14,11 @@ export default {
     },
     extend: {
       fontFamily: {
+        sans: ["BDSans", "Inter", "sans-serif"],
         serif: ['Cormorant Garamond', 'serif'],
-        sans: ['Inter', 'sans-serif'],
-        heading: ['Playfair Display', 'serif'],
-        elegant: ['Cinzel', 'serif'],
+        heading: ["Cinzel", "serif"],
+        elegant: ["Cinzel", "serif"],
+        body: ["BDSans", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

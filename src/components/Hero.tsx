@@ -1,41 +1,35 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import heroImage1 from "@/assets/hero-1.jpg";
-import heroImage2 from "@/assets/hero-2.jpg";
-import heroImage3 from "@/assets/hero-3.jpg";
 
 export const Hero = () => {
   const { t } = useCurrency();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const heroImages = [heroImage1, heroImage2, heroImage3];
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log("Video autoplay failed:", error);
+      });
+    }
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Images */}
-      {heroImages.map((image, index) => (
-        <div
-          key={index}
-          className="absolute inset-0 transition-opacity duration-1000"
-          style={{
-            opacity: currentImageIndex === index ? 0.3 : 0,
-            backgroundImage: `url(${image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-      ))}
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background/90" />
+    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-50"
+        >
+          <source src="https://cdn.pixabay.com/video/2023/07/19/172554-847468885_large.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60" />
+      </div>
 
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
@@ -54,26 +48,22 @@ export const Hero = () => {
             </p>
           </div>
 
-          {/* CTA Button */}
-          <div className="pt-8">
-            <Button
-              asChild
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
-            >
-              <Link to="/shop">{t('discoverCatalog')}</Link>
-            </Button>
-          </div>
-
-
-          {/* CTA Button */}
-          <div className="pt-8">
+          {/* CTA Buttons */}
+          <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               asChild
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
             >
               <Link to="/customize">{t('bookExperience')}</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="px-8 py-6 text-lg"
+            >
+              <Link to="/shop">{t('shopCollection')}</Link>
             </Button>
           </div>
 
