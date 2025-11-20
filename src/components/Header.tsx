@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, User, ChevronDown, Globe } from "lucide-react";
+import { ShoppingCart, User, Globe, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "./CartDrawer";
 import { Link } from "react-router-dom";
@@ -10,8 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
-import { ThemeToggle } from "./ThemeToggle";
-import lunaLogo from "@/assets/luna.svg";
 
 export const Header = () => {
   const { currency, language, setCurrency, setLanguage, t } = useCurrency();
@@ -42,50 +40,29 @@ export const Header = () => {
 
           {/* Logo */}
           <Link to="/" className="flex items-center justify-center flex-1 md:flex-none">
-            <img src={lunaLogo} alt="Luna Lux Studio" className="h-12 w-auto" />
+            <h1 className="text-2xl md:text-3xl font-serif tracking-wider">
+              <span className="text-primary">LUNA</span>
+              <span className="text-foreground ml-2">STUDIO</span>
+            </h1>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
-            <Link to="/" className="hover:text-primary transition-colors">
+            <Link to="/shop" className="text-foreground hover:text-primary transition-colors">
               {t('shopAll')}
             </Link>
-            <Link to="/about" className="hover:text-primary transition-colors">
-              {t('about')}
+            <Link to="/bundles" className="text-foreground hover:text-primary transition-colors">
+              {t('hairBundles')}
             </Link>
-            <Link to="/shop" className="hover:text-primary transition-colors">
-              Explore
+            <Link to="/wigs" className="text-foreground hover:text-primary transition-colors">
+              {t('wigs')}
             </Link>
-            <Link to="/community" className="hover:text-primary transition-colors">
-              {t('community')}
+            <Link to="/frontals" className="text-foreground hover:text-primary transition-colors">
+              {t('frontals')}
             </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-1">
-                  More <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link to="/loyalty">Loyalty Rewards</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/gift-vouchers">Gift Vouchers</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/offers">Special Offers</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/referral">Referral Program</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/reviews">Leave A Review</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/policies">Store Policies</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link to="/booking" className="text-foreground hover:text-primary transition-colors">
+              {t('bookNow')}
+            </Link>
           </nav>
 
           {/* Right Side Actions */}

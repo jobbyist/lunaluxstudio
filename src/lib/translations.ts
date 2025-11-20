@@ -5,10 +5,10 @@ export const translations = {
     // Header
     topBanner: "Free Shipping + 10% OFF your first order above $100 with code NEWLUNA25",
     shopAll: "Home",
-    about: "About",
+    hairBundles: "Hair Bundles",
     wigs: "Wigs",
     frontals: "Frontals",
-    community: "Community",
+    bookNow: "Book Now",
     
     // Hero
     heroTagline: "Where Quality Hair Resides",
@@ -16,7 +16,6 @@ export const translations = {
     heroTitleHighlight: "LUXURY HAIR",
     heroSubtitle: "TRUSTED SINCE 2021",
     discoverCatalog: "DISCOVER OUR CATALOG",
-    shopCollection: "Shop The Collection",
     bookExperience: "BUILD YOUR PERFECT LOOK",
     heroDescription: "From our exclusive line of ethically sourced hair to our personalized in-studio styling and maintenance treatments, every Luna experience is crafted with care, quality, and a touch of celestial grace.",
     
@@ -133,10 +132,10 @@ export const translations = {
     // Header
     topBanner: "Envío gratis + 10% DE DESCUENTO en tu primer pedido superior a $100 con el código NEWLUNA25",
     shopAll: "Inicio",
-    about: "Acerca de",
+    hairBundles: "Extensiones",
     wigs: "Pelucas",
     frontals: "Frontales",
-    community: "Comunidad",
+    bookNow: "Reservar Ahora",
     
     // Hero
     heroTagline: "Donde Reside el Cabello de Calidad",
@@ -144,7 +143,6 @@ export const translations = {
     heroTitleHighlight: "CABELLO DE LUJO",
     heroSubtitle: "CONFIANZA DESDE 2021",
     discoverCatalog: "DESCUBRE NUESTRO CATÁLOGO",
-    shopCollection: "Comprar La Colección",
     bookExperience: "CREA TU LOOK PERFECTO",
     heroDescription: "Desde nuestra línea exclusiva de cabello de origen ético hasta nuestros tratamientos personalizados de estilismo y mantenimiento en el estudio, cada experiencia Luna está elaborada con cuidado, calidad y un toque de gracia celestial.",
     
@@ -261,10 +259,10 @@ export const translations = {
     // Header
     topBanner: "Livraison gratuite + 10% DE RÉDUCTION sur votre première commande de plus de 100 $ avec le code NEWLUNA25",
     shopAll: "Accueil",
-    about: "À Propos",
+    hairBundles: "Extensions",
     wigs: "Perruques",
     frontals: "Frontaux",
-    community: "Communauté",
+    bookNow: "Réserver Maintenant",
     
     // Hero
     heroTagline: "Où Réside la Qualité des Cheveux",
@@ -272,7 +270,6 @@ export const translations = {
     heroTitleHighlight: "CHEVEUX DE LUXE",
     heroSubtitle: "DE CONFIANCE DEPUIS 2021",
     discoverCatalog: "DÉCOUVREZ NOTRE CATALOGUE",
-    shopCollection: "Acheter La Collection",
     bookExperience: "CRÉEZ VOTRE LOOK PARFAIT",
     heroDescription: "De notre gamme exclusive de cheveux d'origine éthique à nos traitements de coiffure et d'entretien personnalisés en studio, chaque expérience Luna est conçue avec soin, qualité et une touche de grâce céleste.",
     
@@ -389,10 +386,10 @@ export const translations = {
     // Header
     topBanner: "Kostenloser Versand + 10% RABATT auf Ihre erste Bestellung über 100 $ mit Code NEWLUNA25",
     shopAll: "Startseite",
-    about: "Über Uns",
+    hairBundles: "Haarverlängerungen",
     wigs: "Perücken",
     frontals: "Frontals",
-    community: "Gemeinschaft",
+    bookNow: "Jetzt Buchen",
     
     // Hero
     heroTagline: "Wo Qualitätshaar Wohnt",
@@ -400,7 +397,6 @@ export const translations = {
     heroTitleHighlight: "LUXUSHAAR",
     heroSubtitle: "VERTRAUT SEIT 2021",
     discoverCatalog: "ENTDECKEN SIE UNSEREN KATALOG",
-    shopCollection: "Die Kollektion Kaufen",
     bookExperience: "GESTALTEN SIE IHREN PERFEKTEN LOOK",
     heroDescription: "Von unserer exklusiven Linie ethisch bezogenen Haares bis zu unseren personalisierten Studio-Styling- und Pflegebehandlungen wird jedes Luna-Erlebnis mit Sorgfalt, Qualität und einem Hauch himmlischer Anmut gestaltet.",
     
