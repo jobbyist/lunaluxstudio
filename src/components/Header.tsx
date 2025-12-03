@@ -48,8 +48,11 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
-            <Link to="/shop" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-foreground hover:text-primary transition-colors">
               {t('shopAll')}
+            </Link>
+            <Link to="/about" className="text-foreground hover:text-primary transition-colors">
+              {t('about')}
             </Link>
             <Link to="/bundles" className="text-foreground hover:text-primary transition-colors">
               {t('hairBundles')}
@@ -123,11 +126,18 @@ export const Header = () => {
           <nav className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
               <Link
-                to="/shop"
+                to="/"
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('shopAll')}
+              </Link>
+              <Link
+                to="/about"
+                className="text-foreground hover:text-primary transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t('about')}
               </Link>
               <Link
                 to="/bundles"

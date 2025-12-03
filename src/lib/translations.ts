@@ -127,6 +127,11 @@ export const translations = {
     aboutValue2Desc: 'Your satisfaction is our priority. We provide personalized consultations and ongoing support to ensure you love your purchase.',
     aboutValue3Title: 'Sustainability',
     aboutValue3Desc: 'We are committed to ethical sourcing and sustainable practices, ensuring our products are as good for the planet as they are for you.',
+    
+    // Navigation
+    about: 'About',
+    community: 'Community',
+    shopCollection: 'Shop Collection',
   },
   ES: {
     // Header
@@ -254,6 +259,11 @@ export const translations = {
     aboutValue2Desc: 'Su satisfacción es nuestra prioridad. Proporcionamos consultas personalizadas y apoyo continuo para garantizar que ame su compra.',
     aboutValue3Title: 'Sostenibilidad',
     aboutValue3Desc: 'Estamos comprometidos con el abastecimiento ético y las prácticas sostenibles, asegurando que nuestros productos sean tan buenos para el planeta como para usted.',
+    
+    // Navigation
+    about: 'Acerca de',
+    community: 'Comunidad',
+    shopCollection: 'Comprar Colección',
   },
   FR: {
     // Header
@@ -381,6 +391,11 @@ export const translations = {
     aboutValue2Desc: 'Votre satisfaction est notre priorité. Nous offrons des consultations personnalisées et un soutien continu pour vous assurer d\'aimer votre achat.',
     aboutValue3Title: 'Durabilité',
     aboutValue3Desc: 'Nous nous engageons dans l\'approvisionnement éthique et les pratiques durables, garantissant que nos produits sont aussi bons pour la planète que pour vous.',
+    
+    // Navigation
+    about: 'À Propos',
+    community: 'Communauté',
+    shopCollection: 'Acheter la Collection',
   },
   DE: {
     // Header
@@ -508,6 +523,11 @@ export const translations = {
     aboutValue2Desc: 'Ihre Zufriedenheit ist unsere Priorität. Wir bieten personalisierte Beratungen und kontinuierliche Unterstützung, um sicherzustellen, dass Sie Ihren Kauf lieben.',
     aboutValue3Title: 'Nachhaltigkeit',
     aboutValue3Desc: 'Wir sind verpflichtet zu ethischer Beschaffung und nachhaltigen Praktiken und stellen sicher, dass unsere Produkte so gut für den Planeten sind wie für Sie.',
+    
+    // Navigation
+    about: 'Über Uns',
+    community: 'Gemeinschaft',
+    shopCollection: 'Kollektion Kaufen',
   },
 };
 
