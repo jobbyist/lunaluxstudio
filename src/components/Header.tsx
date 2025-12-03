@@ -54,17 +54,11 @@ export const Header = () => {
             <Link to="/about" className="text-foreground hover:text-primary transition-colors">
               {t('about')}
             </Link>
-            <Link to="/bundles" className="text-foreground hover:text-primary transition-colors">
-              {t('hairBundles')}
+            <Link to="/explore" className="text-foreground hover:text-primary transition-colors">
+              {t('explore')}
             </Link>
-            <Link to="/wigs" className="text-foreground hover:text-primary transition-colors">
-              {t('wigs')}
-            </Link>
-            <Link to="/frontals" className="text-foreground hover:text-primary transition-colors">
-              {t('frontals')}
-            </Link>
-            <Link to="/booking" className="text-foreground hover:text-primary transition-colors">
-              {t('bookNow')}
+            <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
+              {t('contact')}
             </Link>
           </nav>
 
@@ -140,32 +134,18 @@ export const Header = () => {
                 {t('about')}
               </Link>
               <Link
-                to="/bundles"
+                to="/explore"
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('hairBundles')}
+                {t('explore')}
               </Link>
               <Link
-                to="/wigs"
+                to="/contact"
                 className="text-foreground hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('wigs')}
-              </Link>
-              <Link
-                to="/frontals"
-                className="text-foreground hover:text-primary transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('frontals')}
-              </Link>
-              <Link
-                to="/booking"
-                className="text-foreground hover:text-primary transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('bookNow')}
+                {t('contact')}
               </Link>
             </div>
           </nav>
