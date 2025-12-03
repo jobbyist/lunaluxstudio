@@ -130,6 +130,7 @@ export const translations = {
     
     // Navigation
     about: 'About',
+    explore: 'Explore',
     community: 'Community',
     shopCollection: 'Shop Collection',
   },
@@ -262,6 +263,7 @@ export const translations = {
     
     // Navigation
     about: 'Acerca de',
+    explore: 'Explorar',
     community: 'Comunidad',
     shopCollection: 'Comprar Colección',
   },
@@ -394,6 +396,7 @@ export const translations = {
     
     // Navigation
     about: 'À Propos',
+    explore: 'Explorer',
     community: 'Communauté',
     shopCollection: 'Acheter la Collection',
   },
@@ -526,6 +529,7 @@ export const translations = {
     
     // Navigation
     about: 'Über Uns',
+    explore: 'Entdecken',
     community: 'Gemeinschaft',
     shopCollection: 'Kollektion Kaufen',
   },

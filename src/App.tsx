@@ -10,6 +10,8 @@ import CustomizeProduct from "./pages/CustomizeProduct";
 import Auth from "./pages/Auth";
 import Booking from "./pages/Booking";
 import About from "./pages/About";
+import Explore from "./pages/Explore";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,10 +29,9 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/about" element={<About />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Index />} />
-          <Route path="/bundles" element={<Index />} />
-          <Route path="/wigs" element={<Index />} />
-          <Route path="/frontals" element={<Index />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatBot />
