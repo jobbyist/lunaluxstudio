@@ -62,12 +62,41 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/29527315-b618-45f3-b80b-eb898100345f) and click on Share -> Publish.
+This project is configured to automatically deploy to GitHub Pages with a custom domain.
 
-## Can I connect a custom domain to my Lovable project?
+### GitHub Pages Deployment
 
-Yes, you can!
+The project uses GitHub Actions to automatically build and deploy to GitHub Pages whenever changes are pushed to the `main` branch.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+**Custom Domain**: https://lunalux.gravitas.uno
+
+#### Deployment Setup
+
+The deployment is configured through:
+- `.github/workflows/deploy.yml` - GitHub Actions workflow for automated deployment
+- `public/CNAME` - Custom domain configuration
+- `vite.config.ts` - Vite build configuration with proper base path
+
+#### Manual Deployment
+
+To manually trigger a deployment:
+1. Go to the "Actions" tab in your GitHub repository
+2. Select the "Deploy to GitHub Pages" workflow
+3. Click "Run workflow"
+
+#### First-Time Setup
+
+To enable GitHub Pages for this repository:
+1. Go to your repository Settings
+2. Navigate to "Pages" in the left sidebar
+3. Under "Build and deployment", select "GitHub Actions" as the source
+4. Configure your custom domain DNS settings:
+   - Add a CNAME record pointing `lunalux.gravitas.uno` to `<username>.github.io`
+
+**Alternative: Lovable Deployment**
+
+You can also deploy using [Lovable](https://lovable.dev/projects/29527315-b618-45f3-b80b-eb898100345f) by clicking Share -> Publish.
+
+To connect a domain via Lovable, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
