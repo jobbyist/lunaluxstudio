@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingCart, User, Globe, Menu, X } from "lucide-react";
+import { ShoppingCart, User, Globe, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "./CartDrawer";
 import { Link } from "react-router-dom";
@@ -60,6 +60,36 @@ export const Header = () => {
             <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
               {t('contact')}
             </Link>
+            
+            {/* More Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground hover:text-primary transition-colors flex items-center gap-1 px-0">
+                  More
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-background border-border">
+                <DropdownMenuItem asChild>
+                  <Link to="/loyalty" className="cursor-pointer">Loyalty Rewards</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/gift-vouchers" className="cursor-pointer">Gift Vouchers</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/special-offers" className="cursor-pointer">Special Offers</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/referral" className="cursor-pointer">Referral Program</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/reviews" className="cursor-pointer">Leave A Review</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/policies" className="cursor-pointer">Store Policies</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           {/* Right Side Actions */}
@@ -147,6 +177,19 @@ export const Header = () => {
               >
                 {t('contact')}
               </Link>
+              
+              {/* Mobile More Section */}
+              <div className="pt-4 border-t border-border/50">
+                <span className="text-muted-foreground text-sm font-medium">More</span>
+                <div className="flex flex-col space-y-3 mt-3">
+                  <Link to="/loyalty" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Loyalty Rewards</Link>
+                  <Link to="/gift-vouchers" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Gift Vouchers</Link>
+                  <Link to="/special-offers" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Special Offers</Link>
+                  <Link to="/referral" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Referral Program</Link>
+                  <Link to="/reviews" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Leave A Review</Link>
+                  <Link to="/policies" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Store Policies</Link>
+                </div>
+              </div>
             </div>
           </nav>
         )}
