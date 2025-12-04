@@ -67,6 +67,7 @@ export const Header = () => {
               src="/luna.svg" 
               alt="Luna Studio" 
               className="h-8 md:h-10 w-auto"
+              loading="eager"
             />
           </Link>
 
@@ -178,6 +179,7 @@ export const Header = () => {
                   src="/luna.svg" 
                   alt="Luna Studio" 
                   className="h-8 w-auto"
+                  loading="eager"
                 />
               </SheetTitle>
             </SheetHeader>
