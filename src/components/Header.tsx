@@ -1,5 +1,22 @@
 import { useState } from "react";
-import { ShoppingCart, User, Globe, Menu, X, ChevronDown } from "lucide-react";
+import { 
+  ShoppingCart, 
+  User, 
+  Globe, 
+  Menu, 
+  X, 
+  ChevronDown,
+  Home,
+  Info,
+  Compass,
+  Mail,
+  Gift,
+  Tag,
+  UserPlus,
+  Star,
+  FileText,
+  Award
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "./CartDrawer";
 import { Link } from "react-router-dom";
@@ -9,6 +26,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 
 export const Header = () => {
@@ -146,53 +169,106 @@ export const Header = () => {
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col space-y-4">
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetContent side="left" className="w-72 p-0">
+            <SheetHeader className="p-6 pb-4 border-b border-border">
+              <SheetTitle className="text-left">
+                <span className="text-primary">LUNA</span>
+                <span className="text-foreground ml-2">STUDIO</span>
+              </SheetTitle>
+            </SheetHeader>
+            
+            <nav className="flex flex-col p-4">
               <Link
                 to="/"
-                className="text-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('shopAll')}
+                <Home className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                <span>{t('shopAll')}</span>
               </Link>
               <Link
                 to="/about"
-                className="text-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('about')}
+                <Info className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                <span>{t('about')}</span>
               </Link>
               <Link
                 to="/explore"
-                className="text-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('explore')}
+                <Compass className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                <span>{t('explore')}</span>
               </Link>
               <Link
                 to="/contact"
-                className="text-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('contact')}
+                <Mail className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                <span>{t('contact')}</span>
               </Link>
               
               {/* Mobile More Section */}
-              <div className="pt-4 border-t border-border/50">
-                <span className="text-muted-foreground text-sm font-medium">More</span>
-                <div className="flex flex-col space-y-3 mt-3">
-                  <Link to="/loyalty" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Loyalty Rewards</Link>
-                  <Link to="/gift-vouchers" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Gift Vouchers</Link>
-                  <Link to="/special-offers" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Special Offers</Link>
-                  <Link to="/referral" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Referral Program</Link>
-                  <Link to="/reviews" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Leave A Review</Link>
-                  <Link to="/policies" className="text-foreground hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Store Policies</Link>
+              <div className="mt-4 pt-4 border-t border-border">
+                <div className="px-3 mb-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  More
                 </div>
+                <Link 
+                  to="/loyalty" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Award className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                  <span>Loyalty Rewards</span>
+                </Link>
+                <Link 
+                  to="/gift-vouchers" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Gift className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                  <span>Gift Vouchers</span>
+                </Link>
+                <Link 
+                  to="/special-offers" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Tag className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                  <span>Special Offers</span>
+                </Link>
+                <Link 
+                  to="/referral" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <UserPlus className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                  <span>Referral Program</span>
+                </Link>
+                <Link 
+                  to="/reviews" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Star className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                  <span>Leave A Review</span>
+                </Link>
+                <Link 
+                  to="/policies" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <FileText className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                  <span>Store Policies</span>
+                </Link>
               </div>
-            </div>
-          </nav>
-        )}
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );
