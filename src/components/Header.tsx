@@ -63,10 +63,12 @@ export const Header = () => {
 
           {/* Logo */}
           <Link to="/" className="flex items-center justify-center flex-1 md:flex-none">
-            <h1 className="text-2xl md:text-3xl font-serif tracking-wider">
-              <span className="text-primary">LUNA</span>
-              <span className="text-foreground ml-2">STUDIO</span>
-            </h1>
+            <img 
+              src="/luna.svg" 
+              alt="Luna Studio" 
+              className="h-8 md:h-10 w-auto"
+              loading="eager"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -173,8 +175,12 @@ export const Header = () => {
           <SheetContent side="left" className="w-72 p-0">
             <SheetHeader className="p-6 pb-4 border-b border-border">
               <SheetTitle className="text-left">
-                <span className="text-primary">LUNA</span>
-                <span className="text-foreground ml-2">STUDIO</span>
+                <img 
+                  src="/luna.svg" 
+                  alt="Luna Studio" 
+                  className="h-8 w-auto"
+                  loading="eager"
+                />
               </SheetTitle>
             </SheetHeader>
             
