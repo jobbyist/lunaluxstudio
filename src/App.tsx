@@ -13,6 +13,12 @@ import About from "./pages/About";
 import Explore from "./pages/Explore";
 import Contact from "./pages/Contact";
 import CollectionCategory from "./pages/CollectionCategory";
+import Loyalty from "./pages/Loyalty";
+import GiftVouchers from "./pages/GiftVouchers";
+import SpecialOffers from "./pages/SpecialOffers";
+import Referral from "./pages/Referral";
+import Reviews from "./pages/Reviews";
+import Policies from "./pages/Policies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +40,12 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Index />} />
           <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
+          <Route path="/loyalty" element={<Loyalty />} />
+          <Route path="/gift-vouchers" element={<GiftVouchers />} />
+          <Route path="/special-offers" element={<SpecialOffers />} />
+          <Route path="/referral" element={<Referral />} />
+          <Route path="/reviews" element={<Reviews />} />
+          <Route path="/policies" element={<Policies />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatBot />
