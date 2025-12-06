@@ -76,7 +76,7 @@ export const RefundsContent = () => (
     <p>Please inspect your order upon reception and contact us immediately if the item is defective, damaged or if you receive the wrong item, so that we can evaluate the issue and make it right.</p>
     
     <h4 className="font-semibold mt-4">Exceptions</h4>
-    <p>Unfortunately, we cannot accept returns on sale items nor on single items like extensions</p>
+    <p>Unfortunately, we cannot accept returns on sale items nor on single items like extensions.</p>
     
     <h4 className="font-semibold mt-4">Exchanges</h4>
     <p>The fastest way to ensure you get what you want is to return the item you have, and once the return is accepted, make a separate purchase for the new item.</p>
@@ -94,7 +94,7 @@ export const ShippingContent = () => (
     <p>Wigs that are listed as "on sale" or discounted/clearance items are NOT customised unless stated otherwise.</p>
     
     <h4 className="font-semibold mt-4">Customisation</h4>
-    <p>To request customisation, please send us an email, message us on WhatsApp or give us a call at 012 880 6563 on weekdays between 10PM - 3PM (South African Time).</p>
+    <p>To request customisation, please send us an email, message us on WhatsApp or give us a call at 012 880 6563 on weekdays between 10AM - 3PM (South African Time).</p>
     
     <h4 className="font-semibold mt-4">Shipping Costs</h4>
     <p>Countrywide shipping is R150. We use The Courier Guy as our preferred courier service.</p>
