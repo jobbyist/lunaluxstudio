@@ -65,7 +65,7 @@ export const Header = () => {
           <Link to="/" className="flex items-center justify-center flex-1 md:flex-none">
             <img 
               src="/luna.svg" 
-              alt="Luna Studio" 
+              alt="Luna Luxury Hair" 
               className="h-8 md:h-10 w-auto"
               loading="eager"
             />
@@ -177,7 +177,7 @@ export const Header = () => {
               <SheetTitle className="text-left">
                 <img 
                   src="/luna.svg" 
-                  alt="Luna Studio" 
+                  alt="Luna Luxury Hair" 
                   className="h-8 w-auto"
                   loading="eager"
                 />

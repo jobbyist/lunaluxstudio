@@ -21,7 +21,7 @@ export const translations = {
     
     // Index Page
     luxuryTitle: "TREAT YOURSELF TO TRUE LUXURY",
-    luxuryDescription: "At Luna Studio, we are confident that our premium hair products and accessories are of the best possible quality. If you're unhappy with your purchase, let us know and we'll refund you or replace your item with another product or service of the same value.",
+    luxuryDescription: "At Luna Luxury Hair, we are confident that our premium hair products and accessories are of the best possible quality. If you're unhappy with your purchase, let us know and we'll refund you or replace your item with another product or service of the same value.",
     
     // Product Grid
     bestsellers: "Bestsellers",
@@ -76,7 +76,7 @@ export const translations = {
     refundPolicy: "Refund Policy",
     shippingPolicy: "Shipping Policy",
     contactUs: "Contact Us",
-    copyright: "© 2024 Luna Studio. All rights reserved.",
+    copyright: "© 2024 Luna Luxury Hair. All rights reserved.",
     
     // Booking Page
     bookingTitle: "Book Your",
@@ -111,12 +111,12 @@ export const translations = {
     returnHome: "Return to Home",
     
     // About Page
-    aboutTitle: 'About Luna Studio',
+    aboutTitle: 'About Luna Luxury Hair',
     aboutSubtitle: 'Crafting Confidence Through Premium Hair Solutions',
     aboutStoryTitle: 'Our Story',
-    aboutStoryPara1: 'Luna Studio was born from a passion for helping people feel their absolute best. Founded in 2020, we recognized a gap in the market for truly premium, ethically-sourced hair extensions and wigs that didn\'t compromise on quality or sustainability.',
+    aboutStoryPara1: 'Luna Luxury Hair was born from a passion for helping people feel their absolute best. Founded in 2020, we recognized a gap in the market for truly premium, ethically-sourced hair extensions and wigs that didn\'t compromise on quality or sustainability.',
     aboutStoryPara2: 'What started as a small boutique has grown into a trusted brand serving thousands of satisfied customers worldwide. Our commitment to excellence means every strand of hair is carefully selected, processed, and quality-checked to ensure it meets our exacting standards.',
-    aboutStoryPara3: 'Today, Luna Studio stands as a beacon of quality in the hair extension industry, combining traditional craftsmanship with modern innovation to deliver products that transform not just appearances, but confidence and self-expression.',
+    aboutStoryPara3: 'Today, Luna Luxury Hair stands as a beacon of quality in the hair extension industry, combining traditional craftsmanship with modern innovation to deliver products that transform not just appearances, but confidence and self-expression.',
     aboutMissionTitle: 'Our Mission',
     aboutMissionStatement: 'To empower individuals to express their unique beauty through premium, ethically-sourced hair products. We believe everyone deserves to feel confident and beautiful, and we\'re committed to making that possible through exceptional quality, sustainable practices, and personalized service.',
     aboutGalleryTitle: 'Our Work',
@@ -154,7 +154,7 @@ export const translations = {
     
     // Index Page
     luxuryTitle: "REGÁLATE EL VERDADERO LUJO",
-    luxuryDescription: "En Luna Studio, confiamos en que nuestros productos y accesorios capilares premium son de la mejor calidad posible. Si no está satisfecho con su compra, háganoslo saber y le reembolsaremos o reemplazaremos su artículo con otro producto o servicio del mismo valor.",
+    luxuryDescription: "En Luna Luxury Hair, confiamos en que nuestros productos y accesorios capilares premium son de la mejor calidad posible. Si no está satisfecho con su compra, háganoslo saber y le reembolsaremos o reemplazaremos su artículo con otro producto o servicio del mismo valor.",
     
     // Product Grid
     bestsellers: "Más Vendidos",
@@ -209,7 +209,7 @@ export const translations = {
     refundPolicy: "Política de Reembolso",
     shippingPolicy: "Política de Envío",
     contactUs: "Contáctanos",
-    copyright: "© 2024 Luna Studio. Todos los derechos reservados.",
+    copyright: "© 2024 Luna Luxury Hair. Todos los derechos reservados.",
     
     // Booking Page
     bookingTitle: "Reserva Tu",
@@ -244,12 +244,12 @@ export const translations = {
     returnHome: "Volver al Inicio",
     
     // About Page
-    aboutTitle: 'Acerca de Luna Studio',
+    aboutTitle: 'Acerca de Luna Luxury Hair',
     aboutSubtitle: 'Creando Confianza a Través de Soluciones de Cabello Premium',
     aboutStoryTitle: 'Nuestra Historia',
-    aboutStoryPara1: 'Luna Studio nació de una pasión por ayudar a las personas a sentirse lo mejor posible. Fundado en 2020, reconocimos un vacío en el mercado de extensiones de cabello y pelucas verdaderamente premium y de origen ético que no comprometieran la calidad o la sostenibilidad.',
+    aboutStoryPara1: 'Luna Luxury Hair nació de una pasión por ayudar a las personas a sentirse lo mejor posible. Fundado en 2020, reconocimos un vacío en el mercado de extensiones de cabello y pelucas verdaderamente premium y de origen ético que no comprometieran la calidad o la sostenibilidad.',
     aboutStoryPara2: 'Lo que comenzó como una pequeña boutique ha crecido hasta convertirse en una marca de confianza que atiende a miles de clientes satisfechos en todo el mundo. Nuestro compromiso con la excelencia significa que cada hebra de cabello se selecciona, procesa y verifica cuidadosamente para garantizar que cumpla con nuestros estándares exigentes.',
-    aboutStoryPara3: 'Hoy, Luna Studio se erige como un faro de calidad en la industria de extensiones de cabello, combinando la artesanía tradicional con la innovación moderna para ofrecer productos que transforman no solo las apariencias, sino la confianza y la autoexpresión.',
+    aboutStoryPara3: 'Hoy, Luna Luxury Hair se erige como un faro de calidad en la industria de extensiones de cabello, combinando la artesanía tradicional con la innovación moderna para ofrecer productos que transforman no solo las apariencias, sino la confianza y la autoexpresión.',
     aboutMissionTitle: 'Nuestra Misión',
     aboutMissionStatement: 'Empoderar a las personas para expresar su belleza única a través de productos capilares premium y de origen ético. Creemos que todos merecen sentirse seguros y hermosos, y estamos comprometidos a hacer eso posible a través de una calidad excepcional, prácticas sostenibles y servicio personalizado.',
     aboutGalleryTitle: 'Nuestro Trabajo',
@@ -287,7 +287,7 @@ export const translations = {
     
     // Index Page
     luxuryTitle: "OFFREZ-VOUS LE VRAI LUXE",
-    luxuryDescription: "Chez Luna Studio, nous sommes convaincus que nos produits capillaires et accessoires haut de gamme sont de la meilleure qualité possible. Si vous n'êtes pas satisfait de votre achat, faites-le nous savoir et nous vous rembourserons ou remplacerons votre article par un autre produit ou service de même valeur.",
+    luxuryDescription: "Chez Luna Luxury Hair, nous sommes convaincus que nos produits capillaires et accessoires haut de gamme sont de la meilleure qualité possible. Si vous n'êtes pas satisfait de votre achat, faites-le nous savoir et nous vous rembourserons ou remplacerons votre article par un autre produit ou service de même valeur.",
     
     // Product Grid
     bestsellers: "Meilleures Ventes",
@@ -342,7 +342,7 @@ export const translations = {
     refundPolicy: "Politique de Remboursement",
     shippingPolicy: "Politique d'Expédition",
     contactUs: "Contactez-nous",
-    copyright: "© 2024 Luna Studio. Tous droits réservés.",
+    copyright: "© 2024 Luna Luxury Hair. Tous droits réservés.",
     
     // Booking Page
     bookingTitle: "Réservez Votre",
@@ -377,12 +377,12 @@ export const translations = {
     returnHome: "Retour à l'Accueil",
     
     // About Page
-    aboutTitle: 'À Propos de Luna Studio',
+    aboutTitle: 'À Propos de Luna Luxury Hair',
     aboutSubtitle: 'Créer la Confiance Grâce à des Solutions Capillaires Premium',
     aboutStoryTitle: 'Notre Histoire',
-    aboutStoryPara1: 'Luna Studio est né d\'une passion pour aider les gens à se sentir au mieux de leur forme. Fondé en 2020, nous avons reconnu un vide sur le marché pour des extensions de cheveux et des perruques véritablement premium et d\'origine éthique qui ne compromettaient ni la qualité ni la durabilité.',
+    aboutStoryPara1: 'Luna Luxury Hair est né d\'une passion pour aider les gens à se sentir au mieux de leur forme. Fondé en 2020, nous avons reconnu un vide sur le marché pour des extensions de cheveux et des perruques véritablement premium et d\'origine éthique qui ne compromettaient ni la qualité ni la durabilité.',
     aboutStoryPara2: 'Ce qui a commencé comme une petite boutique est devenu une marque de confiance desservant des milliers de clients satisfaits dans le monde entier. Notre engagement envers l\'excellence signifie que chaque mèche de cheveux est soigneusement sélectionnée, traitée et vérifiée pour s\'assurer qu\'elle répond à nos normes strictes.',
-    aboutStoryPara3: 'Aujourd\'hui, Luna Studio se présente comme un phare de qualité dans l\'industrie des extensions capillaires, combinant l\'artisanat traditionnel avec l\'innovation moderne pour offrir des produits qui transforment non seulement les apparences, mais aussi la confiance et l\'expression de soi.',
+    aboutStoryPara3: 'Aujourd\'hui, Luna Luxury Hair se présente comme un phare de qualité dans l\'industrie des extensions capillaires, combinant l\'artisanat traditionnel avec l\'innovation moderne pour offrir des produits qui transforment non seulement les apparences, mais aussi la confiance et l\'expression de soi.',
     aboutMissionTitle: 'Notre Mission',
     aboutMissionStatement: 'Permettre aux individus d\'exprimer leur beauté unique à travers des produits capillaires premium et d\'origine éthique. Nous croyons que tout le monde mérite de se sentir confiant et beau, et nous nous engageons à rendre cela possible grâce à une qualité exceptionnelle, des pratiques durables et un service personnalisé.',
     aboutGalleryTitle: 'Notre Travail',
@@ -420,7 +420,7 @@ export const translations = {
     
     // Index Page
     luxuryTitle: "GÖNNEN SIE SICH WAHREN LUXUS",
-    luxuryDescription: "Bei Luna Studio sind wir überzeugt, dass unsere Premium-Haarprodukte und -Accessoires von bestmöglicher Qualität sind. Wenn Sie mit Ihrem Kauf nicht zufrieden sind, lassen Sie es uns wissen und wir erstatten Ihnen den Betrag oder ersetzen Ihren Artikel durch ein anderes Produkt oder eine Dienstleistung gleichen Werts.",
+    luxuryDescription: "Bei Luna Luxury Hair sind wir überzeugt, dass unsere Premium-Haarprodukte und -Accessoires von bestmöglicher Qualität sind. Wenn Sie mit Ihrem Kauf nicht zufrieden sind, lassen Sie es uns wissen und wir erstatten Ihnen den Betrag oder ersetzen Ihren Artikel durch ein anderes Produkt oder eine Dienstleistung gleichen Werts.",
     
     // Product Grid
     bestsellers: "Bestseller",
@@ -475,7 +475,7 @@ export const translations = {
     refundPolicy: "Rückerstattungsrichtlinie",
     shippingPolicy: "Versandrichtlinie",
     contactUs: "Kontaktieren Sie Uns",
-    copyright: "© 2024 Luna Studio. Alle Rechte vorbehalten.",
+    copyright: "© 2024 Luna Luxury Hair. Alle Rechte vorbehalten.",
     
     // Booking Page
     bookingTitle: "Buchen Sie Ihren",
@@ -510,12 +510,12 @@ export const translations = {
     returnHome: "Zurück zur Startseite",
     
     // About Page
-    aboutTitle: 'Über Luna Studio',
+    aboutTitle: 'Über Luna Luxury Hair',
     aboutSubtitle: 'Vertrauen Schaffen Durch Premium Haarlösungen',
     aboutStoryTitle: 'Unsere Geschichte',
-    aboutStoryPara1: 'Luna Studio wurde aus der Leidenschaft geboren, Menschen dabei zu helfen, sich absolut am besten zu fühlen. Gegründet im Jahr 2020, erkannten wir eine Lücke auf dem Markt für wirklich premium, ethisch bezogene Haarverlängerungen und Perücken, die weder bei Qualität noch bei Nachhaltigkeit Kompromisse eingehen.',
+    aboutStoryPara1: 'Luna Luxury Hair wurde aus der Leidenschaft geboren, Menschen dabei zu helfen, sich absolut am besten zu fühlen. Gegründet im Jahr 2020, erkannten wir eine Lücke auf dem Markt für wirklich premium, ethisch bezogene Haarverlängerungen und Perücken, die weder bei Qualität noch bei Nachhaltigkeit Kompromisse eingehen.',
     aboutStoryPara2: 'Was als kleine Boutique begann, ist zu einer vertrauenswürdigen Marke geworden, die Tausende zufriedener Kunden weltweit bedient. Unser Engagement für Exzellenz bedeutet, dass jede Haarsträhne sorgfältig ausgewählt, verarbeitet und qualitätsgeprüft wird, um sicherzustellen, dass sie unseren hohen Standards entspricht.',
-    aboutStoryPara3: 'Heute steht Luna Studio als Leuchtturm der Qualität in der Haarverlängerungsindustrie und kombiniert traditionelles Handwerk mit moderner Innovation, um Produkte zu liefern, die nicht nur das Aussehen, sondern auch das Selbstvertrauen und die Selbstdarstellung transformieren.',
+    aboutStoryPara3: 'Heute steht Luna Luxury Hair als Leuchtturm der Qualität in der Haarverlängerungsindustrie und kombiniert traditionelles Handwerk mit moderner Innovation, um Produkte zu liefern, die nicht nur das Aussehen, sondern auch das Selbstvertrauen und die Selbstdarstellung transformieren.',
     aboutMissionTitle: 'Unsere Mission',
     aboutMissionStatement: 'Individuen zu befähigen, ihre einzigartige Schönheit durch premium, ethisch bezogene Haarprodukte auszudrücken. Wir glauben, dass jeder es verdient, sich selbstbewusst und schön zu fühlen, und wir sind entschlossen, dies durch außergewöhnliche Qualität, nachhaltige Praktiken und personalisierten Service möglich zu machen.',
     aboutGalleryTitle: 'Unsere Arbeit',

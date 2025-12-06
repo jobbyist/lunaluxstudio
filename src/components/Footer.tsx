@@ -11,7 +11,7 @@ export const Footer = () => {
           {/* Brand */}
           <div className="space-y-4">
             <h3 className="text-2xl font-serif tracking-wider">
-              <span className="text-primary">LUNA</span> STUDIO
+              <span className="text-primary">LUNA</span> LUXURY HAIR
             </h3>
             <p className="text-sm text-muted-foreground">
               Premium hair extensions and wigs for the modern woman. Experience luxury that lasts.
@@ -141,7 +141,7 @@ export const Footer = () => {
           </div>
 
           <p className="text-center text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Luna Studio. All rights reserved.
+            &copy; {new Date().getFullYear()} Luna Luxury Hair. All rights reserved.
           </p>
         </div>
       </div>
