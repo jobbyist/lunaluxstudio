@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { translations } from "@/lib/translations";
 
 export type Currency = "ZAR" | "USD" | "EUR" | "GBP";
-export type Language = "EN" | "ES" | "FR" | "DE";
+export type Language = "EN" | "ES" | "FR" | "DE" | "AF";
 
 interface CurrencyContextType {
   currency: Currency;
