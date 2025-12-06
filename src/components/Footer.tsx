@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MessageCircle, CreditCard, Instagram, Twitter, Facebook } from "lucide-react";
-import { LegalDialog, TermsContent, PrivacyContent, RefundsContent, ShippingContent, ContactContent } from "./LegalDialog";
+import { LegalDialog, TermsContent, PrivacyContent, RefundsContent, ShippingContent } from "./LegalDialog";
 import { FaTiktok } from "react-icons/fa";
 
 export const Footer = () => {
@@ -23,9 +23,9 @@ export const Footer = () => {
             <h4 className="font-semibold mb-4 text-primary">Browse</h4>
             <ul className="space-y-2 text-sm">
               <li><Link to="/shop" className="text-muted-foreground hover:text-foreground transition-colors">Catalog</Link></li>
-              <li><Link to="/rewards" className="text-muted-foreground hover:text-foreground transition-colors">Rewards</Link></li>
-              <li><Link to="/gallery" className="text-muted-foreground hover:text-foreground transition-colors">Gallery</Link></li>
-              <li><Link to="/support" className="text-muted-foreground hover:text-foreground transition-colors">Support</Link></li>
+              <li><Link to="/customize" className="text-muted-foreground hover:text-foreground transition-colors">Customize</Link></li>
+              <li><Link to="/explore" className="text-muted-foreground hover:text-foreground transition-colors">Collections</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Support</Link></li>
             </ul>
           </div>
 
@@ -34,9 +34,9 @@ export const Footer = () => {
             <h4 className="font-semibold mb-4 text-primary">Discover</h4>
             <ul className="space-y-2 text-sm">
               <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link></li>
-              <li><Link to="/updates" className="text-muted-foreground hover:text-foreground transition-colors">Updates</Link></li>
-              <li><Link to="/promotions" className="text-muted-foreground hover:text-foreground transition-colors">Promotions</Link></li>
-              <li><Link to="/newsreel" className="text-muted-foreground hover:text-foreground transition-colors">Newsreel</Link></li>
+              <li><Link to="/explore" className="text-muted-foreground hover:text-foreground transition-colors">Explore</Link></li>
+              <li><Link to="/shop" className="text-muted-foreground hover:text-foreground transition-colors">Shop</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
             </ul>
           </div>
 
@@ -69,7 +69,7 @@ export const Footer = () => {
             </div>
             <div className="flex flex-wrap gap-3 items-center">
               {/* Visa */}
-              <div className="bg-white px-3 py-2 rounded flex items-center justify-center" style={{minWidth: '60px', height: '36px'}}>
+              <div className="bg-white px-3 py-2 rounded flex items-center justify-center w-[60px] h-[36px]">
                 <svg viewBox="0 0 48 32" className="h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M20.2 23.8L22.5 8.2H26.3L24 23.8H20.2Z" fill="#00579F"/>
                   <path d="M35.9 8.5C35.1 8.2 33.8 7.9 32.2 7.9C28.4 7.9 25.7 9.8 25.7 12.5C25.7 14.5 27.6 15.6 29.1 16.3C30.6 17 31.1 17.5 31.1 18.2C31.1 19.3 29.8 19.8 28.6 19.8C26.9 19.8 26 19.6 24.6 19L24 18.7L23.4 22.4C24.3 22.8 26 23.2 27.8 23.2C31.8 23.2 34.5 21.3 34.5 18.5C34.5 17 33.6 15.9 31.6 15C30.3 14.4 29.5 13.9 29.5 13.2C29.5 12.6 30.2 11.9 31.7 11.9C33 11.9 33.9 12.1 34.7 12.5L35.1 12.7L35.9 8.5Z" fill="#00579F"/>
@@ -79,7 +79,7 @@ export const Footer = () => {
                 </svg>
               </div>
               {/* Mastercard */}
-              <div className="bg-white px-3 py-2 rounded flex items-center justify-center" style={{minWidth: '60px', height: '36px'}}>
+              <div className="bg-white px-3 py-2 rounded flex items-center justify-center w-[60px] h-[36px]">
                 <svg viewBox="0 0 48 32" className="h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="18" cy="16" r="10" fill="#EB001B"/>
                   <circle cx="30" cy="16" r="10" fill="#F79E1B"/>
@@ -87,14 +87,14 @@ export const Footer = () => {
                 </svg>
               </div>
               {/* American Express */}
-              <div className="bg-white px-3 py-2 rounded flex items-center justify-center" style={{minWidth: '60px', height: '36px'}}>
+              <div className="bg-white px-3 py-2 rounded flex items-center justify-center w-[60px] h-[36px]">
                 <svg viewBox="0 0 48 32" className="h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect width="48" height="32" rx="4" fill="#006FCF"/>
                   <path d="M12 18.5L13.5 15H15.5L14 18.5H17L18.5 15H20.5L19 18.5H21L22.5 15H24.5L21.5 21H19.5L21 18.5H18L16.5 21H14.5L17.5 15H15.5L12 21V18.5Z" fill="white"/>
                 </svg>
               </div>
               {/* Apple Pay */}
-              <div className="bg-black px-3 py-2 rounded flex items-center justify-center" style={{minWidth: '60px', height: '36px'}}>
+              <div className="bg-black px-3 py-2 rounded flex items-center justify-center w-[60px] h-[36px]">
                 <svg viewBox="0 0 48 32" className="h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10.5 10.8C10.1 11.3 9.4 11.7 8.8 11.7C8.7 11 9 10.3 9.4 9.8C9.8 9.3 10.6 8.9 11.1 8.9C11.2 9.6 10.9 10.3 10.5 10.8ZM11.1 12C10.2 11.9 9.5 12.5 9 12.5C8.5 12.5 7.9 12 7.1 12C6.1 12 5.2 12.6 4.7 13.5C3.6 15.3 4.4 18 5.5 19.5C6 20.2 6.6 21 7.4 21C8.2 21 8.5 20.5 9.4 20.5C10.3 20.5 10.5 21 11.4 21C12.3 21 12.8 20.3 13.3 19.5C13.9 18.7 14.1 17.9 14.1 17.9C14.1 17.9 12.6 17.3 12.6 15.6C12.6 14.1 13.8 13.4 13.8 13.4C13.1 12.3 12 12.1 11.7 12.1L11.1 12Z" fill="white"/>
                   <path d="M20 15.5V21H21.5V18.8H23.2C24.9 18.8 26.1 17.6 26.1 16C26.1 14.4 24.9 13.2 23.3 13.2H20V15.5ZM21.5 14.5H22.9C24 14.5 24.6 15.1 24.6 16C24.6 16.9 24 17.5 22.9 17.5H21.5V14.5Z" fill="white"/>
@@ -112,7 +112,7 @@ export const Footer = () => {
                 SnapScan
               </div>
               {/* PayPal */}
-              <div className="bg-white px-3 py-2 rounded flex items-center justify-center" style={{minWidth: '60px', height: '36px'}}>
+              <div className="bg-white px-3 py-2 rounded flex items-center justify-center w-[60px] h-[36px]">
                 <svg viewBox="0 0 48 32" className="h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18.5 8H13.5C13.2 8 12.9 8.2 12.8 8.5L10.5 22.5C10.5 22.8 10.7 23 11 23H13.5C13.8 23 14.1 22.8 14.2 22.5L14.8 18.8C14.9 18.5 15.2 18.3 15.5 18.3H17.3C20.3 18.3 22.1 16.9 22.6 14.1C22.8 12.9 22.6 11.9 22 11.2C21.3 10.4 20.1 10 18.5 10V8Z" fill="#003087"/>
                   <path d="M27.5 8H22.5C22.2 8 21.9 8.2 21.8 8.5L19.5 22.5C19.5 22.8 19.7 23 20 23H22.3C22.5 23 22.7 22.9 22.7 22.7L23.3 19.2C23.4 18.9 23.7 18.7 24 18.7H25.8C28.8 18.7 30.6 17.3 31.1 14.5C31.3 13.3 31.1 12.3 30.5 11.6C29.8 10.8 28.6 10.4 27 10.4L27.5 8Z" fill="#0070E0"/>
@@ -128,7 +128,7 @@ export const Footer = () => {
                 Ozow
               </div>
               {/* Google Pay */}
-              <div className="bg-white px-3 py-2 rounded flex items-center justify-center" style={{minWidth: '60px', height: '36px'}}>
+              <div className="bg-white px-3 py-2 rounded flex items-center justify-center w-[60px] h-[36px]">
                 <svg viewBox="0 0 48 32" className="h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M23.5 15.5V20H22V10H26.3C27.3 10 28.2 10.4 28.9 11.1C29.6 11.8 30 12.7 30 13.7C30 14.7 29.6 15.6 28.9 16.3C28.2 17 27.3 17.4 26.3 17.4L23.5 15.5ZM23.5 11.5V14H26.3C26.8 14 27.2 13.8 27.5 13.5C27.8 13.2 28 12.8 28 12.3C28 11.8 27.8 11.4 27.5 11.1C27.2 10.8 26.8 10.6 26.3 10.6L23.5 11.5Z" fill="#5F6368"/>
                   <path d="M33 10V11.5C32.6 11.5 32.2 11.6 31.9 11.9C31.6 12.2 31.4 12.6 31.4 13V20H29.9V11.5H31.4V12.5C31.7 12.1 32 11.8 32.4 11.6C32.8 11.4 33.2 11.3 33.6 11.3L33 10Z" fill="#5F6368"/>
