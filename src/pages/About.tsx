@@ -36,7 +36,7 @@ const About = () => {
             <div className="grid grid-cols-2 gap-4">
               <img 
                 src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=500&fit=crop" 
-                alt="Luna Studio Story" 
+                alt="Luna Luxury Hair Story" 
                 className="rounded-lg w-full h-64 object-cover"
               />
               <img 

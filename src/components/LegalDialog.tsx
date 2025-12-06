@@ -38,7 +38,7 @@ export const LegalDialog = ({ title, content, children }: LegalDialogProps) => {
 export const TermsContent = () => (
   <div className="space-y-4 text-foreground">
     <h3 className="font-semibold">Terms of Service</h3>
-    <p>By accessing and using Luna Studio's website and services, you agree to be bound by these Terms of Service.</p>
+    <p>By accessing and using Luna Luxury Hair's website and services, you agree to be bound by these Terms of Service.</p>
     
     <h4 className="font-semibold mt-4">Product Information</h4>
     <p>All products are made from premium quality hair. Colors and textures may vary slightly from images shown.</p>
@@ -47,14 +47,14 @@ export const TermsContent = () => (
     <p>All orders are subject to availability. Payment must be received before items are dispatched.</p>
     
     <h4 className="font-semibold mt-4">Intellectual Property</h4>
-    <p>All content on this website is the property of Luna Studio and protected by copyright law.</p>
+    <p>All content on this website is the property of Luna Luxury Hair and protected by copyright law.</p>
   </div>
 );
 
 export const PrivacyContent = () => (
   <div className="space-y-4 text-foreground">
     <h3 className="font-semibold">Privacy Policy</h3>
-    <p>Luna Studio is committed to protecting your privacy and personal information.</p>
+    <p>Luna Luxury Hair is committed to protecting your privacy and personal information.</p>
     
     <h4 className="font-semibold mt-4">Information We Collect</h4>
     <p>We collect information you provide when creating an account, placing orders, or contacting us.</p>
@@ -70,32 +70,42 @@ export const PrivacyContent = () => (
 export const RefundsContent = () => (
   <div className="space-y-4 text-foreground">
     <h3 className="font-semibold">Refund Policy</h3>
-    <p>At Luna Studio, we are confident in the quality of our products. If you're unhappy with your purchase, let us know and we'll refund you or replace your item with another product or service of the same value.</p>
+    <p>We have a 7 day return policy, which means you have 7 days after receiving your item to request a return. To be eligible for a return, your item must be in the same condition that you received it, unworn or unused, with tags, and in its original packaging. You'll also need the receipt or proof of purchase. To start a return, you can contact us at info@lunaluxhair.com. If your return is accepted, we'll send you a return shipping label, as well as instructions on how and where to send your package. Items sent back to us without first requesting a return will not be accepted. Return shipping is liable to the customer. You can always contact us for any returns related questions at info@lunaluxhair.com.</p>
     
-    <h4 className="font-semibold mt-4">Eligibility</h4>
-    <p>Products must be unused, in original packaging, and returned within 14 days of receipt.</p>
-    
-    <h4 className="font-semibold mt-4">Process</h4>
-    <p>Contact us at hi@lunaluxhair.com to initiate a return. Refunds are processed within 5-7 business days.</p>
+    <h4 className="font-semibold mt-4">Damages and issues</h4>
+    <p>Please inspect your order upon reception and contact us immediately if the item is defective, damaged or if you receive the wrong item, so that we can evaluate the issue and make it right.</p>
     
     <h4 className="font-semibold mt-4">Exceptions</h4>
-    <p>Custom wigs and installed services are non-refundable.</p>
+    <p>Unfortunately, we cannot accept returns on sale items nor on single items like extensions.</p>
+    
+    <h4 className="font-semibold mt-4">Exchanges</h4>
+    <p>The fastest way to ensure you get what you want is to return the item you have, and once the return is accepted, make a separate purchase for the new item.</p>
+    
+    <h4 className="font-semibold mt-4">Refunds</h4>
+    <p>We will notify you once we've received and inspected your return, and let you know if the refund was approved or not. If approved, you'll be automatically refunded on your original payment method. Please remember it can take some time for your bank or credit card company to process and post the refund too.</p>
   </div>
 );
 
 export const ShippingContent = () => (
   <div className="space-y-4 text-foreground">
     <h3 className="font-semibold">Shipping Information</h3>
-    <p>We offer shipping across South Africa and internationally.</p>
+    <p>Please note that some items in our catalog are ready to ship immediately whilst some are made to order. Therefore it may take between 7-14 business days to ship your order depending on availability, your location and other factors beyond our control. We will make every effort to ensure that your order arrives within a reasonable timeframe and will keep you updated every step of the way regarding the status of your shipment.</p>
     
-    <h4 className="font-semibold mt-4">Shipping Times</h4>
-    <p>South Africa: 3-5 business days<br/>International: 7-14 business days</p>
+    <p>Wigs that are listed as "on sale" or discounted/clearance items are NOT customised unless stated otherwise.</p>
     
-    <h4 className="font-semibold mt-4">Free Shipping</h4>
-    <p>Enjoy free shipping on orders above $100 with code NEWLUNA25.</p>
+    <h4 className="font-semibold mt-4">Customisation</h4>
+    <p>To request customisation, please send us an email, message us on WhatsApp or give us a call at 012 880 6563 on weekdays between 10AM - 3PM (South African Time).</p>
+    
+    <h4 className="font-semibold mt-4">Shipping Costs</h4>
+    <p>Countrywide shipping is R150. We use The Courier Guy as our preferred courier service.</p>
+    
+    <p>International shipping costs will be calculated during checkout based on your location and the estimated weight of your package.</p>
     
     <h4 className="font-semibold mt-4">Tracking</h4>
-    <p>You'll receive tracking information once your order ships.</p>
+    <p>Tracking numbers will be sent to you upon dispatch of your order from our store to the shipping address provided by you during checkout.</p>
+    
+    <h4 className="font-semibold mt-4">Local Pickups</h4>
+    <p>Local order pickups (SA only) will be implemented soon.</p>
   </div>
 );
 
