@@ -1,12 +1,10 @@
 import { CollectionCard } from "./CollectionCard";
-import { useCurrency } from "@/contexts/CurrencyContext";
 // Using existing assets as placeholders for high-res collection images
 import brazilianImage from "@/assets/hero-1.jpg";
 import vietnameseImage from "@/assets/hero-2.jpg";
 import rawVietnameseImage from "@/assets/hero-3.jpg";
 
 export const Collections = () => {
-  const { t } = useCurrency();
 
   const collections = [
     {

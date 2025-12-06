@@ -19,9 +19,8 @@ export default function CollectionCategory() {
       .join(" ");
   };
 
-  const collectionName = formatName(collection);
-  const categoryName = formatName(category);
-  const pageTitle = `${collectionName} - ${categoryName}`;
+  const collectionName = formatName(collection || "");
+  const categoryName = formatName(category || "");
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,7 +48,7 @@ export default function CollectionCategory() {
         <section className="py-12">
           <ProductGrid 
             title={`${collectionName} ${categoryName}`}
-            searchQuery={`${collection} ${category}`}
+            searchQuery={`${collection || ""} ${category || ""}`.trim()}
             limit={12}
           />
         </section>

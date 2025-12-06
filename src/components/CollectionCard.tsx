@@ -19,12 +19,19 @@ const categories = [
 export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const handleClick = () => {
+    // Only toggle on click for touch devices (mobile)
+    if ('ontouchstart' in window) {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
   return (
     <motion.div
       className="relative h-[500px] rounded-lg overflow-hidden group cursor-pointer"
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => setIsExpanded(false)}
-      onClick={() => setIsExpanded(!isExpanded)}
+      onClick={handleClick}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}
     >
