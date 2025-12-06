@@ -18,6 +18,7 @@ export default {
         sans: ['Inter', 'sans-serif'],
         heading: ['Playfair Display', 'serif'],
         elegant: ['Cinzel', 'serif'],
+        cursive: ['Dancing Script', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",

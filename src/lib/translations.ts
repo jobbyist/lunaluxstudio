@@ -11,13 +11,13 @@ export const translations = {
     bookNow: "Book Now",
     
     // Hero
-    heroTagline: "Where Quality Hair Resides",
-    heroTitle: "THE NEW HOME OF",
-    heroTitleHighlight: "LUXURY HAIR",
-    heroSubtitle: "TRUSTED SINCE 2021",
+    heroTagline: "Where Premium Quality Meets Luxury",
+    heroTitle: "Your Trusted Destination for",
+    heroTitleHighlight: "Luxury Hair & Beauty",
+    heroSubtitle: "Excellence Since 2021",
     discoverCatalog: "DISCOVER OUR CATALOG",
-    bookExperience: "BUILD YOUR PERFECT LOOK",
-    heroDescription: "From our exclusive line of ethically sourced hair to our personalized in-studio styling and maintenance treatments, every Luna experience is crafted with care, quality, and a touch of celestial grace.",
+    bookExperience: "SHOP COLLECTION",
+    heroDescription: "Discover our curated selection of best-in-class hair extensions, wigs, and beauty products. Each item in our exclusive catalog is carefully selected to ensure the highest quality standards, delivering luxury that transforms your look and elevates your confidence.",
     
     // Index Page
     luxuryTitle: "TREAT YOURSELF TO TRUE LUXURY",
@@ -58,7 +58,7 @@ export const translations = {
     enterEmailError: "Please enter your email",
     
     // Footer
-    footerTagline: "Premium hair extensions and wigs for the modern woman. Experience luxury that lasts.",
+    footerTagline: "Your trusted luxury hair and beauty store featuring only the finest, best-in-class products. Experience premium quality that lasts.",
     shop: "Shop",
     allProducts: "All Products",
     frontalsClosures: "Frontals & Closures",
