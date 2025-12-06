@@ -12,6 +12,7 @@ import Booking from "./pages/Booking";
 import About from "./pages/About";
 import Explore from "./pages/Explore";
 import Contact from "./pages/Contact";
+import CollectionCategory from "./pages/CollectionCategory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/explore" element={<Explore />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Index />} />
+          <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatBot />
