@@ -53,9 +53,14 @@ export const Hero = () => {
             <Button
               asChild
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg relative animate-subtle-pulse"
             >
-              <Link to="/customize">{t('discoverCatalog')}</Link>
+              <Link to="/customize">
+                {t('discoverCatalog')}
+                <span className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg" aria-label="New feature">
+                  New!
+                </span>
+              </Link>
             </Button>
             <Button
               asChild

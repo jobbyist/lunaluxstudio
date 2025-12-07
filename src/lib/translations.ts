@@ -15,7 +15,7 @@ export const translations = {
     heroTitle: "Your Trusted Destination for",
     heroTitleHighlight: "Luxury Hair & Beauty",
     heroSubtitle: "Excellence Since 2021",
-    discoverCatalog: "DISCOVER OUR CATALOG",
+    discoverCatalog: "BUILD YOUR PERFECT LOOK",
     bookExperience: "SHOP OUR COLLECTIONS",
     heroDescription: "Discover our curated selection of best-in-class hair extensions, wigs, and beauty products. Each item in our exclusive catalog is carefully selected to ensure the highest quality standards, delivering luxury that transforms your look and elevates your confidence.",
     
@@ -148,7 +148,7 @@ export const translations = {
     heroTitle: "EL NUEVO HOGAR DEL",
     heroTitleHighlight: "CABELLO DE LUJO",
     heroSubtitle: "CONFIANZA DESDE 2021",
-    discoverCatalog: "DESCUBRE NUESTRO CATÁLOGO",
+    discoverCatalog: "CREA TU LOOK PERFECTO",
     bookExperience: "CREA TU LOOK PERFECTO",
     heroDescription: "Desde nuestra línea exclusiva de cabello de origen ético hasta nuestros tratamientos personalizados de estilismo y mantenimiento en el estudio, cada experiencia Luna está elaborada con cuidado, calidad y un toque de gracia celestial.",
     
@@ -281,7 +281,7 @@ export const translations = {
     heroTitle: "LA NOUVELLE MAISON DES",
     heroTitleHighlight: "CHEVEUX DE LUXE",
     heroSubtitle: "DE CONFIANCE DEPUIS 2021",
-    discoverCatalog: "DÉCOUVREZ NOTRE CATALOGUE",
+    discoverCatalog: "CRÉEZ VOTRE LOOK PARFAIT",
     bookExperience: "CRÉEZ VOTRE LOOK PARFAIT",
     heroDescription: "De notre gamme exclusive de cheveux d'origine éthique à nos traitements de coiffure et d'entretien personnalisés en studio, chaque expérience Luna est conçue avec soin, qualité et une touche de grâce céleste.",
     
@@ -414,7 +414,7 @@ export const translations = {
     heroTitle: "DAS NEUE ZUHAUSE VON",
     heroTitleHighlight: "LUXUSHAAR",
     heroSubtitle: "VERTRAUT SEIT 2021",
-    discoverCatalog: "ENTDECKEN SIE UNSEREN KATALOG",
+    discoverCatalog: "GESTALTE DEINEN PERFEKTEN LOOK",
     bookExperience: "GESTALTEN SIE IHREN PERFEKTEN LOOK",
     heroDescription: "Von unserer exklusiven Linie ethisch bezogenen Haares bis zu unseren personalisierten Studio-Styling- und Pflegebehandlungen wird jedes Luna-Erlebnis mit Sorgfalt, Qualität und einem Hauch himmlischer Anmut gestaltet.",
     
@@ -547,7 +547,7 @@ export const translations = {
     heroTitle: "Jou Betroubare Bestemming vir",
     heroTitleHighlight: "Luukse Hare & Skoonheid",
     heroSubtitle: "Uitnemendheid Sedert 2021",
-    discoverCatalog: "ONTDEK ONS KATALOGUS",
+    discoverCatalog: "BOU JOU PERFEKTE VOORKOMS",
     bookExperience: "WINKEL VERSAMELING",
     heroDescription: "Ontdek ons saamgestelde seleksie van beste-in-klas haarverlenging, pruike en skoonheidsprodukte. Elke item in ons eksklusiewe katalogus word sorgvuldig gekies om die hoogste kwaliteitstandaarde te verseker, en luukse te lewer wat jou voorkoms transformeer en jou selfvertroue verhoog.",
     

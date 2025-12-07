@@ -80,10 +80,19 @@ export default {
             height: "0",
           },
         },
+        "subtle-pulse": {
+          "0%, 100%": {
+            boxShadow: "0 0 20px hsl(340 75% 85% / 0.5)",
+          },
+          "50%": {
+            boxShadow: "0 0 30px hsl(340 75% 85% / 0.7)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "subtle-pulse": "subtle-pulse 2s ease-in-out infinite",
       },
     },
   },
