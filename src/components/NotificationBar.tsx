@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useCurrency } from "@/contexts/CurrencyContext";
 
 const notifications = [
   {
@@ -19,7 +18,6 @@ const notifications = [
 
 export const NotificationBar = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { language } = useCurrency();
 
   useEffect(() => {
     const interval = setInterval(() => {

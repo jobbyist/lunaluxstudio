@@ -13,6 +13,10 @@ import About from "./pages/About";
 import Explore from "./pages/Explore";
 import Contact from "./pages/Contact";
 import CollectionCategory from "./pages/CollectionCategory";
+import Collections from "./pages/Collections";
+import MainCharacterCollectionPage from "./pages/MainCharacterCollection";
+import FaceCardCollection from "./pages/FaceCardCollection";
+import PopOutCollection from "./pages/PopOutCollection";
 import Loyalty from "./pages/Loyalty";
 import GiftVouchers from "./pages/GiftVouchers";
 import SpecialOffers from "./pages/SpecialOffers";
@@ -39,6 +43,10 @@ const App = () => (
           <Route path="/explore" element={<Explore />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Index />} />
+          <Route path="/collections" element={<Collections />} />
+          <Route path="/collection/main-character" element={<MainCharacterCollectionPage />} />
+          <Route path="/collection/face-card-collection" element={<FaceCardCollection />} />
+          <Route path="/collection/pop-out-collection" element={<PopOutCollection />} />
           <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
           <Route path="/loyalty" element={<Loyalty />} />
           <Route path="/gift-vouchers" element={<GiftVouchers />} />

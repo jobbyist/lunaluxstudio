@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Categories } from "@/components/Categories";
 import { NewArrivals } from "@/components/NewArrivals";
+import { MainCharacterCollection } from "@/components/MainCharacterCollection";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Collections } from "@/components/Collections";
 import { InstagramReels } from "@/components/InstagramReels";
@@ -18,6 +19,7 @@ const Index = () => {
       <main className="pt-20">
         <Hero />
         <NewArrivals />
+        <MainCharacterCollection />
         <ProductGrid />
         <Collections />
         <InstagramReels />

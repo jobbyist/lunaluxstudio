@@ -16,7 +16,7 @@ export const translations = {
     heroTitleHighlight: "Luxury Hair & Beauty",
     heroSubtitle: "Excellence Since 2021",
     discoverCatalog: "DISCOVER OUR CATALOG",
-    bookExperience: "SHOP COLLECTION",
+    bookExperience: "SHOP OUR COLLECTIONS",
     heroDescription: "Discover our curated selection of best-in-class hair extensions, wigs, and beauty products. Each item in our exclusive catalog is carefully selected to ensure the highest quality standards, delivering luxury that transforms your look and elevates your confidence.",
     
     // Index Page
