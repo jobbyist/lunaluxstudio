@@ -16,7 +16,7 @@ export const translations = {
     heroTitleHighlight: "Luxury Hair & Beauty",
     heroSubtitle: "Excellence Since 2021",
     discoverCatalog: "DISCOVER OUR CATALOG",
-    bookExperience: "SHOP COLLECTION",
+    bookExperience: "SHOP OUR COLLECTIONS",
     heroDescription: "Discover our curated selection of best-in-class hair extensions, wigs, and beauty products. Each item in our exclusive catalog is carefully selected to ensure the highest quality standards, delivering luxury that transforms your look and elevates your confidence.",
     
     // Index Page
@@ -532,6 +532,139 @@ export const translations = {
     explore: 'Entdecken',
     community: 'Gemeinschaft',
     shopCollection: 'Kollektion Kaufen',
+  },
+  AF: {
+    // Header
+    topBanner: "Gratis Versending + 10% AF op jou eerste bestelling bo R100 met kode NEWLUNA25",
+    shopAll: "Tuis",
+    hairBundles: "Haartoevoegings",
+    wigs: "Pruike",
+    frontals: "Voorkantstukke",
+    bookNow: "Bespreek Nou",
+    
+    // Hero
+    heroTagline: "Waar Premium Kwaliteit Luukse Ontmoet",
+    heroTitle: "Jou Betroubare Bestemming vir",
+    heroTitleHighlight: "Luukse Hare & Skoonheid",
+    heroSubtitle: "Uitnemendheid Sedert 2021",
+    discoverCatalog: "ONTDEK ONS KATALOGUS",
+    bookExperience: "WINKEL VERSAMELING",
+    heroDescription: "Ontdek ons saamgestelde seleksie van beste-in-klas haarverlenging, pruike en skoonheidsprodukte. Elke item in ons eksklusiewe katalogus word sorgvuldig gekies om die hoogste kwaliteitstandaarde te verseker, en luukse te lewer wat jou voorkoms transformeer en jou selfvertroue verhoog.",
+    
+    // Index Page
+    luxuryTitle: "TRAKTEER JOUSELF OP WARE LUUKSE",
+    luxuryDescription: "By Luna Luxury Hair is ons vol vertroue dat ons premium haarprodukte en bykomstighede van die beste moontlike kwaliteit is. As jy nie tevrede is met jou aankoop nie, laat weet ons en ons sal jou terugbetaal of jou item vervang met 'n ander produk of diens van dieselfde waarde.",
+    
+    // Product Grid
+    bestsellers: "Topverkopers",
+    bestsellerDescription: "Van ontdekking tot lojaliteit, hierdie is jou mees-geliefde produkte, topverkopers en nuutste uitgawes.",
+    noProductsFound: "Geen produkte gevind nie",
+    
+    // New Arrivals
+    newArrivals: "Nuwe Aankomste",
+    shopNow: "Koop Nou",
+    newArrival1Title: "Brasiliaanse Golf Bundel",
+    newArrival1Desc: "Premium kwaliteit golvende haarverlenging bundel",
+    newArrival2Title: "Sy Reguit Pruik",
+    newArrival2Desc: "Luukse reguit kant voorkant pruik",
+    newArrival3Title: "HD Kant Voorkantstuk",
+    newArrival3Desc: "Onsigbare HD kant voorkantstuk sluiting",
+    
+    // Instagram Reels
+    featuredStories: "Uitgesoekte Stories & Tutoriale",
+    watchTutorial: "Kyk Tutoriaal",
+    bundlesTutorial: "Hoe Om Haarbundels Te Installeer",
+    wigsTutorial: "Pruik Stileringstegnieke",
+    frontalsTutorial: "Voorkantstukke Toepas Soos 'n Pro",
+    
+    // Newsletter
+    joinMailingList: "Sluit Aan By Ons Poslys",
+    newsletterDescription: "Teken in om eksklusiewe aanbiedinge, nuwe produklanseringe en haarsorg wenke direk na jou inkassie te ontvang.",
+    enterEmail: "Voer jou e-pos in",
+    subscribe: "Teken In",
+    subscribing: "Teken in...",
+    privacyNote: "Ons respekteer jou privaatheid. Teken af enige tyd.",
+    subscribeSuccess: "Suksesvol ingeteken op ons nuusbrief!",
+    subscribeError: "Kon nie inteken nie. Probeer asseblief weer.",
+    alreadySubscribed: "Jy is reeds ingeteken!",
+    enterEmailError: "Voer asseblief jou e-pos in",
+    
+    // Footer
+    footerTagline: "Jou betroubare luukse hare en skoonheidswinkel met slegs die fynste, beste-in-klas produkte. Ervaar premium kwaliteit wat hou.",
+    shop: "Winkel",
+    allProducts: "Alle Produkte",
+    frontalsClosures: "Voorkantstukke & Sluitings",
+    support: "Ondersteuning",
+    bookAppointment: "Bespreek Afspraak",
+    faqs: "Gereelde Vrae",
+    shippingInfo: "Versending Info",
+    returns: "Terugsendings",
+    contact: "Kontak",
+    weAccept: "Ons Aanvaar:",
+    followUs: "Volg Ons",
+    legal: "Wetlik",
+    termsOfService: "Diensbepalings",
+    privacyPolicy: "Privaatheidsbeleid",
+    refundPolicy: "Terugbetalingsbeleid",
+    shippingPolicy: "Versendingsbeleid",
+    contactUs: "Kontak Ons",
+    copyright: "© 2024 Luna Luxury Hair. Alle regte voorbehou.",
+    
+    // Booking Page
+    bookingTitle: "Bespreek Jou",
+    bookingTitleHighlight: "Afspraak",
+    bookingDescription: "Skeduleer \'n konsultasie of installasiediens met ons deskundige stiliste",
+    comingSoon: "Binnekort Beskikbaar",
+    bookingComingSoonText: "Ons aanlynbesprekingstelsel sal binnekort met Cal.com of Calendly geïntegreer word. Kontak ons intussen direk om jou afspraak te skeduleer.",
+    phone: "Telefoon:",
+    whatsapp: "WhatsApp:",
+    email: "E-pos:",
+    
+    // Auth Page
+    welcomeBack: "Welkom Terug",
+    createAccount: "Skep Rekening",
+    signInDescription: "Meld aan by jou rekening om voort te gaan",
+    signUpDescription: "Skep \'n nuwe rekening om te begin",
+    emailAddress: "E-posadres",
+    password: "Wagwoord",
+    confirmPassword: "Bevestig Wagwoord",
+    signIn: "Meld Aan",
+    signUp: "Registreer",
+    signingIn: "Meld aan...",
+    signingUp: "Registreer...",
+    dontHaveAccount: "Het jy nie \'n rekening nie?",
+    alreadyHaveAccount: "Het jy reeds \'n rekening?",
+    signUpLink: "Registreer",
+    signInLink: "Meld aan",
+    
+    // 404 Page
+    notFoundTitle: "404",
+    notFoundMessage: "Oeps! Bladsy nie gevind nie",
+    returnHome: "Keer Terug na Tuis",
+    
+    // About Page
+    aboutTitle: 'Oor Luna Luxury Hair',
+    aboutSubtitle: 'Selfvertroue Skep Deur Premium Haaroplossings',
+    aboutStoryTitle: 'Ons Verhaal',
+    aboutStoryPara1: 'Luna Luxury Hair is gebore uit \'n passie om mense te help om hul absolute beste te voel. Gestig in 2020, het ons \'n gaping in die mark erken vir werklik premium, eties-verkrygde haarverlenging en pruike wat nie kwaliteit of volhoubaarheid kompromitteer nie.',
+    aboutStoryPara2: 'Wat as \'n klein boetiek begin het, het gegroei tot \'n betroubare handelsmerk wat duisende tevrede kliënte wêreldwyd bedien. Ons verbintenis tot uitnemendheid beteken elke haarstrand word sorgvuldig gekies, verwerk en kwaliteit-nagegaan om te verseker dit voldoen aan ons streng standaarde.',
+    aboutStoryPara3: 'Vandag staan Luna Luxury Hair as \'n baken van kwaliteit in die haarverlenging bedryf, tradisionele vakmanskap kombineer met moderne innovasie om produkte te lewer wat nie net voorkoms transformeer nie, maar selfvertroue en selfuitdrukking.',
+    aboutMissionTitle: 'Ons Missie',
+    aboutMissionStatement: 'Om individue te bemagtig om hul unieke skoonheid uit te druk deur premium, eties-verkrygde haarprodukte. Ons glo almal verdien om selfversekerd en mooi te voel, en ons is verbind om dit moontlik te maak deur uitsonderlike kwaliteit, volhoubare praktyke en persoonlike diens.',
+    aboutGalleryTitle: 'Ons Werk',
+    aboutValuesTitle: 'Ons Waardes',
+    aboutValue1Title: 'Kwaliteit Eerste',
+    aboutValue1Desc: 'Ons kompromitteer nooit op die kwaliteit van ons produkte nie. Elke stuk word sorgvuldig vervaardig en geïnspekteer om te verseker dit voldoen aan ons hoë standaarde.',
+    aboutValue2Title: 'Kliëntesorg',
+    aboutValue2Desc: 'Jou tevredenheid is ons prioriteit. Ons bied persoonlike konsultasies en deurlopende ondersteuning om te verseker jy is lief vir jou aankoop.',
+    aboutValue3Title: 'Volhoubaarheid',
+    aboutValue3Desc: 'Ons is verbind tot etiese verkryging en volhoubare praktyke, om te verseker ons produkte is so goed vir die planeet soos vir jou.',
+    
+    // Navigation
+    about: 'Oor Ons',
+    explore: 'Verken',
+    community: 'Gemeenskap',
+    shopCollection: 'Koop Versameling',
   },
 };
 

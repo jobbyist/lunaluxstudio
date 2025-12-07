@@ -33,21 +33,20 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
+import { NotificationBar } from "./NotificationBar";
 
 export const Header = () => {
   const { currency, language, setCurrency, setLanguage, t } = useCurrency();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const currencies: Currency[] = ["ZAR", "USD", "EUR", "GBP"];
-  const languages: Language[] = ["EN", "ES", "FR", "DE"];
+  const languages: Language[] = ["EN", "ES", "FR", "DE", "AF"];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-b border-border">
       <div className="container mx-auto px-4">
-        {/* Top Bar */}
-        <div className="py-2 border-b border-border/50 text-center text-sm text-muted-foreground">
-          {t('topBanner')}
-        </div>
+        {/* Top Bar - Rotating Notifications */}
+        <NotificationBar />
 
         {/* Main Header */}
         <div className="flex items-center justify-between py-4">

@@ -55,7 +55,7 @@ export const Hero = () => {
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
             >
-              <Link to="/customize">{t('bookExperience')}</Link>
+              <Link to="/customize">{t('discoverCatalog')}</Link>
             </Button>
             <Button
               asChild
@@ -63,7 +63,7 @@ export const Hero = () => {
               size="lg"
               className="px-8 py-6 text-lg"
             >
-              <Link to="/shop">{t('shopCollection')}</Link>
+              <Link to="/collections">{t('bookExperience')}</Link>
             </Button>
           </div>
 
