@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { articlesAPI, Article } from '@/lib/githubStorage';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { toast } from 'sonner';
@@ -18,17 +18,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  status: 'draft' | 'published' | 'archived';
-  created_at: string;
-  updated_at: string;
-  published_at: string | null;
-}
-
 const AdminArticles = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,13 +30,8 @@ const AdminArticles = () => {
   const loadArticles = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('articles')
-        .select('*')
-        .order('updated_at', { ascending: false });
-
-      if (error) throw error;
-      setArticles(data || []);
+      const data = await articlesAPI.getAll();
+      setArticles(data);
     } catch (error) {
       console.error('Error loading articles:', error);
       toast.error('Failed to load articles');
@@ -60,12 +44,7 @@ const AdminArticles = () => {
     if (!deleteId) return;
 
     try {
-      const { error } = await supabase
-        .from('articles')
-        .delete()
-        .eq('id', deleteId);
-
-      if (error) throw error;
+      await articlesAPI.delete(deleteId);
       
       toast.success('Article deleted successfully');
       setArticles(articles.filter(a => a.id !== deleteId));
@@ -140,7 +119,7 @@ const AdminArticles = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-medium">{article.title}</h3>
-                        <Badge variant={getStatusBadgeVariant(article.status)}>
+                        <Badge variant={getStatusBadgeVariant(article.status) as any}>
                           {article.status}
                         </Badge>
                       </div>

@@ -1,7 +1,7 @@
 import { AdminLayout } from '@/components/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { articlesAPI, productsAPI, analyticsAPI, Article } from '@/lib/githubStorage';
 import { FileText, Package, Users, TrendingUp } from 'lucide-react';
 
 interface DashboardStats {
@@ -9,13 +9,6 @@ interface DashboardStats {
   productsCount: number;
   analyticsCount: number;
   recentActivity: Article[];
-}
-
-interface Article {
-  id: string;
-  title: string;
-  status: string;
-  updated_at: string;
 }
 
 const AdminDashboard = () => {
@@ -36,36 +29,28 @@ const AdminDashboard = () => {
       setLoading(true);
 
       // Load articles count
-      const { count: articlesCount } = await supabase
-        .from('articles')
-        .select('*', { count: 'exact', head: true });
+      const articlesCount = await articlesAPI.count();
 
       // Load products count
-      const { count: productsCount } = await supabase
-        .from('cms_products')
-        .select('*', { count: 'exact', head: true });
+      const productsCount = await productsAPI.count();
 
       // Load analytics count (last 30 days)
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
-      const { count: analyticsCount } = await supabase
-        .from('analytics_events')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', thirtyDaysAgo.toISOString());
+      const analyticsCount = await analyticsAPI.count(thirtyDaysAgo.toISOString());
 
       // Load recent articles
-      const { data: recentArticles } = await supabase
-        .from('articles')
-        .select('*')
-        .order('updated_at', { ascending: false })
-        .limit(5);
+      const allArticles = await articlesAPI.getAll();
+      const recentArticles = allArticles
+        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+        .slice(0, 5);
 
       setStats({
-        articlesCount: articlesCount || 0,
-        productsCount: productsCount || 0,
-        analyticsCount: analyticsCount || 0,
-        recentActivity: recentArticles || [],
+        articlesCount,
+        productsCount,
+        analyticsCount,
+        recentActivity: recentArticles,
       });
     } catch (error) {
       console.error('Error loading dashboard stats:', error);
@@ -213,3 +198,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

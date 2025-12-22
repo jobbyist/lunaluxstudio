@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/stores/authStore';
 
 export interface AdminUser {
   id: string;
@@ -15,34 +15,32 @@ export const useAdmin = () => {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuthStore();
 
   useEffect(() => {
     checkAdminStatus();
-  }, []);
+  }, [isAuthenticated, user]);
 
-  const checkAdminStatus = async () => {
+  const checkAdminStatus = () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
+      if (!isAuthenticated || !user) {
         setIsAdmin(false);
+        setAdminUser(null);
         setLoading(false);
         return;
       }
 
-      const { data: adminData, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
+      // Create a compatible admin user object
+      const adminData: AdminUser = {
+        id: '1',
+        user_id: user.username,
+        role: user.role as 'admin' | 'editor' | 'viewer',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
 
-      if (error || !adminData) {
-        setIsAdmin(false);
-        setAdminUser(null);
-      } else {
-        setIsAdmin(true);
-        setAdminUser(adminData);
-      }
+      setIsAdmin(true);
+      setAdminUser(adminData);
     } catch (error) {
       console.error('Error checking admin status:', error);
       setIsAdmin(false);
@@ -51,7 +49,7 @@ export const useAdmin = () => {
     }
   };
 
-  const requireAdmin = (redirectTo: string = '/auth') => {
+  const requireAdmin = (redirectTo: string = '/admin/signin') => {
     if (!loading && !isAdmin) {
       navigate(redirectTo);
     }

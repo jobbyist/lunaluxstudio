@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { productsAPI } from '@/lib/githubStorage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Save } from 'lucide-react';
@@ -60,13 +60,9 @@ const AdminProductEditor = () => {
   const loadProduct = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('cms_products')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) throw error;
+      if (!id) return;
+      
+      const data = await productsAPI.getById(id);
       
       if (data) {
         setForm({
@@ -74,17 +70,17 @@ const AdminProductEditor = () => {
           slug: data.slug,
           description: data.description,
           price: data.price.toString(),
-          compare_at_price: data.compare_at_price?.toString() || '',
+          compare_at_price: '',
           currency: data.currency,
-          sku: data.sku || '',
+          sku: '',
           inventory_quantity: data.inventory_quantity.toString(),
           featured_image: data.featured_image || '',
-          images: data.images?.join('\n') || '',
+          images: '',
           status: data.status,
-          tags: data.tags?.join(', ') || '',
-          category: data.category || '',
-          meta_title: data.meta_title || '',
-          meta_description: data.meta_description || '',
+          tags: '',
+          category: '',
+          meta_title: '',
+          meta_description: '',
         });
       }
     } catch (error) {
@@ -122,50 +118,24 @@ const AdminProductEditor = () => {
     setLoading(true);
 
     try {
-      const tagsArray = form.tags
-        .split(',')
-        .map(t => t.trim())
-        .filter(t => t.length > 0);
-
-      const imagesArray = form.images
-        .split('\n')
-        .map(i => i.trim())
-        .filter(i => i.length > 0);
-
       const productData = {
         title: form.title,
         slug: form.slug,
         description: form.description,
         price: parseFloat(form.price),
-        compare_at_price: form.compare_at_price ? parseFloat(form.compare_at_price) : null,
         currency: form.currency,
-        sku: form.sku || null,
         inventory_quantity: parseInt(form.inventory_quantity),
         featured_image: form.featured_image || null,
-        images: imagesArray.length > 0 ? imagesArray : null,
         status: form.status,
-        tags: tagsArray.length > 0 ? tagsArray : null,
-        category: form.category || null,
-        meta_title: form.meta_title || null,
-        meta_description: form.meta_description || null,
       };
 
       if (id) {
         // Update existing product
-        const { error } = await supabase
-          .from('cms_products')
-          .update(productData)
-          .eq('id', id);
-
-        if (error) throw error;
+        await productsAPI.update(id, productData);
         toast.success('Product updated successfully');
       } else {
         // Create new product
-        const { error } = await supabase
-          .from('cms_products')
-          .insert(productData);
-
-        if (error) throw error;
+        await productsAPI.create(productData);
         toast.success('Product created successfully');
       }
 

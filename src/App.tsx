@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChatBot } from "@/components/ChatBot";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import CustomizeProduct from "./pages/CustomizeProduct";
@@ -24,6 +25,7 @@ import Referral from "./pages/Referral";
 import Reviews from "./pages/Reviews";
 import Policies from "./pages/Policies";
 import NotFound from "./pages/NotFound";
+import AdminSignin from "./pages/admin/Signin";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminArticles from "./pages/admin/Articles";
 import AdminArticleEditor from "./pages/admin/ArticleEditor";
@@ -63,15 +65,16 @@ const App = () => (
           <Route path="/policies" element={<Policies />} />
           
           {/* Admin Routes */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/articles" element={<AdminArticles />} />
-          <Route path="/admin/articles/new" element={<AdminArticleEditor />} />
-          <Route path="/admin/articles/edit/:id" element={<AdminArticleEditor />} />
-          <Route path="/admin/products" element={<AdminProducts />} />
-          <Route path="/admin/products/new" element={<AdminProductEditor />} />
-          <Route path="/admin/products/edit/:id" element={<AdminProductEditor />} />
-          <Route path="/admin/analytics" element={<AdminAnalytics />} />
-          <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/signin" element={<AdminSignin />} />
+          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/articles" element={<ProtectedRoute><AdminArticles /></ProtectedRoute>} />
+          <Route path="/admin/articles/new" element={<ProtectedRoute><AdminArticleEditor /></ProtectedRoute>} />
+          <Route path="/admin/articles/edit/:id" element={<ProtectedRoute><AdminArticleEditor /></ProtectedRoute>} />
+          <Route path="/admin/products" element={<ProtectedRoute><AdminProducts /></ProtectedRoute>} />
+          <Route path="/admin/products/new" element={<ProtectedRoute><AdminProductEditor /></ProtectedRoute>} />
+          <Route path="/admin/products/edit/:id" element={<ProtectedRoute><AdminProductEditor /></ProtectedRoute>} />
+          <Route path="/admin/analytics" element={<ProtectedRoute><AdminAnalytics /></ProtectedRoute>} />
+          <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -59,11 +59,11 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
-- Supabase (Authentication & Database)
+- File-based CMS (content stored in cms/content.json)
 
 ## Admin CMS
 
-This project includes a comprehensive Admin Content Management System (CMS) for managing your website content without editing code.
+This project includes a comprehensive Admin Content Management System (CMS) for managing your website content without editing code. Content is now stored in a local JSON file (`public/cms/content.json`) instead of using a database.
 
 ### Features
 
@@ -71,32 +71,22 @@ This project includes a comprehensive Admin Content Management System (CMS) for 
 - 📦 **Products Management** - Manage product catalog with pricing and inventory
 - 📊 **Analytics Dashboard** - Track page views, events, and user engagement
 - ⚙️ **Site Settings** - Configure site-wide settings and social media links
-- 🔐 **Role-Based Access** - Admin, editor, and viewer roles
+- 🔐 **Simple Authentication** - Admin access with hardcoded credentials (username: admin, password: Luna101$)
 
 ### Quick Start
 
-1. **Run the setup script:**
-   ```bash
-   ./admin/setup.sh
-   ```
+1. **Access admin panel:**
+   - Navigate to `/admin/signin` in your browser
+   - Sign in with username: `admin` and password: `Luna101$`
+   - You'll be redirected to `/admin` dashboard
 
-2. **Create an account:**
-   - Navigate to `/auth` in your browser
-   - Sign up with your email
-
-3. **Grant admin access:**
-   - Go to Supabase Dashboard → Table Editor
-   - Open `admin_users` table
-   - Insert your user_id with role='admin'
-
-4. **Access admin panel:**
-   - Navigate to `/admin`
-   - Start managing your content!
-
-For detailed documentation, see [admin/README.md](admin/README.md)
+2. **Start managing content:**
+   - All changes are stored client-side in memory during the session
+   - In production, you would integrate with GitHub API to persist changes to the repository
 
 ### Admin Routes
 
+- `/admin/signin` - Sign in page
 - `/admin` - Dashboard overview
 - `/admin/articles` - Manage articles
 - `/admin/products` - Manage products
