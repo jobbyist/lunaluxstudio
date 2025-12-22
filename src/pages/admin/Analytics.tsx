@@ -3,18 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { analyticsAPI } from '@/lib/githubStorage';
 import { BarChart3, TrendingUp, Users, Eye } from 'lucide-react';
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
 
 interface AnalyticsData {
   totalEvents: number;
@@ -57,47 +45,6 @@ const AdminAnalytics = () => {
       setLoading(false);
     }
   };
-        const url = item.page_url || 'unknown';
-        acc[url] = (acc[url] || 0) + 1;
-        return acc;
-      }, {} as PageCount) || {};
-
-      const topPages = Object.entries(pageCounts)
-        .map(([page, count]) => ({ page, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 10);
-
-      // Get events by day
-      const { data: eventsData } = await supabase
-        .from('analytics_events')
-        .select('created_at')
-        .gte('created_at', startDate.toISOString())
-        .order('created_at', { ascending: true });
-
-      const eventsByDay: EventsByDay = eventsData?.reduce((acc: EventsByDay, event) => {
-        const date = new Date(event.created_at).toLocaleDateString();
-        acc[date] = (acc[date] || 0) + 1;
-        return acc;
-      }, {} as EventsByDay) || {};
-
-      const chartData = Object.entries(eventsByDay).map(([date, count]) => ({
-        date,
-        count,
-      }));
-
-      setAnalytics({
-        totalEvents: totalEvents || 0,
-        uniqueUsers: uniqueSessions.size,
-        pageViews: pageViews || 0,
-        topPages,
-        eventsByDay: chartData,
-      });
-    } catch (error) {
-      console.error('Error loading analytics:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     loadAnalytics();
@@ -118,14 +65,14 @@ const AdminAnalytics = () => {
       color: 'text-green-500',
     },
     {
-      title: 'Unique Visitors',
+      title: 'Unique Users',
       value: analytics.uniqueUsers,
       icon: Users,
       color: 'text-purple-500',
     },
     {
-      title: 'Avg. Per Day',
-      value: Math.round(analytics.totalEvents / dateRange),
+      title: 'Avg. Session',
+      value: '0m',
       icon: TrendingUp,
       color: 'text-orange-500',
     },
@@ -134,39 +81,11 @@ const AdminAnalytics = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Analytics</h1>
-            <p className="text-muted-foreground mt-2">
-              Track your website performance
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setDateRange(7)}
-              className={`px-4 py-2 rounded-lg ${
-                dateRange === 7 ? 'bg-primary text-primary-foreground' : 'bg-muted'
-              }`}
-            >
-              7 days
-            </button>
-            <button
-              onClick={() => setDateRange(30)}
-              className={`px-4 py-2 rounded-lg ${
-                dateRange === 30 ? 'bg-primary text-primary-foreground' : 'bg-muted'
-              }`}
-            >
-              30 days
-            </button>
-            <button
-              onClick={() => setDateRange(90)}
-              className={`px-4 py-2 rounded-lg ${
-                dateRange === 90 ? 'bg-primary text-primary-foreground' : 'bg-muted'
-              }`}
-            >
-              90 days
-            </button>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold">Analytics</h1>
+          <p className="text-muted-foreground mt-2">
+            Track your website performance and user engagement
+          </p>
         </div>
 
         {loading ? (
@@ -195,62 +114,17 @@ const AdminAnalytics = () => {
               })}
             </div>
 
-            {/* Events Chart */}
-            {analytics.eventsByDay.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Events Over Time</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={analytics.eventsByDay}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="count"
-                        stroke="#8884d8"
-                        name="Events"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Top Pages */}
-            {analytics.topPages.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Top Pages</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={analytics.topPages.slice(0, 5)}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="page" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="count" fill="#82ca9d" name="Page Views" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            )}
-
-            {analytics.totalEvents === 0 && (
-              <Card>
-                <CardContent className="py-12 text-center">
-                  <p className="text-muted-foreground">
-                    No analytics data available for the selected period.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
+            {/* Message about analytics */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Analytics Data</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground text-center py-8">
+                  Analytics tracking is now file-based. Event data will be stored in the CMS content file.
+                </p>
+              </CardContent>
+            </Card>
           </>
         )}
       </div>
