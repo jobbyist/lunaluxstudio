@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAdmin } from '@/hooks/useAdmin';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { useAuthStore } from '@/stores/authStore';
 import { toast } from 'sonner';
 import {
   LayoutDashboard,
@@ -34,16 +34,17 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { logout } = useAuthStore();
 
   useEffect(() => {
     if (!loading && !isAdmin) {
       toast.error('You must be an admin to access this page');
-      navigate('/auth');
+      navigate('/admin/signin');
     }
   }, [isAdmin, loading, navigate]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const handleLogout = () => {
+    logout();
     toast.success('Logged out successfully');
     navigate('/');
   };

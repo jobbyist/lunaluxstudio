@@ -1,7 +1,7 @@
 import { AdminLayout } from '@/components/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { analyticsAPI } from '@/lib/githubStorage';
 import { BarChart3, TrendingUp, Users, Eye } from 'lucide-react';
 import {
   LineChart,
@@ -24,14 +24,6 @@ interface AnalyticsData {
   eventsByDay: Array<{ date: string; count: number }>;
 }
 
-interface PageCount {
-  [key: string]: number;
-}
-
-interface EventsByDay {
-  [key: string]: number;
-}
-
 const AdminAnalytics = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData>({
     totalEvents: 0,
@@ -41,7 +33,7 @@ const AdminAnalytics = () => {
     eventsByDay: [],
   });
   const [loading, setLoading] = useState(true);
-  const [dateRange, setDateRange] = useState(30); // days
+  const [dateRange] = useState(30); // days
 
   const loadAnalytics = async () => {
     try {
@@ -50,34 +42,21 @@ const AdminAnalytics = () => {
       startDate.setDate(startDate.getDate() - dateRange);
 
       // Get total events
-      const { count: totalEvents } = await supabase
-        .from('analytics_events')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', startDate.toISOString());
+      const totalEvents = await analyticsAPI.count(startDate.toISOString());
 
-      // Get page views
-      const { count: pageViews } = await supabase
-        .from('analytics_events')
-        .select('*', { count: 'exact', head: true })
-        .eq('event_type', 'page_view')
-        .gte('created_at', startDate.toISOString());
-
-      // Get unique users (sessions)
-      const { data: sessionsData } = await supabase
-        .from('analytics_events')
-        .select('session_id')
-        .gte('created_at', startDate.toISOString());
-
-      const uniqueSessions = new Set(sessionsData?.map(s => s.session_id) || []);
-
-      // Get top pages
-      const { data: pagesData } = await supabase
-        .from('analytics_events')
-        .select('page_url')
-        .eq('event_type', 'page_view')
-        .gte('created_at', startDate.toISOString());
-
-      const pageCounts: PageCount = pagesData?.reduce((acc: PageCount, item) => {
+      setAnalytics({
+        totalEvents,
+        uniqueUsers: 0,
+        pageViews: 0,
+        topPages: [],
+        eventsByDay: [],
+      });
+    } catch (error) {
+      console.error('Error loading analytics:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
         const url = item.page_url || 'unknown';
         acc[url] = (acc[url] || 0) + 1;
         return acc;

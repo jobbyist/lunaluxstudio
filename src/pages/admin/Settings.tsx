@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { settingsAPI } from '@/lib/githubStorage';
 import { toast } from 'sonner';
 import { Save } from 'lucide-react';
 
@@ -45,11 +45,7 @@ const AdminSettings = () => {
   const loadSettings = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('*');
-
-      if (error) throw error;
+      const data = await settingsAPI.getAll();
 
       const settingsObj: { [key: string]: string | { [key: string]: string } } = {};
       data?.forEach((item: SettingsData) => {
@@ -75,8 +71,6 @@ const AdminSettings = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
 
       const updates = [
         { key: 'site_name', value: settings.site_name },
@@ -86,17 +80,7 @@ const AdminSettings = () => {
       ];
 
       for (const update of updates) {
-        const { error } = await supabase
-          .from('site_settings')
-          .upsert({
-            key: update.key,
-            value: update.value,
-            updated_by: user.id,
-          }, {
-            onConflict: 'key'
-          });
-
-        if (error) throw error;
+        await settingsAPI.upsert(update.key, update.value);
       }
 
       toast.success('Settings saved successfully');
