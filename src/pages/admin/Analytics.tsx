@@ -24,6 +24,14 @@ interface AnalyticsData {
   eventsByDay: Array<{ date: string; count: number }>;
 }
 
+interface PageCount {
+  [key: string]: number;
+}
+
+interface EventsByDay {
+  [key: string]: number;
+}
+
 const AdminAnalytics = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData>({
     totalEvents: 0,
@@ -34,10 +42,6 @@ const AdminAnalytics = () => {
   });
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState(30); // days
-
-  useEffect(() => {
-    loadAnalytics();
-  }, [dateRange]);
 
   const loadAnalytics = async () => {
     try {
@@ -73,14 +77,14 @@ const AdminAnalytics = () => {
         .eq('event_type', 'page_view')
         .gte('created_at', startDate.toISOString());
 
-      const pageCounts = pagesData?.reduce((acc: any, item) => {
+      const pageCounts: PageCount = pagesData?.reduce((acc: PageCount, item) => {
         const url = item.page_url || 'unknown';
         acc[url] = (acc[url] || 0) + 1;
         return acc;
-      }, {});
+      }, {} as PageCount) || {};
 
-      const topPages = Object.entries(pageCounts || {})
-        .map(([page, count]) => ({ page, count: count as number }))
+      const topPages = Object.entries(pageCounts)
+        .map(([page, count]) => ({ page, count }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 10);
 
@@ -91,15 +95,15 @@ const AdminAnalytics = () => {
         .gte('created_at', startDate.toISOString())
         .order('created_at', { ascending: true });
 
-      const eventsByDay = eventsData?.reduce((acc: any, event) => {
+      const eventsByDay: EventsByDay = eventsData?.reduce((acc: EventsByDay, event) => {
         const date = new Date(event.created_at).toLocaleDateString();
         acc[date] = (acc[date] || 0) + 1;
         return acc;
-      }, {});
+      }, {} as EventsByDay) || {};
 
-      const chartData = Object.entries(eventsByDay || {}).map(([date, count]) => ({
+      const chartData = Object.entries(eventsByDay).map(([date, count]) => ({
         date,
-        count: count as number,
+        count,
       }));
 
       setAnalytics({
@@ -115,6 +119,11 @@ const AdminAnalytics = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange]);
 
   const statsCards = [
     {

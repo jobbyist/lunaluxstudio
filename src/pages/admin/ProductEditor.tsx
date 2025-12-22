@@ -57,12 +57,6 @@ const AdminProductEditor = () => {
     meta_description: '',
   });
 
-  useEffect(() => {
-    if (id) {
-      loadProduct();
-    }
-  }, [id]);
-
   const loadProduct = async () => {
     try {
       setLoading(true);
@@ -100,6 +94,13 @@ const AdminProductEditor = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      loadProduct();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const generateSlug = (title: string) => {
     return title
@@ -169,9 +170,10 @@ const AdminProductEditor = () => {
       }
 
       navigate('/admin/products');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error saving product:', error);
-      toast.error(error.message || 'Failed to save product');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save product';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -327,7 +329,7 @@ const AdminProductEditor = () => {
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={form.status}
-                  onValueChange={(value: any) => setForm({ ...form, status: value })}
+                  onValueChange={(value: 'draft' | 'active' | 'archived') => setForm({ ...form, status: value })}
                 >
                   <SelectTrigger>
                     <SelectValue />

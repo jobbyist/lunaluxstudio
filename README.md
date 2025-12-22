@@ -59,6 +59,49 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (Authentication & Database)
+
+## Admin CMS
+
+This project includes a comprehensive Admin Content Management System (CMS) for managing your website content without editing code.
+
+### Features
+
+- 📝 **Articles Management** - Create, edit, and delete blog articles
+- 📦 **Products Management** - Manage product catalog with pricing and inventory
+- 📊 **Analytics Dashboard** - Track page views, events, and user engagement
+- ⚙️ **Site Settings** - Configure site-wide settings and social media links
+- 🔐 **Role-Based Access** - Admin, editor, and viewer roles
+
+### Quick Start
+
+1. **Run the setup script:**
+   ```bash
+   ./admin/setup.sh
+   ```
+
+2. **Create an account:**
+   - Navigate to `/auth` in your browser
+   - Sign up with your email
+
+3. **Grant admin access:**
+   - Go to Supabase Dashboard → Table Editor
+   - Open `admin_users` table
+   - Insert your user_id with role='admin'
+
+4. **Access admin panel:**
+   - Navigate to `/admin`
+   - Start managing your content!
+
+For detailed documentation, see [admin/README.md](admin/README.md)
+
+### Admin Routes
+
+- `/admin` - Dashboard overview
+- `/admin/articles` - Manage articles
+- `/admin/products` - Manage products
+- `/admin/analytics` - View analytics
+- `/admin/settings` - Site settings
 
 ## How can I deploy this project?
 

@@ -45,12 +45,6 @@ const AdminArticleEditor = () => {
     tags: '',
   });
 
-  useEffect(() => {
-    if (id) {
-      loadArticle();
-    }
-  }, [id]);
-
   const loadArticle = async () => {
     try {
       setLoading(true);
@@ -82,6 +76,13 @@ const AdminArticleEditor = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      loadArticle();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const generateSlug = (title: string) => {
     return title
@@ -147,9 +148,10 @@ const AdminArticleEditor = () => {
       }
 
       navigate('/admin/articles');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error saving article:', error);
-      toast.error(error.message || 'Failed to save article');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save article';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -250,7 +252,7 @@ const AdminArticleEditor = () => {
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={form.status}
-                  onValueChange={(value: any) => setForm({ ...form, status: value })}
+                  onValueChange={(value: 'draft' | 'published' | 'archived') => setForm({ ...form, status: value })}
                 >
                   <SelectTrigger>
                     <SelectValue />

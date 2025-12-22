@@ -8,7 +8,14 @@ interface DashboardStats {
   articlesCount: number;
   productsCount: number;
   analyticsCount: number;
-  recentActivity: any[];
+  recentActivity: Article[];
+}
+
+interface Article {
+  id: string;
+  title: string;
+  status: string;
+  updated_at: string;
 }
 
 const AdminDashboard = () => {

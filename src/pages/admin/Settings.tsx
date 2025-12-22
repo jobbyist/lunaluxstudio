@@ -19,6 +19,11 @@ interface SiteSettings {
   };
 }
 
+interface SettingsData {
+  key: string;
+  value: string | { [key: string]: string };
+}
+
 const AdminSettings = () => {
   const [settings, setSettings] = useState<SiteSettings>({
     site_name: '',
@@ -46,20 +51,18 @@ const AdminSettings = () => {
 
       if (error) throw error;
 
-      const settingsObj: any = {};
-      data?.forEach((item) => {
+      const settingsObj: { [key: string]: string | { [key: string]: string } } = {};
+      data?.forEach((item: SettingsData) => {
         settingsObj[item.key] = item.value;
       });
 
       setSettings({
-        site_name: settingsObj.site_name || '',
-        site_description: settingsObj.site_description || '',
-        contact_email: settingsObj.contact_email || '',
-        social_media: settingsObj.social_media || {
-          instagram: '',
-          facebook: '',
-          twitter: '',
-        },
+        site_name: typeof settingsObj.site_name === 'string' ? settingsObj.site_name : '',
+        site_description: typeof settingsObj.site_description === 'string' ? settingsObj.site_description : '',
+        contact_email: typeof settingsObj.contact_email === 'string' ? settingsObj.contact_email : '',
+        social_media: typeof settingsObj.social_media === 'object' && settingsObj.social_media !== null ? 
+          settingsObj.social_media as { instagram: string; facebook: string; twitter: string } : 
+          { instagram: '', facebook: '', twitter: '' },
       });
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -97,9 +100,10 @@ const AdminSettings = () => {
       }
 
       toast.success('Settings saved successfully');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error saving settings:', error);
-      toast.error(error.message || 'Failed to save settings');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save settings';
+      toast.error(errorMessage);
     } finally {
       setSaving(false);
     }
