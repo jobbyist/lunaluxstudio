@@ -24,6 +24,13 @@ import Referral from "./pages/Referral";
 import Reviews from "./pages/Reviews";
 import Policies from "./pages/Policies";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminArticles from "./pages/admin/Articles";
+import AdminArticleEditor from "./pages/admin/ArticleEditor";
+import AdminProducts from "./pages/admin/Products";
+import AdminProductEditor from "./pages/admin/ProductEditor";
+import AdminAnalytics from "./pages/admin/Analytics";
+import AdminSettings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +61,18 @@ const App = () => (
           <Route path="/referral" element={<Referral />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/policies" element={<Policies />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/articles" element={<AdminArticles />} />
+          <Route path="/admin/articles/new" element={<AdminArticleEditor />} />
+          <Route path="/admin/articles/edit/:id" element={<AdminArticleEditor />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/new" element={<AdminProductEditor />} />
+          <Route path="/admin/products/edit/:id" element={<AdminProductEditor />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatBot />
