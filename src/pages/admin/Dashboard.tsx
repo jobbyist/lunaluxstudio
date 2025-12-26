@@ -1,12 +1,12 @@
 import { AdminLayout } from '@/components/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, Package, Users, TrendingUp } from 'lucide-react';
+import { FileText, Package, TrendingUp, ExternalLink, AlertCircle, PenTool, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const statsCards = [
     {
-      title: 'Total Articles',
+      title: 'Published Content',
       value: 0,
       icon: FileText,
       color: 'text-blue-500',
@@ -23,12 +23,6 @@ const AdminDashboard = () => {
       icon: TrendingUp,
       color: 'text-purple-500',
     },
-    {
-      title: 'Active Users',
-      value: 0,
-      icon: Users,
-      color: 'text-orange-500',
-    },
   ];
 
   return (
@@ -42,7 +36,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {statsCards.map((stat) => {
             const Icon = stat.icon;
             return (
@@ -61,6 +55,29 @@ const AdminDashboard = () => {
           })}
         </div>
 
+        {/* Shopify Notice */}
+        <Card className="border-amber-500/50 bg-amber-500/5">
+          <CardContent className="flex items-start gap-4 pt-6">
+            <AlertCircle className="h-6 w-6 text-amber-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-foreground">Product Management</h3>
+              <p className="text-muted-foreground mt-1">
+                Please log in to your Shopify dashboard to make any product related changes. 
+                We're working on integrating it into your website dashboard soon!
+              </p>
+              <a 
+                href="https://admin.shopify.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-primary hover:underline mt-2 text-sm"
+              >
+                Open Shopify Dashboard
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Recent Activity */}
         <Card>
           <CardHeader>
@@ -68,7 +85,7 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground text-center py-8">
-              No recent activity. Database tables will be configured as needed.
+              No recent activity. Start by publishing content to the Featured Stories section.
             </p>
           </CardContent>
         </Card>
@@ -81,21 +98,21 @@ const AdminDashboard = () => {
           <CardContent>
             <div className="grid gap-4 md:grid-cols-3">
               <Link
-                to="/admin/articles/new"
+                to="/admin/publish"
                 className="flex items-center justify-center p-6 border-2 border-dashed border-border rounded-lg hover:border-primary transition-colors"
               >
                 <div className="text-center">
-                  <FileText className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <p className="font-medium">New Article</p>
+                  <PenTool className="h-8 w-8 mx-auto mb-2 text-primary" />
+                  <p className="font-medium">Publish Content</p>
                 </div>
               </Link>
               <Link
-                to="/admin/products"
+                to="/admin/activity"
                 className="flex items-center justify-center p-6 border-2 border-dashed border-border rounded-lg hover:border-primary transition-colors"
               >
                 <div className="text-center">
-                  <Package className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <p className="font-medium">Manage Products</p>
+                  <Activity className="h-8 w-8 mx-auto mb-2 text-primary" />
+                  <p className="font-medium">View Activity Logs</p>
                 </div>
               </Link>
               <Link

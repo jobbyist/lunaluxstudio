@@ -30,8 +30,9 @@ import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminHomepageEditor from "./pages/admin/HomepageEditor";
 import AdminEmails from "./pages/admin/AdminEmails";
-import AdminProducts from "./pages/admin/Products";
 import AdminSettings from "./pages/admin/Settings";
+import ContentPublisher from "./pages/admin/ContentPublisher";
+import ActivityLogs from "./pages/admin/ActivityLogs";
 
 const queryClient = new QueryClient();
 
@@ -68,9 +69,10 @@ const App = () => (
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/publish" element={<ContentPublisher />} />
             <Route path="/admin/homepage" element={<AdminHomepageEditor />} />
+            <Route path="/admin/activity" element={<ActivityLogs />} />
             <Route path="/admin/admins" element={<AdminEmails />} />
-            <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
             
             <Route path="*" element={<NotFound />} />
