@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
-import { productsAPI, Product } from '@/lib/githubStorage';
+import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { toast } from 'sonner';
@@ -18,6 +18,20 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
+interface Product {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  currency: string;
+  status: 'draft' | 'active' | 'archived';
+  featured_image: string | null;
+  inventory_quantity: number;
+  created_at: string;
+  updated_at: string;
+}
+
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,8 +44,13 @@ const AdminProducts = () => {
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const data = await productsAPI.getAll();
-      setProducts(data);
+      const { data, error } = await supabase
+        .from('cms_products')
+        .select('*')
+        .order('updated_at', { ascending: false });
+
+      if (error) throw error;
+      setProducts(data || []);
     } catch (error) {
       console.error('Error loading products:', error);
       toast.error('Failed to load products');
@@ -44,7 +63,12 @@ const AdminProducts = () => {
     if (!deleteId) return;
 
     try {
-      await productsAPI.delete(deleteId);
+      const { error } = await supabase
+        .from('cms_products')
+        .delete()
+        .eq('id', deleteId);
+
+      if (error) throw error;
       
       toast.success('Product deleted successfully');
       setProducts(products.filter(p => p.id !== deleteId));

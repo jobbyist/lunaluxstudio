@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useEffect, useState } from 'react';
-import { articlesAPI } from '@/lib/githubStorage';
+import { supabase } from '@/integrations/supabase/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Save } from 'lucide-react';
@@ -48,9 +48,13 @@ const AdminArticleEditor = () => {
   const loadArticle = async () => {
     try {
       setLoading(true);
-      if (!id) return;
-      
-      const data = await articlesAPI.getById(id);
+      const { data, error } = await supabase
+        .from('articles')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
       
       if (data) {
         setForm({
@@ -100,6 +104,9 @@ const AdminArticleEditor = () => {
     setLoading(true);
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
       const tagsArray = form.tags
         .split(',')
         .map(t => t.trim())
@@ -114,17 +121,29 @@ const AdminArticleEditor = () => {
         status: form.status,
         meta_title: form.meta_title || null,
         meta_description: form.meta_description || null,
-        tags: tagsArray,
+        tags: tagsArray.length > 0 ? tagsArray : null,
         published_at: form.status === 'published' ? new Date().toISOString() : null,
       };
 
       if (id) {
         // Update existing article
-        await articlesAPI.update(id, articleData);
+        const { error } = await supabase
+          .from('articles')
+          .update(articleData)
+          .eq('id', id);
+
+        if (error) throw error;
         toast.success('Article updated successfully');
       } else {
         // Create new article
-        await articlesAPI.create(articleData);
+        const { error } = await supabase
+          .from('articles')
+          .insert({
+            ...articleData,
+            author_id: user.id,
+          });
+
+        if (error) throw error;
         toast.success('Article created successfully');
       }
 

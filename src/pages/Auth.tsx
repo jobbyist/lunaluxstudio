@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -20,10 +21,26 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      // Authentication is now handled by the admin system
-      // Regular user authentication is disabled
-      toast.info("User authentication is currently disabled. Please use /admin/signin for admin access.");
-      navigate("/");
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        toast.success("Welcome back!");
+        navigate("/");
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+          },
+        });
+        if (error) throw error;
+        toast.success("Account created successfully!");
+        navigate("/");
+      }
     } catch (error: any) {
       toast.error(error.message || "An error occurred");
     } finally {
