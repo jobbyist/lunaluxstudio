@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_activity_logs: {
+        Row: {
+          action_details: Json | null
+          action_type: string
+          created_at: string
+          id: string
+          ip_address: string | null
+          success: boolean | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       admin_emails: {
         Row: {
           created_at: string
@@ -105,6 +138,69 @@ export type Database = {
           id?: string
           product_id?: string
           rating?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      published_content: {
+        Row: {
+          content_body: string | null
+          content_type: string
+          content_url: string | null
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          external_link: string | null
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          seo_score: number | null
+          status: string
+          tags: string[] | null
+          title: string
+          topic: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content_body?: string | null
+          content_type: string
+          content_url?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          external_link?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          seo_score?: number | null
+          status?: string
+          tags?: string[] | null
+          title: string
+          topic?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content_body?: string | null
+          content_type?: string
+          content_url?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          external_link?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          seo_score?: number | null
+          status?: string
+          tags?: string[] | null
+          title?: string
+          topic?: string | null
           updated_at?: string
           user_id?: string
         }

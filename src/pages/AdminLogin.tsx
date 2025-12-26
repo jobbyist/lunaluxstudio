@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Shield, ArrowLeft } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
+import { logAdminActivity } from "@/hooks/useActivityLogger";
 
 type AuthMode = 'login' | 'signup' | 'reset' | 'reset-sent';
 
@@ -57,11 +58,15 @@ const AdminLogin = () => {
           password,
         });
         
-        if (error) throw error;
+        if (error) {
+          await logAdminActivity({ actionType: 'login_failed', actionDetails: { email }, success: false });
+          throw error;
+        }
+        
+        await logAdminActivity({ actionType: 'login_success', actionDetails: { email } });
         
         // Handle session persistence based on remember me
         if (!rememberMe) {
-          // Session will be cleared when browser closes
           sessionStorage.setItem('admin_session_temp', 'true');
         }
         
