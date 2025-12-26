@@ -111,14 +111,25 @@ This project is configured to automatically deploy to GitHub Pages with a custom
 
 The project uses GitHub Actions to automatically build and deploy to GitHub Pages whenever changes are pushed to the `main` branch.
 
-**Custom Domain**: https://lunalux.gravitas.uno
+**Custom Domain**: https://preview.lunaluxhair.com
 
 #### Deployment Setup
 
 The deployment is configured through:
 - `.github/workflows/deploy.yml` - GitHub Actions workflow for automated deployment
-- `public/CNAME` - Custom domain configuration
+- `public/CNAME` - Custom domain configuration (`preview.lunaluxhair.com`)
 - `vite.config.ts` - Vite build configuration with proper base path
+
+For detailed deployment documentation, see:
+- **Full Guide**: [DEPLOYMENT_SETUP.md](DEPLOYMENT_SETUP.md)
+- **Quick Start**: [QUICKSTART_DEPLOYMENT.md](QUICKSTART_DEPLOYMENT.md)
+
+#### Automatic Deployment
+
+Every push to `main` branch automatically:
+1. Builds the React application
+2. Deploys to GitHub Pages
+3. Makes the site live at https://preview.lunaluxhair.com
 
 #### Manual Deployment
 
@@ -133,8 +144,11 @@ To enable GitHub Pages for this repository:
 1. Go to your repository Settings
 2. Navigate to "Pages" in the left sidebar
 3. Under "Build and deployment", select "GitHub Actions" as the source
-4. Configure your custom domain DNS settings:
-   - Add a CNAME record pointing `lunalux.gravitas.uno` to `<username>.github.io`
+4. Under "Custom domain", enter: `preview.lunaluxhair.com`
+5. Configure your DNS settings:
+   - Add a CNAME record: `preview` → `jobbyist.github.io`
+6. Wait for DNS verification (5-30 minutes)
+7. Enable "Enforce HTTPS" once verified
 
 **Alternative: Lovable Deployment**
 
