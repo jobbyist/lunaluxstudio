@@ -51,25 +51,27 @@ export const Header = () => {
 
         {/* Main Header */}
         <div className="flex items-center justify-between py-4">
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </Button>
+          {/* Mobile Menu Button & Logo Container */}
+          <div className="flex items-center gap-2 md:gap-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </Button>
 
-          {/* Logo - New Image Logo */}
-          <Link to="/" className="flex items-center justify-center flex-1 md:flex-none">
-            <img 
-              src={lunaLogo} 
-              alt="Luna Luxury Hair" 
-              className="h-12 md:h-14 w-auto"
-              loading="eager"
-            />
-          </Link>
+            {/* Logo - Significantly Larger */}
+            <Link to="/" className="flex items-center">
+              <img 
+                src={lunaLogo} 
+                alt="Luna Luxury Hair" 
+                className="h-20 md:h-24 w-auto"
+                loading="eager"
+              />
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">

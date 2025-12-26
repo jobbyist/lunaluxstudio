@@ -2,17 +2,22 @@ import { Link } from "react-router-dom";
 import { Mail, Phone, MessageCircle, CreditCard, Instagram, Twitter, Facebook } from "lucide-react";
 import { LegalDialog, TermsContent, PrivacyContent, RefundsContent, ShippingContent } from "./LegalDialog";
 import { FaTiktok } from "react-icons/fa";
+import footerLogo from "@/assets/luna-logo-footer.png";
 
 export const Footer = () => {
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand - Text Logo moved from header */}
+          {/* Brand - Logo Image */}
           <div className="space-y-4">
-            <h3 className="text-3xl md:text-4xl font-cursive tracking-wider">
-              <span className="text-primary">Luna</span> Luxury Hair
-            </h3>
+            <Link to="/">
+              <img 
+                src={footerLogo} 
+                alt="Luna Luxury Hair" 
+                className="h-16 md:h-20 w-auto"
+              />
+            </Link>
             <p className="text-sm text-muted-foreground">
               Your trusted luxury hair and beauty store featuring only the finest, best-in-class products. Experience premium quality that lasts.
             </p>
