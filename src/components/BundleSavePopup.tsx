@@ -240,7 +240,9 @@ export const BundleSavePopup = ({ isOpen, onClose }: BundleSavePopupProps) => {
         addedCount++;
       } else {
         // Product has no variants, skip it
-        console.warn(`Skipping product without variants: ${item.product.node.title}`);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`Skipping product without variants: ${item.product.node.title}`);
+        }
         skippedCount++;
       }
     });
