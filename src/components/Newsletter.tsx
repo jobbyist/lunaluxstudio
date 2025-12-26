@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
@@ -19,10 +20,20 @@ export const Newsletter = () => {
 
     setIsLoading(true);
     try {
-      // Newsletter subscriptions are currently disabled
-      // In production, integrate with your email service provider
-      toast.success(t('subscribeSuccess'));
-      setEmail("");
+      const { error } = await supabase
+        .from("newsletter_subscriptions")
+        .insert({ email });
+
+      if (error) {
+        if (error.code === "23505") {
+          toast.error(t('alreadySubscribed'));
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success(t('subscribeSuccess'));
+        setEmail("");
+      }
     } catch (error) {
       console.error("Newsletter subscription error:", error);
       toast.error(t('subscribeError'));
