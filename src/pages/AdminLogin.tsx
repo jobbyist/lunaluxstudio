@@ -12,6 +12,7 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
   const { isAdmin, loading: adminLoading } = useAdmin();
 
@@ -26,15 +27,27 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (error) throw error;
-
-      // The useAdmin hook will handle the redirect after checking admin status
-      toast.success("Checking admin access...");
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/admin-login`,
+          },
+        });
+        
+        if (error) throw error;
+        toast.success("Account created! You can now sign in.");
+        setIsSignUp(false);
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        
+        if (error) throw error;
+        toast.success("Checking admin access...");
+      }
     } catch (error: any) {
       toast.error(error.message || "An error occurred");
     } finally {
@@ -60,9 +73,13 @@ const AdminLogin = () => {
             </div>
           </div>
           
-          <h1 className="text-2xl font-serif text-center mb-2">Admin Login</h1>
+          <h1 className="text-2xl font-serif text-center mb-2">
+            {isSignUp ? "Admin Sign Up" : "Admin Login"}
+          </h1>
           <p className="text-muted-foreground text-center mb-8 text-sm">
-            Access restricted to authorized administrators only
+            {isSignUp 
+              ? "Create your admin account" 
+              : "Access restricted to authorized administrators only"}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -89,6 +106,7 @@ const AdminLogin = () => {
                 required
                 className="mt-1"
                 placeholder="••••••••"
+                minLength={6}
               />
             </div>
 
@@ -100,21 +118,31 @@ const AdminLogin = () => {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  {isSignUp ? "Creating account..." : "Signing in..."}
                 </>
               ) : (
-                "Sign In"
+                isSignUp ? "Create Account" : "Sign In"
               )}
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <a
-              href="/"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          <div className="mt-6 text-center space-y-3">
+            <button
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm text-primary hover:underline"
             >
-              ← Back to store
-            </a>
+              {isSignUp 
+                ? "Already have an account? Sign in" 
+                : "Need an account? Sign up"}
+            </button>
+            <div>
+              <a
+                href="/"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                ← Back to store
+              </a>
+            </div>
           </div>
         </div>
       </div>
