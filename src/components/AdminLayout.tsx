@@ -6,9 +6,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import {
   LayoutDashboard,
-  FileText,
+  Home,
   Package,
-  BarChart3,
+  Users,
   Settings,
   LogOut,
   Menu,
@@ -23,9 +23,9 @@ interface AdminLayoutProps {
 
 const adminNavItems = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/admin/articles', label: 'Articles', icon: FileText },
+  { path: '/admin/homepage', label: 'Homepage Editor', icon: Home },
   { path: '/admin/products', label: 'Products', icon: Package },
-  { path: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+  { path: '/admin/admins', label: 'Admin Access', icon: Users },
   { path: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
@@ -38,7 +38,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
   useEffect(() => {
     if (!loading && !isAdmin) {
       toast.error('You must be an admin to access this page');
-      navigate('/auth');
+      navigate('/admin-login');
     }
   }, [isAdmin, loading, navigate]);
 
@@ -72,8 +72,8 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between p-6 border-b border-border">
-            <Link to="/admin" className="text-2xl font-serif font-bold">
-              LunaStudio Admin
+            <Link to="/admin" className="text-xl font-serif font-bold">
+              Luna Admin
             </Link>
             <Button
               variant="ghost"
@@ -113,7 +113,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
           {/* User info and logout */}
           <div className="p-4 border-t border-border">
             <div className="mb-3 px-4 py-2 bg-muted rounded-lg">
-              <p className="text-sm font-medium">Role: {adminUser?.role}</p>
+              <p className="text-sm font-medium capitalize">Role: {adminUser?.role}</p>
             </div>
             <Button
               variant="outline"
@@ -142,7 +142,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
             </Button>
             <div className="flex items-center gap-4">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
-                View Site
+                View Site →
               </Link>
             </div>
           </div>

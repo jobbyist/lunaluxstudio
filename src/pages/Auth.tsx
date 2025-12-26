@@ -1,51 +1,19 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { ExternalLink, Loader2 } from "lucide-react";
+
+const SHOPIFY_STORE_DOMAIN = "luna-hair-boutique-9dwzm.myshopify.com";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  // Redirect to Shopify customer login
+  const handleShopifyLogin = () => {
+    window.open(`https://${SHOPIFY_STORE_DOMAIN}/account/login`, "_blank");
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
-        toast.success("Welcome back!");
-        navigate("/");
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-          },
-        });
-        if (error) throw error;
-        toast.success("Account created successfully!");
-        navigate("/");
-      }
-    } catch (error: any) {
-      toast.error(error.message || "An error occurred");
-    } finally {
-      setLoading(false);
-    }
+  const handleShopifySignup = () => {
+    window.open(`https://${SHOPIFY_STORE_DOMAIN}/account/register`, "_blank");
   };
 
   return (
@@ -54,60 +22,38 @@ const Auth = () => {
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-4 max-w-md">
           <div className="bg-card rounded-lg p-8 shadow-lg">
-            <h1 className="text-3xl font-serif text-center mb-8">
-              {isLogin ? "Sign In" : "Create Account"}
+            <h1 className="text-3xl font-serif text-center mb-4">
+              Customer Account
             </h1>
+            <p className="text-muted-foreground text-center mb-8">
+              Sign in to your Luna Luxury Hair account to track orders, manage your wishlist, and more.
+            </p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="mt-1"
-                />
-              </div>
+            <div className="space-y-4">
+              <Button
+                onClick={handleShopifyLogin}
+                className="w-full"
+                size="lg"
+              >
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Sign In
+              </Button>
 
               <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90"
-                disabled={loading}
+                onClick={handleShopifySignup}
+                variant="outline"
+                className="w-full"
+                size="lg"
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait
-                  </>
-                ) : (
-                  isLogin ? "Sign In" : "Sign Up"
-                )}
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Create Account
               </Button>
-            </form>
+            </div>
 
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {isLogin
-                  ? "Don't have an account? Sign up"
-                  : "Already have an account? Sign in"}
-              </button>
+            <div className="mt-8 pt-6 border-t border-border">
+              <p className="text-sm text-muted-foreground text-center">
+                Your account is managed securely through our Shopify store.
+              </p>
             </div>
           </div>
         </div>
