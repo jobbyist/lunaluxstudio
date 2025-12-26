@@ -56,7 +56,7 @@ const upsells = [
 ];
 
 export default function CustomizeProduct() {
-  const { convertPrice, currency, t } = useCurrency();
+  const { formatPrice, t } = useCurrency();
   const addItem = useCartStore((state) => state.addItem);
   
   const basePrice = 999.99;
@@ -178,7 +178,7 @@ export default function CustomizeProduct() {
               <div className="p-4 bg-card rounded-lg">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Base Price</span>
-                  <span className="text-lg font-semibold">{currency} {convertPrice(basePrice)}</span>
+                  <span className="text-lg font-semibold">{formatPrice(basePrice)}</span>
                 </div>
               </div>
 
@@ -207,7 +207,7 @@ export default function CustomizeProduct() {
                         />
                         <span className="font-semibold">{option.name}</span>
                         {option.price > 0 && (
-                          <span className="text-xs text-muted-foreground">+{currency} {convertPrice(option.price)}</span>
+                          <span className="text-xs text-muted-foreground">+{formatPrice(option.price)}</span>
                         )}
                       </Label>
                     ))}
@@ -242,7 +242,7 @@ export default function CustomizeProduct() {
                         />
                         <span className="font-semibold">{option.name}</span>
                         {option.price > 0 && (
-                          <span className="text-xs text-muted-foreground">+{currency} {convertPrice(option.price)}</span>
+                          <span className="text-xs text-muted-foreground">+{formatPrice(option.price)}</span>
                         )}
                       </Label>
                     ))}
@@ -277,7 +277,7 @@ export default function CustomizeProduct() {
                         />
                         <span className="font-semibold">{option.name}</span>
                         {option.price > 0 && (
-                          <span className="text-xs text-muted-foreground">+{currency} {convertPrice(option.price)}</span>
+                          <span className="text-xs text-muted-foreground">+{formatPrice(option.price)}</span>
                         )}
                       </Label>
                     ))}
@@ -312,7 +312,7 @@ export default function CustomizeProduct() {
                         />
                         <span className="font-semibold">{option.name}</span>
                         {option.price > 0 && (
-                          <span className="text-xs text-muted-foreground">+{currency} {convertPrice(option.price)}</span>
+                          <span className="text-xs text-muted-foreground">+{formatPrice(option.price)}</span>
                         )}
                       </Label>
                     ))}
@@ -348,7 +348,7 @@ export default function CustomizeProduct() {
                         </div>
                         <div>
                           <p className="font-medium">{upsell.name}</p>
-                          <p className="text-sm text-muted-foreground">+{currency} {convertPrice(upsell.price)}</p>
+                          <p className="text-sm text-muted-foreground">+{formatPrice(upsell.price)}</p>
                         </div>
                       </div>
                       {selectedUpsells.includes(upsell.id) && (
@@ -366,7 +366,7 @@ export default function CustomizeProduct() {
                 <div className="p-6 bg-card rounded-lg space-y-4">
                   <div className="flex justify-between items-center text-2xl font-bold">
                     <span>Total</span>
-                    <span className="text-primary">{currency} {convertPrice(total)}</span>
+                    <span className="text-primary">{formatPrice(total)}</span>
                   </div>
                   <Button 
                     onClick={handleAddToCart}
