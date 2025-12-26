@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 export interface AdminUser {
   id: string;
   user_id: string;
-  role: 'admin' | 'editor' | 'viewer';
+  role: 'admin' | 'user';
   created_at: string;
-  updated_at: string;
 }
 
 export const useAdmin = () => {
@@ -18,6 +17,12 @@ export const useAdmin = () => {
 
   useEffect(() => {
     checkAdminStatus();
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkAdminStatus();
+    });
+    
+    return () => subscription.unsubscribe();
   }, []);
 
   const checkAdminStatus = async () => {
@@ -26,29 +31,41 @@ export const useAdmin = () => {
       
       if (!user) {
         setIsAdmin(false);
+        setAdminUser(null);
         setLoading(false);
         return;
       }
 
-      // For now, check if user exists - admin_users table will be created later
-      // Temporarily allow authenticated users as admins for development
-      setIsAdmin(true);
-      setAdminUser({
-        id: user.id,
-        user_id: user.id,
-        role: 'admin',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
+      // Check if user has admin role using the has_role function
+      const { data: hasAdminRole, error } = await supabase
+        .rpc('has_role', { _user_id: user.id, _role: 'admin' });
+      
+      if (error) {
+        console.error('Error checking admin role:', error);
+        setIsAdmin(false);
+        setAdminUser(null);
+      } else if (hasAdminRole) {
+        setIsAdmin(true);
+        setAdminUser({
+          id: user.id,
+          user_id: user.id,
+          role: 'admin',
+          created_at: new Date().toISOString(),
+        });
+      } else {
+        setIsAdmin(false);
+        setAdminUser(null);
+      }
     } catch (error) {
       console.error('Error checking admin status:', error);
       setIsAdmin(false);
+      setAdminUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const requireAdmin = (redirectTo: string = '/auth') => {
+  const requireAdmin = (redirectTo: string = '/admin-login') => {
     if (!loading && !isAdmin) {
       navigate(redirectTo);
     }
