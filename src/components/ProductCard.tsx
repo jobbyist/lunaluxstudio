@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ShoppingCart, Heart, Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -18,6 +19,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const [userRating, setUserRating] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { formatPrice, currency } = useCurrency();
 
   useEffect(() => {
     checkAuthAndLoadData();
@@ -146,6 +148,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const imageUrl = node.images.edges[0]?.node.url || "/placeholder.svg";
   const price = node.priceRange.minVariantPrice;
+  
+  // Convert Shopify price (in ZAR) to selected currency
+  const priceInZAR = parseFloat(price.amount);
+  const displayPrice = formatPrice(priceInZAR);
 
   return (
     <Link to={`/product/${node.handle}`} className="group">
@@ -201,7 +207,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           
           <div className="flex items-center justify-between">
             <span className="text-lg font-semibold text-primary">
-              {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
+              {displayPrice}
             </span>
           </div>
 

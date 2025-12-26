@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/sheet";
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 import { NotificationBar } from "./NotificationBar";
+import lunaLogo from "@/assets/luna-logo.png";
 
 export const Header = () => {
   const { currency, language, setCurrency, setLanguage, t } = useCurrency();
@@ -60,12 +61,12 @@ export const Header = () => {
             {mobileMenuOpen ? <X /> : <Menu />}
           </Button>
 
-          {/* Logo */}
+          {/* Logo - New Image Logo */}
           <Link to="/" className="flex items-center justify-center flex-1 md:flex-none">
             <img 
-              src="/luna.svg" 
+              src={lunaLogo} 
               alt="Luna Luxury Hair" 
-              className="h-8 md:h-10 w-auto"
+              className="h-12 md:h-14 w-auto"
               loading="eager"
             />
           </Link>
@@ -175,9 +176,9 @@ export const Header = () => {
             <SheetHeader className="p-6 pb-4 border-b border-border">
               <SheetTitle className="text-left">
                 <img 
-                  src="/luna.svg" 
+                  src={lunaLogo} 
                   alt="Luna Luxury Hair" 
-                  className="h-8 w-auto"
+                  className="h-10 w-auto"
                   loading="eager"
                 />
               </SheetTitle>
