@@ -82,12 +82,16 @@ export const Header = () => {
               {mobileMenuOpen ? <X /> : <Menu />}
             </Button>
 
-            {/* Logo - Significantly Larger */}
+            {/* Logo - Shrinks on scroll */}
             <Link to="/" className="flex items-center">
-              <img 
+              <motion.img 
                 src={lunaLogo} 
                 alt="Luna Luxury Hair" 
-                className="h-20 md:h-24 w-auto"
+                className="w-auto"
+                animate={{
+                  height: scrolled ? "3.5rem" : "5rem",
+                }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 loading="eager"
               />
             </Link>
