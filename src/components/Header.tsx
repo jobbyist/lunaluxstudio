@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   ShoppingCart, 
   User, 
@@ -35,16 +35,36 @@ import {
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 import { NotificationBar } from "./NotificationBar";
 import lunaLogo from "@/assets/luna-logo.png";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export const Header = () => {
   const { currency, language, setCurrency, setLanguage, t } = useCurrency();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const currencies: Currency[] = ["ZAR", "USD", "EUR", "GBP"];
   const languages: Language[] = ["EN", "ES", "FR", "DE", "AF"];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-b border-border">
+    <motion.header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled 
+          ? "bg-background/70 backdrop-blur-xl shadow-lg border-b border-border/50" 
+          : "bg-background/95 backdrop-blur border-b border-border"
+      }`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="container mx-auto px-4">
         {/* Top Bar - Rotating Notifications */}
         <NotificationBar />
@@ -278,6 +298,6 @@ export const Header = () => {
           </SheetContent>
         </Sheet>
       </div>
-    </header>
+    </motion.header>
   );
 };
