@@ -12,6 +12,7 @@ import {
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,10 +23,11 @@ export const CartDrawer = () => {
     removeItem, 
     createCheckout 
   } = useCartStore();
+  const { formatPrice } = useCurrency();
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
-
+  // Calculate total in ZAR (assuming prices from Shopify are in ZAR)
+  const totalPriceZAR = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
   const handleCheckout = async () => {
     try {
       await createCheckout();
@@ -91,7 +93,7 @@ export const CartDrawer = () => {
                           {item.selectedOptions.map(option => option.value).join(' • ')}
                         </p>
                         <p className="font-semibold text-primary">
-                          {item.price.currencyCode} {parseFloat(item.price.amount).toFixed(2)}
+                          {formatPrice(parseFloat(item.price.amount))}
                         </p>
                       </div>
                       
@@ -134,7 +136,7 @@ export const CartDrawer = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Total</span>
                   <span className="text-xl font-bold text-primary">
-                    {items[0]?.price.currencyCode || 'USD'} {totalPrice.toFixed(2)}
+                    {formatPrice(totalPriceZAR)}
                   </span>
                 </div>
                 

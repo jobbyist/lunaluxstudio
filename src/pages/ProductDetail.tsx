@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Loader2, ShoppingCart } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -17,6 +18,7 @@ const ProductDetail = () => {
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const addItem = useCartStore(state => state.addItem);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -144,7 +146,7 @@ const ProductDetail = () => {
               <div>
                 <h1 className="text-3xl md:text-4xl font-serif mb-2">{node.title}</h1>
                 <p className="text-2xl font-semibold text-primary">
-                  {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
+                  {formatPrice(parseFloat(price.amount))}
                 </p>
               </div>
 
