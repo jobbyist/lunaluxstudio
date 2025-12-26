@@ -1,13 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { motion, useScroll, useTransform } from "framer-motion";
 import tutorialBundles from "@/assets/tutorial-bundles.jpg";
 import tutorialWigs from "@/assets/tutorial-wigs.jpg";
 import tutorialFrontals from "@/assets/tutorial-frontals.jpg";
 
 export const InstagramReels = () => {
   const { t } = useCurrency();
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
   
   const reels = [
     {
@@ -93,7 +102,7 @@ export const InstagramReels = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, reels.length]);
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev - 1 + reels.length) % reels.length);
@@ -110,39 +119,65 @@ export const InstagramReels = () => {
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <motion.section 
+      ref={sectionRef} 
+      className="py-20 bg-background overflow-hidden"
+      style={{ scale }}
+    >
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-serif text-center mb-12 tracking-wider">
+        <motion.h2 
+          className="text-3xl md:text-4xl font-serif text-center mb-12 tracking-wider"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >
           {t('featuredStories').toUpperCase()}
-        </h2>
+        </motion.h2>
 
-        <div 
+        <motion.div 
           className="relative max-w-6xl mx-auto"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
         >
           <div className="flex items-center justify-center gap-4 md:gap-8">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={goToPrevious}
-              className="flex-shrink-0 hover:bg-primary/10"
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-              <ChevronLeft className="h-6 w-6" />
-            </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={goToPrevious}
+                className="flex-shrink-0 hover:bg-primary/10"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </Button>
+            </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 max-w-5xl">
               {visibleReels.map((reel, idx) => (
-                <a
-                  key={reel.id}
+                <motion.a
+                  key={`${reel.id}-${idx}`}
                   href={reel.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group relative aspect-[9/16] rounded-lg overflow-hidden transition-all duration-500 cursor-pointer ${
+                  className={`group relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer ${
                     idx === 1 
-                      ? 'scale-100 md:scale-110 z-10 shadow-2xl shadow-primary/20' 
-                      : 'scale-90 opacity-50 md:opacity-70'
+                      ? 'z-10 shadow-2xl shadow-primary/20' 
+                      : 'opacity-50 md:opacity-70'
                   }`}
+                  initial={{ scale: idx === 1 ? 1 : 0.9 }}
+                  animate={{ 
+                    scale: idx === 1 ? 1.1 : 0.9,
+                    opacity: idx === 1 ? 1 : 0.7
+                  }}
+                  transition={{ duration: 0.5 }}
+                  whileHover={{ scale: idx === 1 ? 1.12 : 0.95 }}
                 >
                   <img
                     src={reel.image}
@@ -151,33 +186,43 @@ export const InstagramReels = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
-                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <motion.div 
+                    className="absolute top-4 right-4"
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <div className="bg-primary/90 rounded-full p-2">
                       <ExternalLink className="h-4 w-4 text-primary-foreground" />
                     </div>
-                  </div>
+                  </motion.div>
                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                     <p className="text-xs text-primary mb-1">{reel.topic}</p>
                     <h3 className="font-semibold">{reel.title}</h3>
                   </div>
-                </a>
+                </motion.a>
               ))}
             </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={goToNext}
-              className="flex-shrink-0 hover:bg-primary/10"
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-              <ChevronRight className="h-6 w-6" />
-            </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={goToNext}
+                className="flex-shrink-0 hover:bg-primary/10"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </Button>
+            </motion.div>
           </div>
 
           {/* Progress Indicators */}
           <div className="flex justify-center mt-8 gap-2">
             {reels.map((_, idx) => (
-              <button
+              <motion.button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`h-1 rounded-full transition-all ${
@@ -185,12 +230,14 @@ export const InstagramReels = () => {
                     ? 'w-8 bg-primary' 
                     : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
                 }`}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
                 aria-label={`Go to reel ${idx + 1}`}
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
