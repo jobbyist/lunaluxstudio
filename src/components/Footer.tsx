@@ -8,9 +8,9 @@ export const Footer = () => {
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
+          {/* Brand - Text Logo moved from header */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-cursive tracking-wider">
+            <h3 className="text-3xl md:text-4xl font-cursive tracking-wider">
               <span className="text-primary">Luna</span> Luxury Hair
             </h3>
             <p className="text-sm text-muted-foreground">

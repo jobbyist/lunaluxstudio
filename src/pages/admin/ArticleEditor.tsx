@@ -11,8 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Save } from 'lucide-react';
@@ -45,45 +44,6 @@ const AdminArticleEditor = () => {
     tags: '',
   });
 
-  const loadArticle = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) throw error;
-      
-      if (data) {
-        setForm({
-          title: data.title,
-          slug: data.slug,
-          content: data.content,
-          excerpt: data.excerpt || '',
-          featured_image: data.featured_image || '',
-          status: data.status,
-          meta_title: data.meta_title || '',
-          meta_description: data.meta_description || '',
-          tags: data.tags?.join(', ') || '',
-        });
-      }
-    } catch (error) {
-      console.error('Error loading article:', error);
-      toast.error('Failed to load article');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (id) {
-      loadArticle();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
   const generateSlug = (title: string) => {
     return title
       .toLowerCase()
@@ -104,54 +64,12 @@ const AdminArticleEditor = () => {
     setLoading(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      const tagsArray = form.tags
-        .split(',')
-        .map(t => t.trim())
-        .filter(t => t.length > 0);
-
-      const articleData = {
-        title: form.title,
-        slug: form.slug,
-        content: form.content,
-        excerpt: form.excerpt || null,
-        featured_image: form.featured_image || null,
-        status: form.status,
-        meta_title: form.meta_title || null,
-        meta_description: form.meta_description || null,
-        tags: tagsArray.length > 0 ? tagsArray : null,
-        published_at: form.status === 'published' ? new Date().toISOString() : null,
-      };
-
-      if (id) {
-        // Update existing article
-        const { error } = await supabase
-          .from('articles')
-          .update(articleData)
-          .eq('id', id);
-
-        if (error) throw error;
-        toast.success('Article updated successfully');
-      } else {
-        // Create new article
-        const { error } = await supabase
-          .from('articles')
-          .insert({
-            ...articleData,
-            author_id: user.id,
-          });
-
-        if (error) throw error;
-        toast.success('Article created successfully');
-      }
-
+      // Articles table not yet configured
+      toast.info('Article feature will be available once the database is configured');
       navigate('/admin/articles');
     } catch (error) {
       console.error('Error saving article:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to save article';
-      toast.error(errorMessage);
+      toast.error('Failed to save article');
     } finally {
       setLoading(false);
     }
