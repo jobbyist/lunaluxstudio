@@ -74,7 +74,7 @@ const ContactContent = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="pt-32 pb-16">
+      <main className="pt-40 md:pt-44 pb-16">
         <div className="container mx-auto px-4">
           {/* Page Header */}
           <motion.div
