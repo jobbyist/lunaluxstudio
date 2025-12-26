@@ -125,10 +125,10 @@ const createBundlesFromProducts = (products: ShopifyProduct[]): Bundle[] => {
   
   // Bundle 3: Luxury Collection (premium bundles + frontal + care products)
   if (categorized.bundle.length >= 2 && categorized.frontal.length >= 1 && categorized.care.length >= 2) {
-    const bundleProduct = categorized.bundle[1] || categorized.bundle[0];
+    const bundleProduct = categorized.bundle[1];
     const frontalProduct = categorized.frontal[0];
     const careProduct1 = categorized.care[0];
-    const careProduct2 = categorized.care[1] || categorized.care[0];
+    const careProduct2 = categorized.care[1]; // Guaranteed to exist due to condition check
     const bundlePrice = parseFloat(bundleProduct.node.priceRange.minVariantPrice.amount) * 3;
     const frontalPrice = parseFloat(frontalProduct.node.priceRange.minVariantPrice.amount);
     const carePrice = parseFloat(careProduct1.node.priceRange.minVariantPrice.amount) + 
@@ -223,6 +223,9 @@ export const BundleSavePopup = ({ isOpen, onClose }: BundleSavePopupProps) => {
 
   const handleAddBundle = (bundle: Bundle) => {
     // Add each product in the bundle to cart with proper quantity
+    let addedCount = 0;
+    let skippedCount = 0;
+    
     bundle.items.forEach(item => {
       const defaultVariant = item.product.node.variants.edges[0]?.node;
       if (defaultVariant) {
@@ -234,13 +237,25 @@ export const BundleSavePopup = ({ isOpen, onClose }: BundleSavePopupProps) => {
           quantity: item.quantity, // Use the actual quantity from the bundle
           selectedOptions: defaultVariant.selectedOptions || []
         });
+        addedCount++;
+      } else {
+        // Product has no variants, skip it
+        console.warn(`Skipping product without variants: ${item.product.node.title}`);
+        skippedCount++;
       }
     });
     
     setAddedBundles(prev => [...prev, bundle.id]);
-    toast.success(`${bundle.name} added to cart!`, {
-      description: `${bundle.items.length} items added with ${bundle.savings}% savings`
-    });
+    
+    if (skippedCount > 0) {
+      toast.success(`${bundle.name} added to cart!`, {
+        description: `${addedCount} items added. ${skippedCount} item(s) unavailable.`
+      });
+    } else {
+      toast.success(`${bundle.name} added to cart!`, {
+        description: `${addedCount} items added with ${bundle.savings}% savings`
+      });
+    }
   };
 
   const formatPrice = (price: number) => {
