@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Categories } from "@/components/Categories";
-import { NewArrivals } from "@/components/NewArrivals";
 import { MainCharacterCollection } from "@/components/MainCharacterCollection";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Collections } from "@/components/Collections";
@@ -23,10 +22,9 @@ const Index = () => {
       <Header />
       <main className="pt-40 md:pt-44">
         <Hero />
-        <NewArrivals />
+        <Collections />
         <MainCharacterCollection />
         <ProductGrid />
-        <Collections />
         <InstagramReels />
         <Newsletter />
       </main>
