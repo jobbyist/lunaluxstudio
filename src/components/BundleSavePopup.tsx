@@ -23,26 +23,32 @@ interface Bundle {
   popular?: boolean;
 }
 
+// Configuration for product categorization
+const PRODUCT_CATEGORIES = {
+  bundle: ['bundle', 'wave', 'straight', 'curly', 'body wave'],
+  closure: ['closure'],
+  frontal: ['frontal'],
+  wig: ['wig'],
+  accessory: ['cap', 'glue', 'band', 'brush', 'stand'],
+  care: ['spray', 'oil', 'shampoo', 'conditioner', 'serum']
+} as const;
+
+// Maximum number of products to fetch for bundle creation
+const MAX_PRODUCTS_TO_FETCH = 50;
+
 // Helper function to categorize products based on title/description
 const categorizeProduct = (product: ShopifyProduct): string => {
   const title = product.node.title.toLowerCase();
-  const desc = product.node.description.toLowerCase();
+  const description = product.node.description.toLowerCase();
+  const searchText = `${title} ${description}`;
   
-  if (title.includes('bundle') || title.includes('wave') || title.includes('straight') || 
-      title.includes('curly') || title.includes('body wave')) {
-    return 'bundle';
+  // Check each category's keywords
+  for (const [category, keywords] of Object.entries(PRODUCT_CATEGORIES)) {
+    if (keywords.some(keyword => searchText.includes(keyword))) {
+      return category;
+    }
   }
-  if (title.includes('closure')) return 'closure';
-  if (title.includes('frontal')) return 'frontal';
-  if (title.includes('wig')) return 'wig';
-  if (title.includes('cap') || title.includes('glue') || title.includes('band') || 
-      title.includes('brush') || title.includes('stand')) {
-    return 'accessory';
-  }
-  if (title.includes('spray') || title.includes('oil') || title.includes('shampoo') || 
-      title.includes('conditioner') || title.includes('serum')) {
-    return 'care';
-  }
+  
   return 'other';
 };
 
@@ -186,7 +192,7 @@ export const BundleSavePopup = ({ isOpen, onClose }: BundleSavePopupProps) => {
         setLoading(true);
         setError(null);
         // Fetch products from Shopify
-        const products = await fetchProducts(50); // Fetch more products for better bundle creation
+        const products = await fetchProducts(MAX_PRODUCTS_TO_FETCH);
         
         if (products.length === 0) {
           setError("No products available to create bundles");
@@ -216,20 +222,18 @@ export const BundleSavePopup = ({ isOpen, onClose }: BundleSavePopupProps) => {
   }, [isOpen]);
 
   const handleAddBundle = (bundle: Bundle) => {
-    // Add each product in the bundle to cart
+    // Add each product in the bundle to cart with proper quantity
     bundle.items.forEach(item => {
       const defaultVariant = item.product.node.variants.edges[0]?.node;
       if (defaultVariant) {
-        for (let i = 0; i < item.quantity; i++) {
-          addItem({
-            product: item.product,
-            variantId: defaultVariant.id,
-            variantTitle: defaultVariant.title,
-            price: defaultVariant.price,
-            quantity: 1,
-            selectedOptions: defaultVariant.selectedOptions || []
-          });
-        }
+        addItem({
+          product: item.product,
+          variantId: defaultVariant.id,
+          variantTitle: defaultVariant.title,
+          price: defaultVariant.price,
+          quantity: item.quantity, // Use the actual quantity from the bundle
+          selectedOptions: defaultVariant.selectedOptions || []
+        });
       }
     });
     
