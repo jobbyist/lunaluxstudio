@@ -202,6 +202,17 @@ export const Footer = () => {
           <p className="text-center text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} Luna Luxury Hair. All rights reserved.
           </p>
+          <p className="text-center text-xs text-muted-foreground mt-2">
+            Developed and maintained by{" "}
+            <a 
+              href="https://gravitas.uno" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              Gravitas Industries
+            </a>
+          </p>
         </div>
       </div>
     </footer>
