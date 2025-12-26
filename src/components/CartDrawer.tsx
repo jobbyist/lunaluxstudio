@@ -13,9 +13,11 @@ import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { UpsellPopup } from "./UpsellPopup";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showUpsell, setShowUpsell] = useState(false);
   const { 
     items, 
     isLoading, 
@@ -28,7 +30,15 @@ export const CartDrawer = () => {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   // Calculate total in ZAR (assuming prices from Shopify are in ZAR)
   const totalPriceZAR = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
-  const handleCheckout = async () => {
+
+  // Show upsell popup when checkout button is clicked
+  const handleCheckoutClick = () => {
+    setShowUpsell(true);
+  };
+
+  // Proceed with actual checkout after upsell
+  const handleProceedToCheckout = async () => {
+    setShowUpsell(false);
     try {
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
@@ -141,7 +151,7 @@ export const CartDrawer = () => {
                 </div>
                 
                 <Button 
-                  onClick={handleCheckout}
+                  onClick={handleCheckoutClick}
                   className="w-full bg-primary hover:bg-primary/90" 
                   size="lg"
                   disabled={items.length === 0 || isLoading}
@@ -163,6 +173,13 @@ export const CartDrawer = () => {
           )}
         </div>
       </SheetContent>
+
+      {/* Upsell Popup */}
+      <UpsellPopup
+        isOpen={showUpsell}
+        onClose={() => setShowUpsell(false)}
+        onProceedToCheckout={handleProceedToCheckout}
+      />
     </Sheet>
   );
 };
