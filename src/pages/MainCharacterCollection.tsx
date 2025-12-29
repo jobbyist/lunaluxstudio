@@ -62,7 +62,7 @@ const MainCharacterCollectionPage = () => {
                 </div>
                 <CardContent className="p-4 space-y-2">
                   <h3 className="font-medium text-center">{wig.title}</h3>
-                  <p className="text-sm text-muted-foreground text-center">
+                  <p className="text-sm text-white text-center">
                     {wig.description}
                   </p>
                   <p className="text-primary font-semibold text-center text-lg">
