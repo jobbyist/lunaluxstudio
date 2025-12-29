@@ -15,7 +15,8 @@ import {
   UserPlus,
   Star,
   FileText,
-  Award
+  Award,
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "./CartDrawer";
@@ -138,6 +139,9 @@ export const Header = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/policies" className="cursor-pointer font-seasons">Store Policies</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/admin" className="cursor-pointer font-seasons">Admin Dashboard</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -296,6 +300,14 @@ export const Header = () => {
                 >
                   <FileText className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
                   <span>Store Policies</span>
+                </Link>
+                <Link 
+                  to="/admin" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Settings className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                  <span>Admin Dashboard</span>
                 </Link>
               </div>
             </nav>
