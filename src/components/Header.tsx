@@ -99,45 +99,45 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
-            <Link to="/" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-foreground hover:text-primary transition-colors font-seasons">
               {t('shopAll')}
             </Link>
-            <Link to="/about" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/about" className="text-foreground hover:text-primary transition-colors font-seasons">
               {t('about')}
             </Link>
-            <Link to="/explore" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/explore" className="text-foreground hover:text-primary transition-colors font-seasons">
               {t('explore')}
             </Link>
-            <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/contact" className="text-foreground hover:text-primary transition-colors font-seasons">
               {t('contact')}
             </Link>
             
             {/* More Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-foreground hover:text-primary transition-colors flex items-center gap-1 px-0">
+                <Button variant="ghost" className="text-foreground hover:text-primary transition-colors flex items-center gap-1 px-0 font-seasons">
                   More
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-background border-border">
                 <DropdownMenuItem asChild>
-                  <Link to="/loyalty" className="cursor-pointer">Loyalty Rewards</Link>
+                  <Link to="/loyalty" className="cursor-pointer font-seasons">Loyalty Rewards</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/gift-vouchers" className="cursor-pointer">Gift Vouchers</Link>
+                  <Link to="/gift-vouchers" className="cursor-pointer font-seasons">Gift Vouchers</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/special-offers" className="cursor-pointer">Special Offers</Link>
+                  <Link to="/special-offers" className="cursor-pointer font-seasons">Special Offers</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/referral" className="cursor-pointer">Referral Program</Link>
+                  <Link to="/referral" className="cursor-pointer font-seasons">Referral Program</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/reviews" className="cursor-pointer">Leave A Review</Link>
+                  <Link to="/reviews" className="cursor-pointer font-seasons">Leave A Review</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/policies" className="cursor-pointer">Store Policies</Link>
+                  <Link to="/policies" className="cursor-pointer font-seasons">Store Policies</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -213,7 +213,7 @@ export const Header = () => {
             <nav className="flex flex-col p-4">
               <Link
                 to="/"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Home className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -221,7 +221,7 @@ export const Header = () => {
               </Link>
               <Link
                 to="/about"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Info className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -229,7 +229,7 @@ export const Header = () => {
               </Link>
               <Link
                 to="/explore"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Compass className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -237,7 +237,7 @@ export const Header = () => {
               </Link>
               <Link
                 to="/contact"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Mail className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -251,7 +251,7 @@ export const Header = () => {
                 </div>
                 <Link 
                   to="/loyalty" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Award className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -259,7 +259,7 @@ export const Header = () => {
                 </Link>
                 <Link 
                   to="/gift-vouchers" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Gift className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -267,7 +267,7 @@ export const Header = () => {
                 </Link>
                 <Link 
                   to="/special-offers" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Tag className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -275,7 +275,7 @@ export const Header = () => {
                 </Link>
                 <Link 
                   to="/referral" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <UserPlus className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -283,7 +283,7 @@ export const Header = () => {
                 </Link>
                 <Link 
                   to="/reviews" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Star className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -291,7 +291,7 @@ export const Header = () => {
                 </Link>
                 <Link 
                   to="/policies" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <FileText className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
