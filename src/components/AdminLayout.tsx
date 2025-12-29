@@ -13,6 +13,7 @@ import {
   LogOut,
   Menu,
   X,
+  Sparkles,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -23,6 +24,7 @@ interface AdminLayoutProps {
 
 const adminNavItems = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/admin/ai-tools', label: 'AI Tools', icon: Sparkles },
   { path: '/admin/articles', label: 'Content Manager', icon: Home },
   { path: '/admin/publish', label: 'Publish Content', icon: Home },
   { path: '/admin/homepage', label: 'Homepage Editor', icon: Home },
