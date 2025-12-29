@@ -23,6 +23,7 @@ interface AdminLayoutProps {
 
 const adminNavItems = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/admin/articles', label: 'Content Manager', icon: Home },
   { path: '/admin/publish', label: 'Publish Content', icon: Home },
   { path: '/admin/homepage', label: 'Homepage Editor', icon: Home },
   { path: '/admin/activity', label: 'Activity Logs', icon: Users },

@@ -33,6 +33,7 @@ import AdminEmails from "./pages/admin/AdminEmails";
 import AdminSettings from "./pages/admin/Settings";
 import ContentPublisher from "./pages/admin/ContentPublisher";
 import ActivityLogs from "./pages/admin/ActivityLogs";
+import Articles from "./pages/admin/Articles";
 
 const queryClient = new QueryClient();
 
@@ -69,7 +70,9 @@ const App = () => (
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/articles" element={<Articles />} />
             <Route path="/admin/publish" element={<ContentPublisher />} />
+            <Route path="/admin/publish/:id" element={<ContentPublisher />} />
             <Route path="/admin/homepage" element={<AdminHomepageEditor />} />
             <Route path="/admin/activity" element={<ActivityLogs />} />
             <Route path="/admin/admins" element={<AdminEmails />} />

@@ -5,7 +5,7 @@ import { Categories } from "@/components/Categories";
 import { MainCharacterCollection } from "@/components/MainCharacterCollection";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Collections } from "@/components/Collections";
-import { InstagramReels } from "@/components/InstagramReels";
+import { FeaturedStories } from "@/components/FeaturedStories";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 import { BundleSavePopup } from "@/components/BundleSavePopup";
@@ -25,7 +25,7 @@ const Index = () => {
         <Collections />
         <MainCharacterCollection />
         <ProductGrid />
-        <InstagramReels />
+        <FeaturedStories />
         <Newsletter />
       </main>
       <Footer />
