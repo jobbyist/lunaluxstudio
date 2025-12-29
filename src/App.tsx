@@ -34,6 +34,7 @@ import AdminSettings from "./pages/admin/Settings";
 import ContentPublisher from "./pages/admin/ContentPublisher";
 import ActivityLogs from "./pages/admin/ActivityLogs";
 import Articles from "./pages/admin/Articles";
+import AITools from "./pages/admin/AITools";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ const App = () => (
             <Route path="/admin/activity" element={<ActivityLogs />} />
             <Route path="/admin/admins" element={<AdminEmails />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
+            <Route path="/admin/ai-tools" element={<AITools />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

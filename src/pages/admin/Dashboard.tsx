@@ -1,6 +1,6 @@
 import { AdminLayout } from '@/components/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, Package, TrendingUp, ExternalLink, AlertCircle, PenTool, Activity } from 'lucide-react';
+import { FileText, Package, TrendingUp, ExternalLink, AlertCircle, PenTool, Activity, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
               <Link
                 to="/admin/publish"
                 className="flex items-center justify-center p-6 border-2 border-dashed border-border rounded-lg hover:border-primary transition-colors"
@@ -122,6 +122,16 @@ const AdminDashboard = () => {
                 <div className="text-center">
                   <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
                   <p className="font-medium">View Analytics</p>
+                </div>
+              </Link>
+              <Link
+                to="/admin/ai-tools"
+                className="flex items-center justify-center p-6 border-2 border-dashed border-border rounded-lg hover:border-primary transition-colors bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20"
+              >
+                <div className="text-center">
+                  <Sparkles className="h-8 w-8 mx-auto mb-2 text-primary animate-pulse" />
+                  <p className="font-medium">AI Tools</p>
+                  <p className="text-xs text-muted-foreground mt-1">Powered by Gemini</p>
                 </div>
               </Link>
             </div>
