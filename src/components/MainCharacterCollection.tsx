@@ -87,7 +87,7 @@ export const MainCharacterCollection = () => {
           viewport={{ once: true, margin: "-100px" }}
         >
           <motion.h2 
-            className="text-3xl md:text-4xl font-serif mb-4 tracking-wider"
+            className="text-3xl md:text-4xl font-helvetica uppercase mb-4 tracking-wider"
             initial={{ opacity: 0, letterSpacing: "0.5em" }}
             whileInView={{ opacity: 1, letterSpacing: "0.2em" }}
             transition={{ duration: 0.8, delay: 0.2 }}

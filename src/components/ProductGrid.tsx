@@ -104,7 +104,7 @@ export const ProductGrid = ({ title, searchQuery, limit = 8 }: ProductGridProps)
   return (
     <section className="py-20 bg-card">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-serif text-center mb-4 tracking-wider">
+        <h2 className="text-3xl md:text-4xl font-helvetica uppercase text-center mb-4 tracking-wider">
           {displayTitle}
         </h2>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">

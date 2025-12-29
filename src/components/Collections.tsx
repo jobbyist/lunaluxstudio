@@ -74,7 +74,7 @@ export const Collections = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           viewport={{ once: true, margin: "-100px" }}
         >
-          <h2 className="text-3xl md:text-4xl font-serif mb-4 tracking-wider">
+          <h2 className="text-3xl md:text-4xl font-helvetica uppercase mb-4 tracking-wider">
             SHOP BY COLLECTION
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">

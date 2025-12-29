@@ -87,7 +87,7 @@ export const Newsletter = () => {
             >
               <Mail className="h-12 w-12 mx-auto text-primary" />
             </motion.div>
-            <h2 className="text-3xl md:text-4xl font-serif tracking-wider">
+            <h2 className="text-3xl md:text-4xl font-helvetica uppercase tracking-wider">
               {t('joinMailingList')}
             </h2>
             <p className="text-muted-foreground">

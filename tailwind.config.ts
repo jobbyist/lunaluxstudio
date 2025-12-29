@@ -19,6 +19,8 @@ export default {
         heading: ['Playfair Display', 'serif'],
         elegant: ['Cinzel', 'serif'],
         cursive: ['Dancing Script', 'cursive'],
+        seasons: ['The Seasons', 'cursive'],
+        helvetica: ['Helvetica', 'Arial', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
