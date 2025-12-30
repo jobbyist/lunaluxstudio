@@ -69,17 +69,7 @@ permissions:
 
 To complete the setup, configure DNS records with your domain provider:
 
-### Option 1: CNAME Record (Recommended for www subdomain)
-Add a CNAME record for www subdomain:
-
-```
-Type: CNAME
-Name: www
-Value: jobbyist.github.io
-TTL: 3600 (or your provider's default)
-```
-
-### Option 2: A Records (For apex domain)
+### Option 1: A Records (Required for apex domain)
 For the apex domain (lunaluxhair.com), use A records pointing to GitHub Pages IPs:
 
 ```
@@ -93,6 +83,16 @@ Additional A records (add all four):
 - 185.199.109.153
 - 185.199.110.153
 - 185.199.111.153
+
+### Option 2: CNAME Record (Optional for www subdomain)
+To also support www.lunaluxhair.com, add a CNAME record:
+
+```
+Type: CNAME
+Name: www
+Value: jobbyist.github.io
+TTL: 3600 (or your provider's default)
+```
 
 ### AAAA Records (Optional - for IPv6)
 ```

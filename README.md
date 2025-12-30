@@ -145,9 +145,9 @@ To enable GitHub Pages for this repository:
 2. Navigate to "Pages" in the left sidebar
 3. Under "Build and deployment", select "GitHub Actions" as the source
 4. Under "Custom domain", enter: `lunaluxhair.com`
-5. Configure your DNS settings:
-   - Add a CNAME record: `@` or apex → `jobbyist.github.io`
-   - Or use A records pointing to GitHub Pages IPs (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153)
+5. Configure your DNS settings (add A records for apex domain):
+   - Add 4 A records: `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - Optionally add CNAME for www: `www` → `jobbyist.github.io`
 6. Wait for DNS verification (5-30 minutes)
 7. Enable "Enforce HTTPS" once verified
 
