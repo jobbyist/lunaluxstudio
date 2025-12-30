@@ -141,7 +141,7 @@ export const Header = () => {
                   <Link to="/policies" className="cursor-pointer font-seasons">Store Policies</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/admin-login" className="cursor-pointer font-seasons">Admin Dashboard</Link>
+                  <Link to="/admin" className="cursor-pointer font-seasons">Admin Dashboard</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -302,7 +302,7 @@ export const Header = () => {
                   <span>Store Policies</span>
                 </Link>
                 <Link 
-                  to="/admin-login" 
+                  to="/admin" 
                   className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
