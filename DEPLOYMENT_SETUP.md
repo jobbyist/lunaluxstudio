@@ -1,7 +1,7 @@
 # GitHub Pages Deployment Setup
 
 ## Overview
-This repository is configured to automatically deploy to GitHub Pages with a custom domain `preview.lunaluxhair.com` using GitHub Actions.
+This repository is configured to automatically deploy to GitHub Pages with a custom domain `lunaluxhair.com` using GitHub Actions.
 
 ## Current Configuration
 
@@ -35,7 +35,7 @@ Location: `.github/workflows/deploy.yml`
 
 **CNAME File**: `public/CNAME`
 ```
-preview.lunaluxhair.com
+lunaluxhair.com
 ```
 
 This file is automatically copied to the `dist` directory during build and deployed with the site.
@@ -51,7 +51,7 @@ To complete the deployment setup, configure the following in your GitHub reposit
 
 ### 2. Configure Custom Domain
 1. In **Settings** → **Pages**
-2. Under "Custom domain", enter: `preview.lunaluxhair.com`
+2. Under "Custom domain", enter: `lunaluxhair.com`
 3. Click **Save**
 4. Wait for DNS check to complete
 5. Once DNS is verified, enable **Enforce HTTPS**
@@ -69,30 +69,42 @@ permissions:
 
 To complete the setup, configure DNS records with your domain provider:
 
-### Option 1: CNAME Record (Recommended)
-Add a CNAME record pointing to your GitHub Pages URL:
+### Option 1: CNAME Record (Recommended for www subdomain)
+Add a CNAME record for www subdomain:
 
 ```
 Type: CNAME
-Name: preview
+Name: www
 Value: jobbyist.github.io
 TTL: 3600 (or your provider's default)
 ```
 
-### Option 2: A Records
-Alternatively, use A records pointing to GitHub Pages IPs:
+### Option 2: A Records (For apex domain)
+For the apex domain (lunaluxhair.com), use A records pointing to GitHub Pages IPs:
 
 ```
 Type: A
-Name: preview
+Name: @ (or leave blank for apex domain)
 Value: 185.199.108.153
 TTL: 3600
 ```
 
-Additional A records:
+Additional A records (add all four):
 - 185.199.109.153
 - 185.199.110.153
 - 185.199.111.153
+
+### AAAA Records (Optional - for IPv6)
+```
+Type: AAAA
+Name: @ (or leave blank)
+Value: 2606:50c0:8000::153
+```
+
+Additional AAAA records:
+- 2606:50c0:8001::153
+- 2606:50c0:8002::153
+- 2606:50c0:8003::153
 
 ## Deployment Process
 
@@ -103,7 +115,7 @@ Every push to the `main` branch triggers automatic deployment:
 2. GitHub Actions workflow starts automatically
 3. Build job compiles the React application
 4. Deploy job publishes to GitHub Pages
-5. Site is available at `https://preview.lunaluxhair.com`
+5. Site is available at `https://lunaluxhair.com`
 
 ### Manual Deployment
 To manually trigger deployment:
