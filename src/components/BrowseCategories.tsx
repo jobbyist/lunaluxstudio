@@ -51,7 +51,7 @@ export const BrowseCategories = () => {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-primary" />
-            <h2 className="text-3xl md:text-4xl font-helvetica uppercase tracking-wider text-primary">
+            <h2 className="text-3xl md:text-4xl font-serif tracking-wider text-primary">
               Browse by Category
             </h2>
             <Sparkles className="h-5 w-5 text-primary" />

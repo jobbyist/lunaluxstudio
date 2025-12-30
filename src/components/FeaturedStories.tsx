@@ -240,7 +240,7 @@ export const FeaturedStories = () => {
     >
       <div className="container mx-auto px-4">
         <motion.h2 
-          className="text-3xl md:text-4xl font-helvetica uppercase text-center mb-12 tracking-wider"
+          className="text-3xl md:text-4xl font-serif text-center mb-12 tracking-wider"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}

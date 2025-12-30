@@ -30,7 +30,7 @@ export const NotificationBar = () => {
   const currentNotification = notifications[currentIndex];
 
   return (
-    <div className="py-2 border-b border-border/50 text-center text-sm min-h-[40px] flex items-center justify-center px-4" style={{ color: '#BAA799' }}>
+    <div className="py-2 border-b border-border/50 text-center text-sm text-muted-foreground min-h-[40px] flex items-center justify-center px-4">
       {currentNotification.link ? (
         <Link 
           to={currentNotification.link} 
