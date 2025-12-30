@@ -2,7 +2,7 @@
 
 ## 🚀 What's Already Configured
 
-✅ **CNAME File**: Custom domain `preview.lunaluxhair.com` is set
+✅ **CNAME File**: Custom domain `lunaluxhair.com` is set
 ✅ **GitHub Actions**: Workflow deploys on every push to `main`
 ✅ **Build Config**: Vite configured with correct base path
 ✅ **Deployment Artifact**: Uploads `dist` folder to GitHub Pages
@@ -16,15 +16,23 @@ Repository Settings → Pages → Source → Select "GitHub Actions"
 
 ### 2. Set Custom Domain (Repository Owner)
 ```
-Repository Settings → Pages → Custom domain → Enter: preview.lunaluxhair.com
+Repository Settings → Pages → Custom domain → Enter: lunaluxhair.com
 ```
 
 ### 3. Configure DNS (Domain Owner)
-Add this CNAME record to your DNS provider:
+Add A records to your DNS provider for the apex domain:
 
-| Type  | Name    | Value                    | TTL  |
-|-------|---------|--------------------------|------|
-| CNAME | preview | jobbyist.github.io       | 3600 |
+| Type | Name | Value                | TTL  |
+|------|------|----------------------|------|
+| A    | @    | 185.199.108.153      | 3600 |
+| A    | @    | 185.199.109.153      | 3600 |
+| A    | @    | 185.199.110.153      | 3600 |
+| A    | @    | 185.199.111.153      | 3600 |
+
+**Optional: Add www subdomain**
+| Type  | Name | Value              | TTL  |
+|-------|------|--------------------|------|
+| CNAME | www  | jobbyist.github.io | 3600 |
 
 **Popular DNS Providers:**
 - **Cloudflare**: DNS → Add Record
@@ -56,7 +64,7 @@ Repository Settings → Pages → Enforce HTTPS (checkbox)
 
 3. **Site is live at:**
    ```
-   https://preview.lunaluxhair.com
+   https://lunaluxhair.com
    ```
 
 ## 👀 Monitor Deployments
@@ -65,7 +73,7 @@ Repository Settings → Pages → Enforce HTTPS (checkbox)
 - Repository → Actions tab → Latest workflow run
 
 **View Site:**
-- https://preview.lunaluxhair.com
+- https://lunaluxhair.com
 - https://jobbyist.github.io/lunastudio (fallback)
 
 ## 🛠️ Local Testing
@@ -136,11 +144,11 @@ git push origin main
 ## ⚡ Fast Track Setup (5 minutes)
 
 1. **Enable Pages**: Settings → Pages → GitHub Actions
-2. **Set Domain**: Settings → Pages → preview.lunaluxhair.com
-3. **Configure DNS**: Add CNAME record → preview → jobbyist.github.io
+2. **Set Domain**: Settings → Pages → lunaluxhair.com
+3. **Configure DNS**: Add A records → @ → GitHub Pages IPs (see step 3 above)
 4. **Wait**: 5-30 minutes for DNS
 5. **Enable HTTPS**: Settings → Pages → Enforce HTTPS
-6. **Done!** Visit https://preview.lunaluxhair.com
+6. **Done!** Visit https://lunaluxhair.com
 
 ---
 

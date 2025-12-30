@@ -1,7 +1,7 @@
 # GitHub Pages Deployment Setup
 
 ## Overview
-This repository is configured to automatically deploy to GitHub Pages with a custom domain `preview.lunaluxhair.com` using GitHub Actions.
+This repository is configured to automatically deploy to GitHub Pages with a custom domain `lunaluxhair.com` using GitHub Actions.
 
 ## Current Configuration
 
@@ -35,7 +35,7 @@ Location: `.github/workflows/deploy.yml`
 
 **CNAME File**: `public/CNAME`
 ```
-preview.lunaluxhair.com
+lunaluxhair.com
 ```
 
 This file is automatically copied to the `dist` directory during build and deployed with the site.
@@ -51,7 +51,7 @@ To complete the deployment setup, configure the following in your GitHub reposit
 
 ### 2. Configure Custom Domain
 1. In **Settings** → **Pages**
-2. Under "Custom domain", enter: `preview.lunaluxhair.com`
+2. Under "Custom domain", enter: `lunaluxhair.com`
 3. Click **Save**
 4. Wait for DNS check to complete
 5. Once DNS is verified, enable **Enforce HTTPS**
@@ -69,30 +69,49 @@ permissions:
 
 To complete the setup, configure DNS records with your domain provider:
 
-### Option 1: CNAME Record (Recommended)
-Add a CNAME record pointing to your GitHub Pages URL:
+### Option 1: A Records (Required for apex domain)
+For the apex domain (lunaluxhair.com), add all four A records pointing to GitHub Pages IPs:
 
-```
-Type: CNAME
-Name: preview
-Value: jobbyist.github.io
-TTL: 3600 (or your provider's default)
-```
-
-### Option 2: A Records
-Alternatively, use A records pointing to GitHub Pages IPs:
+> **Note**: For the "Name" field, use `@` for apex domain. Some DNS providers may use a blank field or the root domain name. Check your provider's documentation.
 
 ```
 Type: A
-Name: preview
+Name: @ 
 Value: 185.199.108.153
 TTL: 3600
 ```
 
-Additional A records:
+Additional A records (add all four):
 - 185.199.109.153
 - 185.199.110.153
 - 185.199.111.153
+
+### Option 2: CNAME Record (Optional for www subdomain)
+To also support www.lunaluxhair.com, add a CNAME record:
+
+```
+Type: CNAME
+Name: www
+Value: jobbyist.github.io
+TTL: 3600 (or your provider's default)
+```
+
+### AAAA Records (Optional - for IPv6 support)
+Add all four AAAA records for IPv6 support:
+
+> **Note**: For the "Name" field, use `@` for apex domain (same as A records).
+
+```
+Type: AAAA
+Name: @
+Value: 2606:50c0:8000::153
+TTL: 3600
+```
+
+Additional AAAA records (add all four):
+- 2606:50c0:8001::153
+- 2606:50c0:8002::153
+- 2606:50c0:8003::153
 
 ## Deployment Process
 
@@ -103,7 +122,7 @@ Every push to the `main` branch triggers automatic deployment:
 2. GitHub Actions workflow starts automatically
 3. Build job compiles the React application
 4. Deploy job publishes to GitHub Pages
-5. Site is available at `https://preview.lunaluxhair.com`
+5. Site is available at `https://lunaluxhair.com`
 
 ### Manual Deployment
 To manually trigger deployment:
