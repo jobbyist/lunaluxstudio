@@ -70,11 +70,13 @@ permissions:
 To complete the setup, configure DNS records with your domain provider:
 
 ### Option 1: A Records (Required for apex domain)
-For the apex domain (lunaluxhair.com), use A records pointing to GitHub Pages IPs:
+For the apex domain (lunaluxhair.com), add all four A records pointing to GitHub Pages IPs:
+
+> **Note**: For the "Name" field, use `@` for apex domain. Some DNS providers may use a blank field or the root domain name. Check your provider's documentation.
 
 ```
 Type: A
-Name: @ (or leave blank for apex domain)
+Name: @ 
 Value: 185.199.108.153
 TTL: 3600
 ```
@@ -94,14 +96,19 @@ Value: jobbyist.github.io
 TTL: 3600 (or your provider's default)
 ```
 
-### AAAA Records (Optional - for IPv6)
+### AAAA Records (Optional - for IPv6 support)
+Add all four AAAA records for IPv6 support:
+
+> **Note**: For the "Name" field, use `@` for apex domain (same as A records).
+
 ```
 Type: AAAA
-Name: @ (or leave blank)
+Name: @
 Value: 2606:50c0:8000::153
+TTL: 3600
 ```
 
-Additional AAAA records:
+Additional AAAA records (add all four):
 - 2606:50c0:8001::153
 - 2606:50c0:8002::153
 - 2606:50c0:8003::153
