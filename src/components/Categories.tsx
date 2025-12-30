@@ -39,7 +39,7 @@ export const Categories = () => {
               </div>
               
               <div className="p-6 text-center space-y-4">
-                <h3 className="text-2xl font-helvetica uppercase tracking-wider text-primary">
+                <h3 className="text-2xl font-serif tracking-wider text-primary">
                   {category.title}
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">

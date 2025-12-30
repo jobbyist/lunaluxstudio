@@ -122,7 +122,7 @@ export const ChatBot = () => {
       {/* Chat Window */}
       {isOpen && (
         <div className="fixed inset-4 md:inset-auto md:bottom-4 md:right-4 z-50 md:w-96 md:max-w-[calc(100vw-2rem)]">
-          <div className="bg-white rounded-lg shadow-2xl border border-border overflow-hidden h-full md:h-auto flex flex-col max-h-[calc(100vh-2rem)] md:max-h-[600px]">
+          <div className="bg-card rounded-lg shadow-2xl border border-border overflow-hidden h-full md:h-auto flex flex-col max-h-[calc(100vh-2rem)] md:max-h-[600px]">
             {/* Header */}
             <div className="bg-primary p-3 md:p-4 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
@@ -140,7 +140,7 @@ export const ChatBot = () => {
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 p-3 md:p-4 min-h-0 bg-white">
+            <ScrollArea className="flex-1 p-3 md:p-4 min-h-0">
               <div className="space-y-3 md:space-y-4">
                 {messages.map((message, index) => (
                   <div
@@ -151,7 +151,7 @@ export const ChatBot = () => {
                       className={`max-w-[85%] rounded-lg p-2.5 md:p-3 ${
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
-                          : "bg-gray-100 text-gray-900"
+                          : "bg-muted text-foreground"
                       }`}
                     >
                       <p className="text-xs md:text-sm whitespace-pre-line">{renderMessageContent(message.content)}</p>
@@ -160,7 +160,7 @@ export const ChatBot = () => {
                 ))}
                 {loading && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 rounded-lg p-2.5 md:p-3">
+                    <div className="bg-muted rounded-lg p-2.5 md:p-3">
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
@@ -174,14 +174,14 @@ export const ChatBot = () => {
 
             {/* Suggested Queries */}
             {messages.length <= 2 && !loading && (
-              <div className="px-3 md:px-4 pb-2 shrink-0 bg-white">
-                <p className="text-xs text-gray-600 mb-2">Suggested questions:</p>
+              <div className="px-3 md:px-4 pb-2 shrink-0">
+                <p className="text-xs text-muted-foreground mb-2">Suggested questions:</p>
                 <div className="flex flex-wrap gap-1.5">
                   {SUGGESTED_QUERIES.map((query, index) => (
                     <button
                       key={index}
                       onClick={() => handleSuggestedQuery(query)}
-                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-900 px-2.5 py-1.5 rounded-full transition-colors"
+                      className="text-xs bg-muted hover:bg-muted/80 text-foreground px-2.5 py-1.5 rounded-full transition-colors"
                     >
                       {query}
                     </button>
@@ -191,15 +191,15 @@ export const ChatBot = () => {
             )}
 
             {/* Support Ticket Notice */}
-            <div className="px-3 md:px-4 py-2 bg-gray-50 border-t border-gray-200 shrink-0">
-              <div className="flex items-center gap-2 text-xs text-gray-600">
+            <div className="px-3 md:px-4 py-2 bg-muted/50 border-t border-border shrink-0">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Ticket className="h-3 w-3" />
                 <span>Queries are logged and our team responds within 1-2 days</span>
               </div>
             </div>
 
             {/* Input */}
-            <div className="p-3 md:p-4 border-t border-gray-200 shrink-0 bg-white">
+            <div className="p-3 md:p-4 border-t border-border shrink-0">
               <div className="flex gap-2">
                 <Input
                   value={input}
