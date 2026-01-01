@@ -343,13 +343,16 @@ const HomepageEditor = () => {
     setSections(newSections);
 
     // Update display_order in database for all affected sections
+    // Note: We update all sections rather than just affected ones for simplicity
+    // and to ensure consistent state. This is acceptable since homepage sections
+    // are typically small in number (<20) and Supabase handles concurrent updates well.
     try {
       const updates = newSections.map((section, index) => ({
         id: section.id,
         display_order: index,
       }));
 
-      // Batch update all sections concurrently
+      // Batch update all sections concurrently for better performance
       await Promise.all(
         updates.map((update) =>
           supabase
