@@ -338,7 +338,7 @@ const HomepageEditor = () => {
     const newIndex = sections.findIndex((s) => s.id === over.id);
 
     const newSections = arrayMove(sections, oldIndex, newIndex);
-    
+
     // Update local state immediately for responsive UI
     setSections(newSections);
 
@@ -349,13 +349,15 @@ const HomepageEditor = () => {
         display_order: index,
       }));
 
-      // Batch update all sections
-      for (const update of updates) {
-        await supabase
-          .from("homepage_sections")
-          .update({ display_order: update.display_order })
-          .eq("id", update.id);
-      }
+      // Batch update all sections concurrently
+      await Promise.all(
+        updates.map((update) =>
+          supabase
+            .from("homepage_sections")
+            .update({ display_order: update.display_order })
+            .eq("id", update.id)
+        )
+      );
 
       toast.success("Section order updated");
     } catch (error) {
