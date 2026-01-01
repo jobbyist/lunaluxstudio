@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CurrencyProvider, useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
-import { Filter, Grid, List } from "lucide-react";
+import { Filter, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -13,63 +13,104 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ProductGrid } from "@/components/ProductGrid";
+import { ProductCard } from "@/components/ProductCard";
+import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 
 const categories = [
   { id: "all", name: "All Products" },
-  { id: "bundles", name: "Hair Bundles" },
-  { id: "wigs", name: "Wigs" },
+  { id: "wigs", name: "Wigs & Units" },
+  { id: "bundles", name: "Bundles & Deals" },
   { id: "frontals", name: "Frontals & Closures" },
-  { id: "clip-ins", name: "Clip-ins" },
-  { id: "ponytails", name: "Ponytails" },
   { id: "accessories", name: "Accessories" },
-];
-
-const hairTypes = [
-  { id: "all", name: "All Types" },
-  { id: "brazilian", name: "Brazilian" },
-  { id: "peruvian", name: "Peruvian" },
-  { id: "indian", name: "Indian" },
-  { id: "malaysian", name: "Malaysian" },
-];
-
-const textures = [
-  { id: "all", name: "All Textures" },
-  { id: "straight", name: "Straight" },
-  { id: "body-wave", name: "Body Wave" },
-  { id: "deep-wave", name: "Deep Wave" },
-  { id: "curly", name: "Curly" },
-  { id: "kinky", name: "Kinky" },
-];
-
-const lengths = [
-  { id: "all", name: "All Lengths" },
-  { id: "10-14", name: "10\" - 14\"" },
-  { id: "16-20", name: "16\" - 20\"" },
-  { id: "22-26", name: "22\" - 26\"" },
-  { id: "28+", name: "28\" +" },
+  { id: "services", name: "Services" },
 ];
 
 const ExploreContent = () => {
-  const { t } = useCurrency();
+  const { t, formatPrice } = useCurrency();
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedHairType, setSelectedHairType] = useState("all");
-  const [selectedTexture, setSelectedTexture] = useState("all");
-  const [selectedLength, setSelectedLength] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchProducts(100); // Fetch all products
+        setProducts(data);
+      } catch (error) {
+        console.error("Error loading products:", error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
+  // Filter products based on selected category
+  const filteredProducts = useMemo(() => {
+    let filtered = [...products];
+
+    // Category filtering based on product title/type
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((product) => {
+        const title = product.node.title.toLowerCase();
+        const handle = product.node.handle.toLowerCase();
+        
+        switch (selectedCategory) {
+          case "wigs":
+            return title.includes("unit") || title.includes("wig") || title.includes("bob") || title.includes("fringe");
+          case "bundles":
+            return title.includes("bundle") || title.includes("combo") || title.includes("deal") || title.includes("strands");
+          case "frontals":
+            return title.includes("frontal") || title.includes("closure") || title.includes("13x4") || title.includes("4x4");
+          case "accessories":
+            return title.includes("lash") || title.includes("brush") || title.includes("bonnet") || title.includes("cap") || title.includes("waver") || title.includes("voucher");
+          case "services":
+            return title.includes("installation") || title.includes("service");
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Sorting
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => 
+          parseFloat(a.node.priceRange.minVariantPrice.amount) - 
+          parseFloat(b.node.priceRange.minVariantPrice.amount)
+        );
+        break;
+      case "price-high":
+        filtered.sort((a, b) => 
+          parseFloat(b.node.priceRange.minVariantPrice.amount) - 
+          parseFloat(a.node.priceRange.minVariantPrice.amount)
+        );
+        break;
+      case "name-az":
+        filtered.sort((a, b) => a.node.title.localeCompare(b.node.title));
+        break;
+      case "name-za":
+        filtered.sort((a, b) => b.node.title.localeCompare(a.node.title));
+        break;
+      default:
+        // Featured - keep original order
+        break;
+    }
+
+    return filtered;
+  }, [products, selectedCategory, sortBy]);
 
   const clearFilters = () => {
     setSelectedCategory("all");
-    setSelectedHairType("all");
-    setSelectedTexture("all");
-    setSelectedLength("all");
+    setSortBy("featured");
   };
 
   const activeFiltersCount = [
     selectedCategory !== "all",
-    selectedHairType !== "all",
-    selectedTexture !== "all",
-    selectedLength !== "all",
   ].filter(Boolean).length;
 
   return (
@@ -89,7 +130,7 @@ const ExploreContent = () => {
               Explore Our <span className="text-primary">Collection</span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover our curated selection of premium hair products. Filter by category, type, texture, and length to find your perfect match.
+              Discover our curated selection of {products.length} premium hair products. Filter by category to find your perfect match.
             </p>
           </motion.div>
 
@@ -123,66 +164,29 @@ const ExploreContent = () => {
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Filters:</span>
+                <span className="text-sm font-medium">
+                  Showing {filteredProducts.length} of {products.length} products
+                </span>
               </div>
-              
-              <Select value={selectedHairType} onValueChange={setSelectedHairType}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Hair Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {hairTypes.map((type) => (
-                    <SelectItem key={type.id} value={type.id}>
-                      {type.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedTexture} onValueChange={setSelectedTexture}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Texture" />
-                </SelectTrigger>
-                <SelectContent>
-                  {textures.map((texture) => (
-                    <SelectItem key={texture.id} value={texture.id}>
-                      {texture.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedLength} onValueChange={setSelectedLength}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Length" />
-                </SelectTrigger>
-                <SelectContent>
-                  {lengths.map((length) => (
-                    <SelectItem key={length.id} value={length.id}>
-                      {length.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
 
               {activeFiltersCount > 0 && (
                 <Button variant="ghost" size="sm" onClick={clearFilters} className="text-primary">
-                  Clear all ({activeFiltersCount})
+                  Clear filters
                 </Button>
               )}
             </div>
 
             <div className="flex items-center gap-4">
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[160px]">
+                <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="featured">Featured</SelectItem>
                   <SelectItem value="price-low">Price: Low to High</SelectItem>
                   <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="newest">Newest</SelectItem>
-                  <SelectItem value="bestselling">Best Selling</SelectItem>
+                  <SelectItem value="name-az">Name: A to Z</SelectItem>
+                  <SelectItem value="name-za">Name: Z to A</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -201,24 +205,6 @@ const ExploreContent = () => {
                   <button onClick={() => setSelectedCategory("all")} className="ml-1 hover:text-primary">×</button>
                 </Badge>
               )}
-              {selectedHairType !== "all" && (
-                <Badge variant="secondary" className="gap-1">
-                  {hairTypes.find(t => t.id === selectedHairType)?.name}
-                  <button onClick={() => setSelectedHairType("all")} className="ml-1 hover:text-primary">×</button>
-                </Badge>
-              )}
-              {selectedTexture !== "all" && (
-                <Badge variant="secondary" className="gap-1">
-                  {textures.find(t => t.id === selectedTexture)?.name}
-                  <button onClick={() => setSelectedTexture("all")} className="ml-1 hover:text-primary">×</button>
-                </Badge>
-              )}
-              {selectedLength !== "all" && (
-                <Badge variant="secondary" className="gap-1">
-                  {lengths.find(l => l.id === selectedLength)?.name}
-                  <button onClick={() => setSelectedLength("all")} className="ml-1 hover:text-primary">×</button>
-                </Badge>
-              )}
             </motion.div>
           )}
 
@@ -228,7 +214,24 @@ const ExploreContent = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <ProductGrid />
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-muted-foreground text-lg">No products found in this category.</p>
+                <Button variant="link" onClick={clearFilters} className="mt-2">
+                  View all products
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.node.id} product={product} />
+                ))}
+              </div>
+            )}
           </motion.div>
         </div>
       </main>
