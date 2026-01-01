@@ -13,7 +13,7 @@ interface ProductGridProps {
 
 // Constants for product filtering and display
 const FILTER_BUFFER = 5; // Extra products to fetch to account for filtering
-const EXCLUDED_PRODUCT_NAME = 'luna premium gift voucher';
+const EXCLUDED_PRODUCT_NAME_LOWER = 'luna premium gift voucher'; // Already lowercase for efficient comparison
 
 // Sample product data for when Shopify has no products
 const createSampleProducts = (count: number): ShopifyProduct[] => {
@@ -74,7 +74,7 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
         // Filter out excluded products only when not performing a search
         // Users should be able to search for any product, including excluded ones
         const filteredData = !searchQuery 
-          ? data.filter(product => !product.node.title.toLowerCase().includes(EXCLUDED_PRODUCT_NAME))
+          ? data.filter(product => !product.node.title.toLowerCase().includes(EXCLUDED_PRODUCT_NAME_LOWER))
           : data;
         
         // Limit to the requested number of products after filtering
