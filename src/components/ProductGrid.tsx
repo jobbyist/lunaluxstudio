@@ -11,6 +11,12 @@ interface ProductGridProps {
   limit?: number;
 }
 
+// Constants for product filtering and display
+// FILTER_BUFFER: 5 extra products provides adequate buffer for filtering a small number of excluded products
+// while avoiding over-fetching. Increase if more products need to be excluded in the future.
+const FILTER_BUFFER = 5;
+const EXCLUDED_PRODUCT_NAME_LOWER = 'luna premium gift voucher'; // Already lowercase for efficient comparison
+
 // Sample product data for when Shopify has no products
 const createSampleProducts = (count: number): ShopifyProduct[] => {
   return Array.from({ length: count }, (_, i) => ({
@@ -62,18 +68,31 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const data = await fetchProducts(limit, searchQuery);
+        // Fetch extra products to account for filtering (only needed when filtering is applied)
+        // This ensures we can still display the full limit even if some products are filtered out
+        const fetchLimit = !searchQuery ? limit + FILTER_BUFFER : limit;
+        const data = await fetchProducts(fetchLimit, searchQuery);
+        
+        // Filter out excluded products only when not performing a search
+        // Uses .includes() to match products containing the excluded name
+        // This ensures variations like "Luna Premium Gift Voucher - $100" are also filtered
+        const filteredData = !searchQuery 
+          ? data.filter(product => !product.node.title.toLowerCase().includes(EXCLUDED_PRODUCT_NAME_LOWER))
+          : data;
+        
+        // Limit to the requested number of products after filtering
+        const limitedData = filteredData.slice(0, limit);
         
         // If no products from Shopify, use sample products
-        if (data.length === 0) {
-          setProducts(createSampleProducts(6));
+        if (limitedData.length === 0) {
+          setProducts(createSampleProducts(Math.min(limit, 6)));
         } else {
-          setProducts(data);
+          setProducts(limitedData);
         }
       } catch (error) {
         console.error("Error loading products:", error);
-        // On error, show sample products
-        setProducts(createSampleProducts(6));
+        // On error, show sample products (max 6 to avoid overwhelming the UI)
+        setProducts(createSampleProducts(Math.min(limit, 6)));
       } finally {
         setLoading(false);
       }
