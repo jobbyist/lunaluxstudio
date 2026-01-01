@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redirecting...</title>
+    <script>
+      // GitHub Pages SPA fallback (custom domain at root)
+      // Redirect unknown paths (e.g. /manage) to /?p=/manage
+      (function () {
+        var l = window.location;
+        var target =
+          l.protocol +
+          "//" +
+          l.host +
+          "/?p=" +
+          encodeURIComponent(l.pathname + l.search + l.hash);
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
