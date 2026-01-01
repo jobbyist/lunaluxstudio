@@ -16,7 +16,7 @@ const Index = () => {
         <Hero />
         <Collections />
         <MainCharacterCollection />
-        <ProductGrid />
+        <ProductGrid limit={8} />
         <FeaturedStories />
         <Newsletter />
       </main>
