@@ -53,41 +53,25 @@ export default function AdminSettings() {
   });
 
   useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('*')
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
-      if (data) {
-        setSettings(data.value);
+    // Settings loading disabled - using localStorage as temporary storage
+    const savedSettings = localStorage.getItem('site_settings');
+    if (savedSettings) {
+      try {
+        setSettings(JSON.parse(savedSettings));
+      } catch (error) {
+        console.error('Error parsing saved settings:', error);
       }
-    } catch (error) {
-      console.error('Error loading settings:', error);
-      toast.error('Failed to load settings');
     }
-  };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await supabase
-        .from('site_settings')
-        .upsert({ 
-          id: 1,
-          value: settings,
-          updated_at: new Date().toISOString() 
-        });
-
-      if (error) throw error;
-      toast.success('Settings saved successfully');
+      // Save to localStorage temporarily until site_settings table is created
+      localStorage.setItem('site_settings', JSON.stringify(settings));
+      toast.success('Settings saved locally');
     } catch (error) {
       console.error('Error saving settings:', error);
       toast.error('Failed to save settings');

@@ -41,24 +41,9 @@ export default function AITools() {
   const [colorDescription, setColorDescription] = useState('');
 
   useEffect(() => {
-    loadApiKey();
+    // API key loading disabled - site_settings table not available
+    // Users can configure AI tools when the settings infrastructure is ready
   }, []);
-
-  const loadApiKey = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('value')
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
-      if (data?.value?.gemini_api_key) {
-        setApiKey(data.value.gemini_api_key);
-      }
-    } catch (error) {
-      console.error('Error loading API key:', error);
-    }
-  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(result);
