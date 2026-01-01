@@ -143,7 +143,7 @@ A comprehensive Content Management System (CMS) has been implemented at `/admin`
 # 1. Run setup script
 ./admin/setup.sh
 
-# 2. Create user account at /auth
+# 2. Create admin account at /admin-login
 # 3. Grant admin access in Supabase
 # 4. Access admin panel at /admin
 ```

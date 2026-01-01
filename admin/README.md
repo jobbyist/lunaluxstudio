@@ -2,7 +2,7 @@
 
 ## Overview
 
-The LunaStudio Admin CMS provides a comprehensive content management system for managing articles, products, analytics, and site settings. The admin panel is accessible at `/admin` and requires admin authentication.
+The LunaStudio Admin CMS provides a comprehensive content management system for managing articles, products, analytics, and site settings. The admin panel is accessible at `/admin` and requires admin authentication through `/admin-login`.
 
 ## Features
 
@@ -84,7 +84,7 @@ To grant admin access to a user, you need to add their user_id to the `admin_use
 
 **Option B: Using SQL**
 ```sql
--- First, create a user account through the Auth page (/auth)
+-- First, create an admin account through the Admin Login page (/admin-login)
 -- Then get their user_id and run:
 INSERT INTO admin_users (user_id, role)
 VALUES ('user-uuid-here', 'admin');
@@ -98,10 +98,10 @@ VALUES ('user-uuid-here', 'admin');
 
 ### 4. Access the Admin Panel
 
-1. Create an account at `/auth`
-2. Have your account added to the `admin_users` table
-3. Navigate to `/admin`
-4. You will be automatically redirected if not authenticated
+1. Create an admin account at `/admin-login`
+2. Have your account added to the `admin_users` table with admin role
+3. Navigate to `/admin-login` to sign in
+4. You will be automatically redirected to `/admin` dashboard after authentication
 
 ## Usage Guide
 

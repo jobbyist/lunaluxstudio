@@ -80,8 +80,8 @@ This project includes a comprehensive Admin Content Management System (CMS) for 
    ./admin/setup.sh
    ```
 
-2. **Create an account:**
-   - Navigate to `/auth` in your browser
+2. **Create an admin account:**
+   - Navigate to `/admin-login` in your browser
    - Sign up with your email
 
 3. **Grant admin access:**
@@ -90,7 +90,8 @@ This project includes a comprehensive Admin Content Management System (CMS) for 
    - Insert your user_id with role='admin'
 
 4. **Access admin panel:**
-   - Navigate to `/admin`
+   - Navigate to `/admin-login` to log in
+   - You'll be redirected to `/admin` dashboard
    - Start managing your content!
 
 For detailed documentation, see [admin/README.md](admin/README.md)
