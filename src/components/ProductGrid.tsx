@@ -66,15 +66,16 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
     const loadProducts = async () => {
       try {
         setLoading(true);
-        // Fetch extra products to account for filtering
+        // Fetch extra products to account for filtering (only needed when filtering is applied)
         // This ensures we can still display the full limit even if some products are filtered out
-        const fetchLimit = limit + FILTER_BUFFER;
+        const fetchLimit = !searchQuery ? limit + FILTER_BUFFER : limit;
         const data = await fetchProducts(fetchLimit, searchQuery);
         
-        // Filter out excluded products
-        const filteredData = data.filter(
-          product => !product.node.title.toLowerCase().includes(EXCLUDED_PRODUCT_NAME)
-        );
+        // Filter out excluded products only when not performing a search
+        // Users should be able to search for any product, including excluded ones
+        const filteredData = !searchQuery 
+          ? data.filter(product => !product.node.title.toLowerCase().includes(EXCLUDED_PRODUCT_NAME))
+          : data;
         
         // Limit to the requested number of products after filtering
         const limitedData = filteredData.slice(0, limit);
