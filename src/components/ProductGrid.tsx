@@ -11,6 +11,10 @@ interface ProductGridProps {
   limit?: number;
 }
 
+// Constants for product filtering and display
+const FILTER_BUFFER = 5; // Extra products to fetch to account for filtering
+const EXCLUDED_PRODUCT_NAME = 'luna premium gift voucher';
+
 // Sample product data for when Shopify has no products
 const createSampleProducts = (count: number): ShopifyProduct[] => {
   return Array.from({ length: count }, (_, i) => ({
@@ -62,15 +66,14 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
     const loadProducts = async () => {
       try {
         setLoading(true);
-        // Fetch a few extra products to account for filtering (buffer of 5 products)
+        // Fetch extra products to account for filtering
         // This ensures we can still display the full limit even if some products are filtered out
-        const FILTER_BUFFER = 5;
         const fetchLimit = limit + FILTER_BUFFER;
         const data = await fetchProducts(fetchLimit, searchQuery);
         
-        // Filter out "Luna Premium Gift Voucher" product
+        // Filter out excluded products
         const filteredData = data.filter(
-          product => !product.node.title.toLowerCase().includes('luna premium gift voucher')
+          product => !product.node.title.toLowerCase().includes(EXCLUDED_PRODUCT_NAME)
         );
         
         // Limit to the requested number of products after filtering
