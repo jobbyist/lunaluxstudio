@@ -52,7 +52,7 @@ const createSampleProducts = (count: number): ShopifyProduct[] => {
   }));
 };
 
-export const ProductGrid = ({ title, searchQuery, limit = 8 }: ProductGridProps) => {
+export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps) => {
   const { t } = useCurrency();
   const displayTitle = title || t('bestsellers');
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
