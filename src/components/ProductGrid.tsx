@@ -62,8 +62,10 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
     const loadProducts = async () => {
       try {
         setLoading(true);
-        // Fetch a few extra products to account for filtering
-        const fetchLimit = limit + 5;
+        // Fetch a few extra products to account for filtering (buffer of 5 products)
+        // This ensures we can still display the full limit even if some products are filtered out
+        const FILTER_BUFFER = 5;
+        const fetchLimit = limit + FILTER_BUFFER;
         const data = await fetchProducts(fetchLimit, searchQuery);
         
         // Filter out "Luna Premium Gift Voucher" product
@@ -76,14 +78,14 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
         
         // If no products from Shopify, use sample products
         if (limitedData.length === 0) {
-          setProducts(createSampleProducts(6));
+          setProducts(createSampleProducts(Math.min(limit, 6)));
         } else {
           setProducts(limitedData);
         }
       } catch (error) {
         console.error("Error loading products:", error);
-        // On error, show sample products
-        setProducts(createSampleProducts(6));
+        // On error, show sample products (max 6 to avoid overwhelming the UI)
+        setProducts(createSampleProducts(Math.min(limit, 6)));
       } finally {
         setLoading(false);
       }
