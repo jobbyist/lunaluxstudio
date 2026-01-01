@@ -213,7 +213,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
           <Button
             onClick={handleAddToCart}
-            className="w-full bg-primary hover:bg-primary/90"
+            className="snipcart-add-item w-full bg-primary hover:bg-primary/90"
             size="sm"
           >
             <ShoppingCart className="h-4 w-4 mr-2" />
