@@ -23,14 +23,17 @@ interface AdminLayoutProps {
 }
 
 const adminNavItems = [
-  { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/admin/ai-tools', label: 'AI Tools', icon: Sparkles },
-  { path: '/admin/articles', label: 'Content Manager', icon: Home },
-  { path: '/admin/publish', label: 'Publish Content', icon: Home },
-  { path: '/admin/homepage', label: 'Homepage Editor', icon: Home },
-  { path: '/admin/activity', label: 'Activity Logs', icon: Users },
-  { path: '/admin/admins', label: 'Admin Access', icon: Users },
-  { path: '/admin/settings', label: 'Settings', icon: Settings },
+  { path: '/manage', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/manage/products', label: 'Products', icon: Package },
+  { path: '/manage/ai-site', label: 'AI Site Manager', icon: Sparkles },
+  { path: '/manage/ai-tools', label: 'AI Content Tools', icon: Sparkles },
+  { path: '/manage/articles', label: 'Content Manager', icon: Home },
+  { path: '/manage/publish', label: 'Publish Content', icon: Home },
+  { path: '/manage/homepage', label: 'Homepage Editor', icon: Home },
+  { path: '/manage/analytics', label: 'Analytics', icon: LayoutDashboard },
+  { path: '/manage/activity', label: 'Activity Logs', icon: Users },
+  { path: '/manage/admins', label: 'Admin Access', icon: Users },
+  { path: '/manage/settings', label: 'Settings', icon: Settings },
 ];
 
 export const AdminLayout = ({ children }: AdminLayoutProps) => {
@@ -42,7 +45,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
   useEffect(() => {
     if (!loading && !isAdmin) {
       toast.error('You must be an admin to access this page');
-      navigate('/admin-login');
+      navigate('/manage-login');
     }
   }, [isAdmin, loading, navigate]);
 
@@ -76,7 +79,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between p-6 border-b border-border">
-            <Link to="/admin" className="text-xl font-serif font-bold">
+            <Link to="/manage" className="text-xl font-serif font-bold">
               Luna Admin
             </Link>
             <Button

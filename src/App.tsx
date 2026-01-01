@@ -35,6 +35,10 @@ import ContentPublisher from "./pages/admin/ContentPublisher";
 import ActivityLogs from "./pages/admin/ActivityLogs";
 import Articles from "./pages/admin/Articles";
 import AITools from "./pages/admin/AITools";
+import AdminProducts from "./pages/admin/Products";
+import AdminProductEditor from "./pages/admin/ProductEditor";
+import AISiteManager from "./pages/admin/AISiteManager";
+import AdminAnalytics from "./pages/admin/Analytics";
 
 const queryClient = new QueryClient();
 
@@ -51,7 +55,7 @@ const App = () => (
             <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="/customize" element={<CustomizeProduct />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/manage-login" element={<AdminLogin />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/about" element={<About />} />
             <Route path="/explore" element={<Explore />} />
@@ -69,16 +73,20 @@ const App = () => (
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/policies" element={<Policies />} />
             
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/articles" element={<Articles />} />
-            <Route path="/admin/publish" element={<ContentPublisher />} />
-            <Route path="/admin/publish/:id" element={<ContentPublisher />} />
-            <Route path="/admin/homepage" element={<AdminHomepageEditor />} />
-            <Route path="/admin/activity" element={<ActivityLogs />} />
-            <Route path="/admin/admins" element={<AdminEmails />} />
-            <Route path="/admin/settings" element={<AdminSettings />} />
-            <Route path="/admin/ai-tools" element={<AITools />} />
+            {/* Admin Routes - /manage */}
+            <Route path="/manage" element={<AdminDashboard />} />
+            <Route path="/manage/articles" element={<Articles />} />
+            <Route path="/manage/publish" element={<ContentPublisher />} />
+            <Route path="/manage/publish/:id" element={<ContentPublisher />} />
+            <Route path="/manage/homepage" element={<AdminHomepageEditor />} />
+            <Route path="/manage/activity" element={<ActivityLogs />} />
+            <Route path="/manage/admins" element={<AdminEmails />} />
+            <Route path="/manage/settings" element={<AdminSettings />} />
+            <Route path="/manage/ai-tools" element={<AITools />} />
+            <Route path="/manage/products" element={<AdminProducts />} />
+            <Route path="/manage/products/:id" element={<AdminProductEditor />} />
+            <Route path="/manage/ai-site" element={<AISiteManager />} />
+            <Route path="/manage/analytics" element={<AdminAnalytics />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

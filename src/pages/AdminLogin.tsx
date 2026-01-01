@@ -23,7 +23,7 @@ const AdminLogin = () => {
 
   useEffect(() => {
     if (!adminLoading && isAdmin) {
-      navigate("/admin");
+      navigate("/manage");
     }
   }, [isAdmin, adminLoading, navigate]);
 
@@ -37,7 +37,7 @@ const AdminLogin = () => {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/admin-login`,
+            emailRedirectTo: `${window.location.origin}/manage-login`,
           },
         });
         
@@ -46,7 +46,7 @@ const AdminLogin = () => {
         setAuthMode('login');
       } else if (authMode === 'reset') {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/admin-login`,
+          redirectTo: `${window.location.origin}/manage-login`,
         });
         
         if (error) throw error;
