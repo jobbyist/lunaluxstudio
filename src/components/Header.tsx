@@ -10,9 +10,6 @@ import {
   Info,
   Compass,
   Mail,
-  Gift,
-  Tag,
-  UserPlus,
   Star,
   FileText,
   Award,
@@ -124,15 +121,6 @@ export const Header = () => {
               <DropdownMenuContent className="bg-background border-border">
                 <DropdownMenuItem asChild>
                   <Link to="/loyalty" className="cursor-pointer">Loyalty Rewards</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/gift-vouchers" className="cursor-pointer">Gift Vouchers</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/special-offers" className="cursor-pointer">Special Offers</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/referral" className="cursor-pointer">Referral Program</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/reviews" className="cursor-pointer">Leave A Review</Link>
@@ -260,30 +248,6 @@ export const Header = () => {
                 >
                   <Award className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
                   <span>Loyalty Rewards</span>
-                </Link>
-                <Link 
-                  to="/gift-vouchers" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Gift className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                  <span>Gift Vouchers</span>
-                </Link>
-                <Link 
-                  to="/special-offers" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Tag className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                  <span>Special Offers</span>
-                </Link>
-                <Link 
-                  to="/referral" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <UserPlus className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                  <span>Referral Program</span>
                 </Link>
                 <Link 
                   to="/reviews" 
