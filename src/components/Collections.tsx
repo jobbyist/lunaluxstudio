@@ -1,19 +1,10 @@
 import { CollectionCard } from "./CollectionCard";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import brazilianImage from "@/assets/hero-1.jpg";
 import vietnameseImage from "@/assets/hero-2.jpg";
 import rawVietnameseImage from "@/assets/hero-3.jpg";
 
 export const Collections = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   const collections = [
     {
@@ -58,13 +49,10 @@ export const Collections = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-20 bg-background overflow-hidden relative">
-      <motion.div 
-        className="absolute inset-0 opacity-5"
-        style={{ y: backgroundY }}
-      >
+    <section className="py-20 bg-background overflow-hidden relative">
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
-      </motion.div>
+      </div>
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div 

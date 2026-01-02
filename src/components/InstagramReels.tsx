@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -9,12 +9,9 @@ import tutorialFrontals from "@/assets/tutorial-frontals.jpg";
 
 export const InstagramReels = () => {
   const { t } = useCurrency();
-  const sectionRef = useRef<HTMLElement>(null);
   
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
+  
+  const { scrollYProgress } = useScroll();
   
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
   
@@ -119,8 +116,7 @@ export const InstagramReels = () => {
   ];
 
   return (
-    <motion.section 
-      ref={sectionRef} 
+    <motion.section
       className="py-20 bg-background overflow-hidden"
       style={{ scale }}
     >

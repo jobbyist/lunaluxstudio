@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+
 import productPlaceholder from "@/assets/product-placeholder.webp";
 
 const mainCharacterWigs = [
@@ -39,12 +39,9 @@ const mainCharacterWigs = [
 
 export const MainCharacterCollection = () => {
   const { formatPrice } = useCurrency();
-  const sectionRef = useRef<HTMLElement>(null);
   
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
+  
+  const { scrollYProgress } = useScroll();
   
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.6, 1, 1, 0.6]);
 
@@ -73,8 +70,7 @@ export const MainCharacterCollection = () => {
   };
 
   return (
-    <motion.section 
-      ref={sectionRef} 
+    <motion.section
       className="py-20 bg-card overflow-hidden"
       style={{ opacity }}
     >
