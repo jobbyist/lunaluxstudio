@@ -17,4 +17,19 @@ export default defineConfig(({ mode }) => ({
   },
   // Base path for GitHub Pages with custom domain
   base: "/",
+  build: {
+    // Ensure large assets like videos are properly handled
+    assetsInlineLimit: 4096, // 4kb - don't inline video files
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          // Keep video files in assets folder with original names
+          if (assetInfo.name && /\.(mp4|webm|ogg)$/.test(assetInfo.name)) {
+            return 'assets/videos/[name]-[hash][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        },
+      },
+    },
+  },
 }));
