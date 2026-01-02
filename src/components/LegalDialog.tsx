@@ -99,7 +99,14 @@ export const ShippingContent = () => (
     <h4 className="font-semibold mt-4">Shipping Costs</h4>
     <p>Countrywide shipping is R150. We use The Courier Guy as our preferred courier service.</p>
     
-    <p>International shipping costs will be calculated during checkout based on your location and the estimated weight of your package.</p>
+    <p>Shipping rates will be calculated at checkout based on your location and the estimated weight of your package.</p>
+    
+    <h4 className="font-semibold mt-4">International Shipping</h4>
+    <p>We currently use UPS for international shipping. DHL and FedEx will be added as shipping options soon.</p>
+    
+    <p>International orders have a turnaround time of 5-12 days. Shipping rates will be calculated at checkout.</p>
+    
+    <p>Please note that any duties or levies will be paid by the customer at customs after the order is shipped. We do not facilitate or participate in this process.</p>
     
     <h4 className="font-semibold mt-4">Tracking</h4>
     <p>Tracking numbers will be sent to you upon dispatch of your order from our store to the shipping address provided by you during checkout.</p>

@@ -104,7 +104,9 @@ const Policies = () => {
                     <li>• We now offer international shipping to select countries</li>
                     <li>• Free shipping on orders above R1500 (South Africa only)</li>
                     <li>• Standard delivery: 3-5 business days (SA)</li>
-                    <li>• International delivery: 7-14 business days</li>
+                    <li>• International delivery: 5-12 business days (via UPS, DHL and FedEx coming soon)</li>
+                    <li>• Shipping rates calculated at checkout</li>
+                    <li>• Customers are responsible for any duties or levies at customs</li>
                   </ul>
                 </div>
               </TabsContent>
