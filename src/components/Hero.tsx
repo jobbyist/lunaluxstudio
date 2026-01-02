@@ -68,7 +68,8 @@ export const Hero = () => {
             playsInline
             className="w-full h-full object-cover opacity-50"
           >
-            <source src="/lunahero.mp4" type="video/mp4" />
+            <source src={`${import.meta.env.BASE_URL}lunahero.mp4`} type="video/mp4" />
+            
           </video>
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60" />
