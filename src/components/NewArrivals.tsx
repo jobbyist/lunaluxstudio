@@ -3,19 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Heart, Star } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+
 import newArrival1 from "@/assets/new-arrival-1.jpg";
 import newArrival2 from "@/assets/new-arrival-2.jpg";
 import newArrival3 from "@/assets/new-arrival-3.jpg";
 
 export const NewArrivals = () => {
   const { formatPrice, t } = useCurrency();
-  const sectionRef = useRef<HTMLElement>(null);
   
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
+  
+  const { scrollYProgress } = useScroll();
   
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
@@ -67,7 +64,7 @@ export const NewArrivals = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-20 bg-background overflow-hidden">
+    <section className="py-20 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div 
           className="text-center mb-12"

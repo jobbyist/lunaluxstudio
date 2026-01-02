@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -23,14 +23,11 @@ const fallbackImages = [tutorialBundles, tutorialWigs, tutorialFrontals];
 
 export const FeaturedStories = () => {
   const { t } = useCurrency();
-  const sectionRef = useRef<HTMLElement>(null);
+  
   const [content, setContent] = useState<ContentItem[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
+  const { scrollYProgress } = useScroll();
   
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
 
@@ -233,8 +230,7 @@ export const FeaturedStories = () => {
   }
 
   return (
-    <motion.section 
-      ref={sectionRef} 
+    <motion.section
       className="py-20 bg-background overflow-hidden"
       style={{ scale }}
     >
