@@ -10,7 +10,7 @@ import { Loader2, Shield, ArrowLeft } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
 import { logAdminActivity } from "@/hooks/useActivityLogger";
 
-type AuthMode = 'login' | 'signup' | 'reset' | 'reset-sent';
+type AuthMode = 'login' | 'reset' | 'reset-sent';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -32,19 +32,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      if (authMode === 'signup') {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/manage-login`,
-          },
-        });
-        
-        if (error) throw error;
-        toast.success("Account created! You can now sign in.");
-        setAuthMode('login');
-      } else if (authMode === 'reset') {
+      if (authMode === 'reset') {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/manage-login`,
         });
@@ -110,7 +98,6 @@ const AdminLogin = () => {
 
   const getTitle = () => {
     switch (authMode) {
-      case 'signup': return "Admin Sign Up";
       case 'reset': return "Reset Password";
       case 'reset-sent': return "Check Your Email";
       default: return "Admin Login";
@@ -119,7 +106,6 @@ const AdminLogin = () => {
 
   const getSubtitle = () => {
     switch (authMode) {
-      case 'signup': return "Create your admin account";
       case 'reset': return "Enter your email to receive a reset link";
       case 'reset-sent': return "Password reset instructions sent";
       default: return "Access restricted to authorized administrators only";
@@ -160,7 +146,7 @@ const AdminLogin = () => {
                 />
               </div>
 
-              {authMode !== 'reset' && (
+              {authMode === 'login' && (
                 <div>
                   <Label htmlFor="password">Password</Label>
                   <Input
@@ -206,11 +192,9 @@ const AdminLogin = () => {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {authMode === 'signup' ? "Creating account..." : 
-                     authMode === 'reset' ? "Sending reset link..." : "Signing in..."}
+                    {authMode === 'reset' ? "Sending reset link..." : "Signing in..."}
                   </>
                 ) : (
-                  authMode === 'signup' ? "Create Account" : 
                   authMode === 'reset' ? "Send Reset Link" : "Sign In"
                 )}
               </Button>
@@ -219,22 +203,13 @@ const AdminLogin = () => {
 
           {authMode !== 'reset-sent' && (
             <div className="mt-6 text-center space-y-3">
-              {authMode === 'reset' ? (
+              {authMode === 'reset' && (
                 <button
                   onClick={() => setAuthMode('login')}
                   className="text-sm text-primary hover:underline"
                 >
                   <ArrowLeft className="inline mr-1 h-3 w-3" />
                   Back to login
-                </button>
-              ) : (
-                <button
-                  onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-                  className="text-sm text-primary hover:underline"
-                >
-                  {authMode === 'signup' 
-                    ? "Already have an account? Sign in" 
-                    : "Need an account? Sign up"}
                 </button>
               )}
               <div>

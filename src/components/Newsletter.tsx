@@ -6,6 +6,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
+import { z } from "zod";
+
+// Email validation schema
+const emailSchema = z.string().trim().email("Please enter a valid email address").max(255, "Email is too long");
 
 export const Newsletter = () => {
   const { t } = useCurrency();
@@ -14,16 +18,34 @@ export const Newsletter = () => {
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      toast.error(t('enterEmailError'));
+    
+    // Client-side validation with zod
+    const validationResult = emailSchema.safeParse(email);
+    if (!validationResult.success) {
+      toast.error(validationResult.error.errors[0]?.message || t('enterEmailError'));
       return;
     }
 
+    const validatedEmail = validationResult.data;
     setIsLoading(true);
+    
     try {
+      // Check for duplicate first
+      const { data: existing } = await supabase
+        .from("newsletter_subscriptions")
+        .select("id")
+        .eq("email", validatedEmail)
+        .maybeSingle();
+
+      if (existing) {
+        toast.error(t('alreadySubscribed'));
+        setIsLoading(false);
+        return;
+      }
+
       const { error } = await supabase
         .from("newsletter_subscriptions")
-        .insert({ email });
+        .insert({ email: validatedEmail });
 
       if (error) {
         if (error.code === "23505") {
