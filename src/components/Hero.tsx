@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
+import heroVideo from "@/assets/lunahero.mp4";
 
 export const Hero = () => {
   const { t } = useCurrency();
@@ -68,7 +69,7 @@ export const Hero = () => {
             playsInline
             className="w-full h-full object-cover opacity-50"
           >
-            <source src={`${import.meta.env.BASE_URL}lunahero.mp4`} type="video/mp4" />
+            <source src={heroVideo} type="video/mp4" />
             
           </video>
         </motion.div>
