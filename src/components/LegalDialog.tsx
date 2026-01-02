@@ -102,7 +102,7 @@ export const ShippingContent = () => (
     <p>Shipping rates will be calculated at checkout based on your location and the estimated weight of your package.</p>
     
     <h4 className="font-semibold mt-4">International Shipping</h4>
-    <p>We currently use UPS for international shipping. DHL and Fedex will be added as shipping options soon.</p>
+    <p>We currently use UPS for international shipping. DHL and FedEx will be added as shipping options soon.</p>
     
     <p>International orders have a turnaround time of 5-12 days. Shipping rates will be calculated at checkout.</p>
     
