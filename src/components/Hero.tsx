@@ -1,10 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
+import heroVideo from "@/assets/lunahero.mp4";
 
 export const Hero = () => {
   const { t } = useCurrency();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log("Video autoplay failed:", error);
+      });
+    }
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -50,11 +61,17 @@ export const Hero = () => {
           transition={{ duration: 1.5, ease: "easeOut" }}
           className="w-full h-full"
         >
-          <img
-            src="/lunahero.gif"
-            alt="Hero background"
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
             className="w-full h-full object-cover opacity-50"
-          />
+          >
+            <source src={heroVideo} type="video/mp4" />
+            
+          </video>
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60" />
       </div>
