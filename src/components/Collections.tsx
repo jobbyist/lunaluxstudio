@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import brazilianImage from "@/assets/hero-1.jpg";
 import vietnameseImage from "@/assets/hero-2.jpg";
 import rawVietnameseImage from "@/assets/hero-3.jpg";
+import { useHomepageSections } from "@/hooks/useHomepageSections";
 
 export const Collections = () => {
+  const { section, loading } = useHomepageSections("collections");
 
   const collections = [
     {
@@ -48,6 +50,15 @@ export const Collections = () => {
     },
   };
 
+  // Use database content or fallback
+  const content = section?.content || {};
+  const title = content.title || "SHOP BY COLLECTION";
+  const subtitle = content.subtitle || "Discover our premium hair collections, each crafted with the finest quality materials";
+
+  if (loading) {
+    return null; // Or skeleton loader
+  }
+
   return (
     <section className="py-20 bg-background overflow-hidden relative">
       <div className="absolute inset-0 opacity-5">
@@ -63,10 +74,10 @@ export const Collections = () => {
           viewport={{ once: true, margin: "-100px" }}
         >
           <h2 className="text-3xl md:text-4xl font-serif mb-4 tracking-wider">
-            SHOP BY COLLECTION
+            {title}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover our premium hair collections, each crafted with the finest quality materials
+            {subtitle}
           </p>
         </motion.div>
 

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import tutorialBundles from "@/assets/tutorial-bundles.jpg";
 import tutorialWigs from "@/assets/tutorial-wigs.jpg";
 import tutorialFrontals from "@/assets/tutorial-frontals.jpg";
+import { useHomepageSections } from "@/hooks/useHomepageSections";
 
 interface ContentItem {
   id: string;
@@ -23,6 +24,7 @@ const fallbackImages = [tutorialBundles, tutorialWigs, tutorialFrontals];
 
 export const FeaturedStories = () => {
   const { t } = useCurrency();
+  const { section, loading: sectionLoading } = useHomepageSections("featured_stories");
   
   const [content, setContent] = useState<ContentItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -210,23 +212,12 @@ export const FeaturedStories = () => {
     return <ExternalLink className="h-4 w-4 text-primary-foreground" />;
   };
 
-  if (loading) {
-    return (
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center">
-            <div className="animate-pulse w-full max-w-6xl">
-              <div className="h-8 bg-muted rounded w-1/3 mx-auto mb-12"></div>
-              <div className="grid grid-cols-3 gap-4">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="aspect-[9/16] bg-muted rounded-lg"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+  // Use database content or fallback
+  const content = section?.content || {};
+  const title = content.title || t('featuredStories').toUpperCase();
+
+  if (loading || sectionLoading || !section?.is_visible) {
+    return null;
   }
 
   return (
@@ -242,7 +233,7 @@ export const FeaturedStories = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          {t('featuredStories').toUpperCase()}
+          {title}
         </motion.h2>
 
         <motion.div 
