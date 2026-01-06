@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, ExternalLink, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, Play, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
-import tutorialBundles from "@/assets/tutorial-bundles.jpg";
-import tutorialWigs from "@/assets/tutorial-wigs.jpg";
-import tutorialFrontals from "@/assets/tutorial-frontals.jpg";
-import { useHomepageSections } from "@/hooks/useHomepageSections";
+import { Link } from "react-router-dom";
 
 interface ContentItem {
   id: string;
@@ -16,209 +12,180 @@ interface ContentItem {
   content_type: string;
   cover_image_url: string | null;
   topic: string | null;
-  external_link: string | null;
-  content_url: string | null;
+  link: string;
+  isExternal: boolean;
 }
-
-const fallbackImages = [tutorialBundles, tutorialWigs, tutorialFrontals];
 
 export const FeaturedStories = () => {
   const { t } = useCurrency();
   const { section, loading: sectionLoading } = useHomepageSections("featured_stories");
   
-  const [content, setContent] = useState<ContentItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  
   const { scrollYProgress } = useScroll();
-  
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
 
-  // Static fallback content
-  const staticContent: ContentItem[] = [
+  // Real article content
+  const articles: ContentItem[] = [
     {
       id: '1',
-      title: "Hair Bundle Unboxing",
-      description: "See our premium hair bundles",
+      title: "Introducing the New LunaLuxHair",
+      description: "We're thrilled to announce the official launch of our rebranded platform",
       content_type: "video",
-      cover_image_url: tutorialBundles,
-      topic: "Bundles Collection",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
+      cover_image_url: "/lunahero.gif",
+      topic: "Announcement",
+      link: "/article/lunaluxhair-rebrand-launch",
+      isExternal: false
     },
     {
       id: '2',
-      title: "Wig Installation Tutorial",
-      description: "Step-by-step installation guide",
-      content_type: "video",
-      cover_image_url: tutorialWigs,
-      topic: "Installation Guide",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
+      title: "The Ultimate Guide to Wig Care",
+      description: "Keep your investment looking flawless with professional tips",
+      content_type: "blog",
+      cover_image_url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800",
+      topic: "Hair Care",
+      link: "/article/ultimate-wig-care-guide",
+      isExternal: false
     },
     {
       id: '3',
-      title: "Frontal Lace Styling",
-      description: "Master the perfect frontal style",
+      title: "Choosing the Perfect Hair Texture",
+      description: "Discover which texture complements your lifestyle",
       content_type: "blog",
-      cover_image_url: tutorialFrontals,
-      topic: "Styling Tips",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
+      cover_image_url: "https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?w=800",
+      topic: "Style Guide",
+      link: "/article/choosing-perfect-hair-texture",
+      isExternal: false
     },
     {
       id: '4',
-      title: "Customer Transformation",
-      description: "Amazing before and after results",
-      content_type: "image",
-      cover_image_url: tutorialBundles,
-      topic: "Before & After",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
+      title: "Frontal vs. Closure: Which One?",
+      description: "Understand the key differences to make the best choice",
+      content_type: "blog",
+      cover_image_url: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=800",
+      topic: "Education",
+      link: "/article/frontal-vs-closure",
+      isExternal: false
     },
     {
       id: '5',
-      title: "Hair Care Routine",
-      description: "Keep your hair looking fresh",
+      title: "Benefits of Protective Styling",
+      description: "How extensions promote natural hair growth and health",
       content_type: "blog",
-      cover_image_url: tutorialWigs,
-      topic: "Maintenance Tips",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
-    },
-    {
-      id: '6',
-      title: "Color Matching Guide",
-      description: "Find your perfect shade",
-      content_type: "blog",
-      cover_image_url: tutorialFrontals,
-      topic: "How To",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
-    },
-    {
-      id: '7',
-      title: "Custom Wig Making",
-      description: "Behind the scenes of wig creation",
-      content_type: "video",
-      cover_image_url: tutorialBundles,
-      topic: "Behind the Scenes",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
-    },
-    {
-      id: '8',
-      title: "Ponytail Install",
-      description: "Quick and easy ponytail styles",
-      content_type: "video",
-      cover_image_url: tutorialWigs,
-      topic: "Quick Style",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
-    },
-    {
-      id: '9',
-      title: "Virgin Hair Quality",
-      description: "Premium quality hair showcase",
-      content_type: "image",
-      cover_image_url: tutorialFrontals,
-      topic: "Product Showcase",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
-    },
-    {
-      id: '10',
-      title: "Curling Techniques",
-      description: "Perfect curls every time",
-      content_type: "blog",
-      cover_image_url: tutorialBundles,
-      topic: "Styling Tutorial",
-      external_link: "https://www.instagram.com/reel/",
-      content_url: null
+      cover_image_url: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800",
+      topic: "Hair Health",
+      link: "/article/protective-styling-benefits",
+      isExternal: false
     }
   ];
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('published_content')
-          .select('id, title, description, content_type, cover_image_url, topic, external_link, content_url')
-          .eq('status', 'published')
-          .order('display_order', { ascending: true })
-          .order('created_at', { ascending: false })
-          .limit(10);
-
-        if (error) throw error;
-        
-        // Use fetched content if available, otherwise fall back to static
-        if (data && data.length > 0) {
-          // Ensure each item has a cover image
-          const contentWithImages = data.map((item, index) => ({
-            ...item,
-            cover_image_url: item.cover_image_url || fallbackImages[index % fallbackImages.length]
-          }));
-          setContent(contentWithImages);
-        } else {
-          setContent(staticContent);
-        }
-      } catch (error) {
-        console.error('Error fetching content:', error);
-        setContent(staticContent);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchContent();
-  }, []);
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const displayContent = content.length > 0 ? content : staticContent;
-
   useEffect(() => {
-    if (isPaused || displayContent.length === 0) return;
+    if (isPaused) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % displayContent.length);
+      setCurrentIndex((prev) => (prev + 1) % articles.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isPaused, displayContent.length]);
+  }, [isPaused, articles.length]);
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + displayContent.length) % displayContent.length);
+    setCurrentIndex((prev) => (prev - 1 + articles.length) % articles.length);
   };
 
   const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % displayContent.length);
+    setCurrentIndex((prev) => (prev + 1) % articles.length);
   };
 
   const visibleContent = [
-    displayContent[(currentIndex - 1 + displayContent.length) % displayContent.length],
-    displayContent[currentIndex],
-    displayContent[(currentIndex + 1) % displayContent.length],
+    articles[(currentIndex - 1 + articles.length) % articles.length],
+    articles[currentIndex],
+    articles[(currentIndex + 1) % articles.length],
   ];
-
-  const getContentLink = (item: ContentItem) => {
-    return item.external_link || item.content_url || '#';
-  };
 
   const getContentIcon = (type: string) => {
     if (type === 'video') {
       return <Play className="h-6 w-6 text-primary-foreground" />;
     }
-    return <ExternalLink className="h-4 w-4 text-primary-foreground" />;
+    return <FileText className="h-4 w-4 text-primary-foreground" />;
   };
 
-  // Use database content or fallback
-  const sectionContent = section?.content || {};
-  const title = sectionContent.title || t('featuredStories').toUpperCase();
+  const renderContentCard = (item: ContentItem, idx: number) => {
+    const cardContent = (
+      <>
+        <img
+          src={item.cover_image_url || ""}
+          alt={item.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        
+        <motion.div 
+          className="absolute top-4 right-4"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="bg-primary/90 rounded-full p-2">
+            {getContentIcon(item.content_type)}
+          </div>
+        </motion.div>
+        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <p className="text-xs text-primary mb-1">{item.topic}</p>
+          <h3 className="font-semibold">{item.title}</h3>
+          {item.description && (
+            <p className="text-xs text-white/70 mt-1 line-clamp-2">{item.description}</p>
+          )}
+        </div>
+      </>
+    );
 
-  if (loading || sectionLoading || !section?.is_visible) {
-    return null;
-  }
+    const cardClasses = `group relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer ${
+      idx === 1 
+        ? 'z-10 shadow-2xl shadow-primary/20' 
+        : 'opacity-50 md:opacity-70'
+    }`;
+
+    if (item.isExternal) {
+      return (
+        <motion.a
+          key={`${item.id}-${idx}`}
+          href={item.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cardClasses}
+          initial={{ scale: idx === 1 ? 1 : 0.9 }}
+          animate={{ 
+            scale: idx === 1 ? 1.1 : 0.9,
+            opacity: idx === 1 ? 1 : 0.7
+          }}
+          transition={{ duration: 0.5 }}
+          whileHover={{ scale: idx === 1 ? 1.12 : 0.95 }}
+        >
+          {cardContent}
+        </motion.a>
+      );
+    }
+
+    return (
+      <motion.div
+        key={`${item.id}-${idx}`}
+        className={cardClasses}
+        initial={{ scale: idx === 1 ? 1 : 0.9 }}
+        animate={{ 
+          scale: idx === 1 ? 1.1 : 0.9,
+          opacity: idx === 1 ? 1 : 0.7
+        }}
+        transition={{ duration: 0.5 }}
+        whileHover={{ scale: idx === 1 ? 1.12 : 0.95 }}
+      >
+        <Link to={item.link} className="block w-full h-full">
+          {cardContent}
+        </Link>
+      </motion.div>
+    );
+  };
 
   return (
     <motion.section
@@ -261,51 +228,7 @@ export const FeaturedStories = () => {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 max-w-5xl">
-              {visibleContent.map((item, idx) => (
-                <motion.a
-                  key={`${item.id}-${idx}`}
-                  href={getContentLink(item)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`group relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer ${
-                    idx === 1 
-                      ? 'z-10 shadow-2xl shadow-primary/20' 
-                      : 'opacity-50 md:opacity-70'
-                  }`}
-                  initial={{ scale: idx === 1 ? 1 : 0.9 }}
-                  animate={{ 
-                    scale: idx === 1 ? 1.1 : 0.9,
-                    opacity: idx === 1 ? 1 : 0.7
-                  }}
-                  transition={{ duration: 0.5 }}
-                  whileHover={{ scale: idx === 1 ? 1.12 : 0.95 }}
-                >
-                  <img
-                    src={item.cover_image_url || fallbackImages[0]}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  
-                  <motion.div 
-                    className="absolute top-4 right-4"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className="bg-primary/90 rounded-full p-2">
-                      {getContentIcon(item.content_type)}
-                    </div>
-                  </motion.div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <p className="text-xs text-primary mb-1">{item.topic}</p>
-                    <h3 className="font-semibold">{item.title}</h3>
-                    {item.description && (
-                      <p className="text-xs text-white/70 mt-1 line-clamp-2">{item.description}</p>
-                    )}
-                  </div>
-                </motion.a>
-              ))}
+              {visibleContent.map((item, idx) => renderContentCard(item, idx))}
             </div>
 
             <motion.div
@@ -325,7 +248,7 @@ export const FeaturedStories = () => {
 
           {/* Progress Indicators */}
           <div className="flex justify-center mt-8 gap-2">
-            {displayContent.map((_, idx) => (
+            {articles.map((_, idx) => (
               <motion.button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}

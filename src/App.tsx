@@ -26,6 +26,7 @@ import SpecialOffers from "./pages/SpecialOffers";
 import Referral from "./pages/Referral";
 import Reviews from "./pages/Reviews";
 import Policies from "./pages/Policies";
+import Article from "./pages/Article";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminHomepageEditor from "./pages/admin/HomepageEditor";
@@ -73,6 +74,7 @@ const App = () => (
             <Route path="/referral" element={<Referral />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/policies" element={<Policies />} />
+            <Route path="/article/:slug" element={<Article />} />
             
             {/* Admin Routes - /manage */}
             <Route path="/manage" element={<AdminDashboard />} />
