@@ -6,13 +6,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useHomepageSections } from "@/hooks/useHomepageSections";
 
 export const MainCharacterCollection = () => {
   const { formatPrice } = useCurrency();
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const { section, loading: sectionLoading } = useHomepageSections("main_character");
   
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.6, 1, 1, 0.6]);
@@ -56,17 +54,6 @@ export const MainCharacterCollection = () => {
     },
   };
 
-  // Use database content or fallback
-  const content = section?.content || {};
-  const title = content.title || "THE MAIN CHARACTER";
-  const subtitle = content.subtitle || "Non-custom, readily available wigs for immediate purchase. Look and feel like the main character in your story.";
-  const ctaText = content.ctaText || "View Full Collection";
-  const ctaLink = content.ctaLink || "/collection/main-character";
-
-  if (sectionLoading || !section?.is_visible) {
-    return null;
-  }
-
   return (
     <motion.section
       className="py-20 bg-card overflow-hidden"
@@ -87,7 +74,7 @@ export const MainCharacterCollection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            {title}
+            THE MAIN CHARACTER
           </motion.h2>
           <motion.p 
             className="text-muted-foreground max-w-2xl mx-auto mb-6"
@@ -96,7 +83,7 @@ export const MainCharacterCollection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            {subtitle}
+            Non-custom, readily available wigs for immediate purchase. Look and feel like the main character in your story.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -107,7 +94,7 @@ export const MainCharacterCollection = () => {
             whileTap={{ scale: 0.98 }}
           >
             <Button asChild variant="outline">
-              <Link to={ctaLink}>{ctaText}</Link>
+              <Link to="/collection/main-character">View Full Collection</Link>
             </Button>
           </motion.div>
         </motion.div>
