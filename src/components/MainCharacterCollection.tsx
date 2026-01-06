@@ -18,12 +18,9 @@ export const MainCharacterCollection = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const allProducts = await fetchProducts(50, "title:*Unit*");
-        // Filter to show only units (ready-to-wear wigs) and limit to 4
-        const unitProducts = allProducts
-          .filter(p => p.node.title.toLowerCase().includes('unit'))
-          .slice(0, 4);
-        setProducts(unitProducts);
+        // Fetch products from the "Main Character" collection on Shopify
+        const collectionProducts = await fetchProducts(50, 'collection:"main character"');
+        setProducts(collectionProducts.slice(0, 4));
       } catch (error) {
         console.error('Failed to load Main Character products:', error);
       } finally {

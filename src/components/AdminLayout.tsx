@@ -57,7 +57,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
@@ -79,8 +79,8 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between p-6 border-b border-border">
-            <Link to="/manage" className="text-xl font-serif font-bold">
-              Luna Admin
+            <Link to="/manage" className="text-xl font-serif tracking-wider text-foreground">
+              Luna Lux Admin
             </Link>
             <Button
               variant="ghost"
@@ -93,7 +93,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             {adminNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -103,10 +103,10 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-all',
                     isActive
                       ? 'bg-primary text-primary-foreground'
-                      : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   )}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -120,11 +120,11 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
           {/* User info and logout */}
           <div className="p-4 border-t border-border">
             <div className="mb-3 px-4 py-2 bg-muted rounded-lg">
-              <p className="text-sm font-medium capitalize">Role: {adminUser?.role}</p>
+              <p className="text-sm font-medium capitalize text-foreground">Role: {adminUser?.role}</p>
             </div>
             <Button
               variant="outline"
-              className="w-full"
+              className="w-full border-border hover:bg-primary hover:text-primary-foreground transition-all"
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4 mr-2" />
@@ -148,7 +148,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
               <Menu className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-4">
-              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 View Site →
               </Link>
             </div>
@@ -156,7 +156,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-6 bg-background">
           {children}
         </main>
       </div>
@@ -164,7 +164,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
       {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
