@@ -3,47 +3,35 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion, useScroll, useTransform } from "framer-motion";
-
-import productPlaceholder from "@/assets/product-placeholder.webp";
-
-const mainCharacterWigs = [
-  {
-    id: "mc-1",
-    title: "Classic Bob Wig",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "classic-bob-wig"
-  },
-  {
-    id: "mc-2",
-    title: "Long Straight Wig",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "long-straight-wig"
-  },
-  {
-    id: "mc-3",
-    title: "Curly Shoulder Length Wig",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "curly-shoulder-wig"
-  },
-  {
-    id: "mc-4",
-    title: "Natural Wave Wig",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "natural-wave-wig"
-  }
-];
+import { useEffect, useState } from "react";
+import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const MainCharacterCollection = () => {
   const { formatPrice } = useCurrency();
-  
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(true);
   
   const { scrollYProgress } = useScroll();
-  
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.6, 1, 1, 0.6]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const allProducts = await fetchProducts(50, "title:*Unit*");
+        // Filter to show only units (ready-to-wear wigs) and limit to 4
+        const unitProducts = allProducts
+          .filter(p => p.node.title.toLowerCase().includes('unit'))
+          .slice(0, 4);
+        setProducts(unitProducts);
+      } catch (error) {
+        console.error('Failed to load Main Character products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -114,45 +102,59 @@ export const MainCharacterCollection = () => {
           </motion.div>
         </motion.div>
 
-        <motion.div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {mainCharacterWigs.map((wig, index) => (
-            <motion.div
-              key={wig.id}
-              variants={cardVariants}
-              whileHover={{ 
-                y: -10, 
-                scale: 1.03,
-                transition: { duration: 0.3 } 
-              }}
-            >
-              <Card className="group overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <Link to={`/product/${wig.handle}`}>
-                  <div className="aspect-square overflow-hidden bg-muted">
-                    <motion.img
-                      src={wig.image}
-                      alt={wig.title}
-                      className="w-full h-full object-cover"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.4 }}
-                    />
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-medium mb-2 text-center">{wig.title}</h3>
-                    <p className="text-primary font-semibold text-center">
-                      {formatPrice(wig.price)}
-                    </p>
-                  </CardContent>
-                </Link>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="aspect-square w-full" />
+                <Skeleton className="h-4 w-3/4 mx-auto" />
+                <Skeleton className="h-4 w-1/2 mx-auto" />
+              </div>
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <p className="text-center text-muted-foreground">No products available</p>
+        ) : (
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+          >
+            {products.map((product) => (
+              <motion.div
+                key={product.node.id}
+                variants={cardVariants}
+                whileHover={{ 
+                  y: -10, 
+                  scale: 1.03,
+                  transition: { duration: 0.3 } 
+                }}
+              >
+                <Card className="group overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                  <Link to={`/product/${product.node.handle}`}>
+                    <div className="aspect-square overflow-hidden bg-muted">
+                      <motion.img
+                        src={product.node.images.edges[0]?.node.url || '/placeholder.svg'}
+                        alt={product.node.title}
+                        className="w-full h-full object-cover"
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.4 }}
+                      />
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="font-medium mb-2 text-center">{product.node.title}</h3>
+                      <p className="text-primary font-semibold text-center">
+                        {formatPrice(parseFloat(product.node.priceRange.minVariantPrice.amount))}
+                      </p>
+                    </CardContent>
+                  </Link>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </motion.section>
   );

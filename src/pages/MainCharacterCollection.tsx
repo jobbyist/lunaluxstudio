@@ -2,46 +2,32 @@ import { PageLayout } from "@/components/PageLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import productPlaceholder from "@/assets/product-placeholder.webp";
-
-// Sample wig data for The Main Character collection
-const mainCharacterWigs = [
-  {
-    id: "mc-1",
-    title: "Classic Bob Wig",
-    description: "Sleek and sophisticated bob cut, perfect for any occasion",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "classic-bob-wig"
-  },
-  {
-    id: "mc-2",
-    title: "Long Straight Wig",
-    description: "Luxurious long straight hair with natural shine",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "long-straight-wig"
-  },
-  {
-    id: "mc-3",
-    title: "Curly Shoulder Length Wig",
-    description: "Bouncy curls that frame your face beautifully",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "curly-shoulder-wig"
-  },
-  {
-    id: "mc-4",
-    title: "Natural Wave Wig",
-    description: "Soft waves for an effortlessly elegant look",
-    image: productPlaceholder,
-    price: 999.00,
-    handle: "natural-wave-wig"
-  }
-];
+import { useEffect, useState } from "react";
+import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const MainCharacterCollectionPage = () => {
   const { formatPrice } = useCurrency();
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const allProducts = await fetchProducts(50, "title:*Unit*");
+        // Filter to show only units (ready-to-wear wigs)
+        const unitProducts = allProducts.filter(p => 
+          p.node.title.toLowerCase().includes('unit')
+        );
+        setProducts(unitProducts);
+      } catch (error) {
+        console.error('Failed to load Main Character products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
 
   return (
     <PageLayout
@@ -49,30 +35,44 @@ const MainCharacterCollectionPage = () => {
       subtitle="Non-custom, readily available wigs for immediate purchase. Be the main character in your own story."
     >
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {mainCharacterWigs.map((wig) => (
-            <Card key={wig.id} className="group overflow-hidden hover:shadow-lg transition-all duration-300">
-              <Link to={`/product/${wig.handle}`}>
-                <div className="aspect-square overflow-hidden bg-muted">
-                  <img
-                    src={wig.image}
-                    alt={wig.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <CardContent className="p-4 space-y-2">
-                  <h3 className="font-medium text-center">{wig.title}</h3>
-                  <p className="text-sm text-white text-center">
-                    {wig.description}
-                  </p>
-                  <p className="text-primary font-semibold text-center text-lg">
-                    {formatPrice(wig.price)}
-                  </p>
-                </CardContent>
-              </Link>
-            </Card>
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="aspect-square w-full" />
+                <Skeleton className="h-4 w-3/4 mx-auto" />
+                <Skeleton className="h-4 w-1/2 mx-auto" />
+              </div>
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <p className="text-center text-muted-foreground py-12">No products available in this collection</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <Card key={product.node.id} className="group overflow-hidden hover:shadow-lg transition-all duration-300">
+                <Link to={`/product/${product.node.handle}`}>
+                  <div className="aspect-square overflow-hidden bg-muted">
+                    <img
+                      src={product.node.images.edges[0]?.node.url || '/placeholder.svg'}
+                      alt={product.node.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <CardContent className="p-4 space-y-2">
+                    <h3 className="font-medium text-center">{product.node.title}</h3>
+                    <p className="text-sm text-muted-foreground text-center line-clamp-2">
+                      {product.node.description || 'Premium quality wig'}
+                    </p>
+                    <p className="text-primary font-semibold text-center text-lg">
+                      {formatPrice(parseFloat(product.node.priceRange.minVariantPrice.amount))}
+                    </p>
+                  </CardContent>
+                </Link>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {/* Info Section */}
         <div className="mt-12 bg-muted/30 rounded-lg p-8 text-center">
