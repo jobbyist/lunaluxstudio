@@ -18,6 +18,7 @@ interface ContentItem {
 
 export const FeaturedStories = () => {
   const { t } = useCurrency();
+  const { section, loading: sectionLoading } = useHomepageSections("featured_stories");
   
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
@@ -199,7 +200,7 @@ export const FeaturedStories = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          {t('featuredStories').toUpperCase()}
+          {title}
         </motion.h2>
 
         <motion.div 

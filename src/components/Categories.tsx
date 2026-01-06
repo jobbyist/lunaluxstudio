@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useHomepageSections } from "@/hooks/useHomepageSections";
 
 const categories = [
   {
@@ -24,6 +25,13 @@ const categories = [
 ];
 
 export const Categories = () => {
+  const { section, loading } = useHomepageSections("categories");
+  
+  // Hide if section is not visible
+  if (loading || !section?.is_visible) {
+    return null;
+  }
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
