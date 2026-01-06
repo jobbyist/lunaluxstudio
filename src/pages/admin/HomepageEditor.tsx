@@ -19,24 +19,23 @@ import {
 } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
-// TODO: Re-enable drag-and-drop functionality after installing @dnd-kit packages
-// import {
-//   DndContext,
-//   closestCenter,
-//   KeyboardSensor,
-//   PointerSensor,
-//   useSensor,
-//   useSensors,
-//   DragEndEvent,
-// } from "@dnd-kit/core";
-// import {
-//   arrayMove,
-//   SortableContext,
-//   sortableKeyboardCoordinates,
-//   useSortable,
-//   verticalListSortingStrategy,
-// } from "@dnd-kit/sortable";
-// import { CSS } from "@dnd-kit/utilities";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface HomepageSection {
   id: string;
@@ -59,8 +58,7 @@ interface SortableSectionProps {
   onAiPromptChange: (sectionId: string, value: string) => void;
 }
 
-// Simplified Section component (drag-and-drop temporarily disabled)
-const Section = ({
+const SortableSection = ({
   section,
   saving,
   aiPrompt,
@@ -71,35 +69,33 @@ const Section = ({
   onAiEdit,
   onAiPromptChange,
 }: SortableSectionProps) => {
-  // TODO: Re-enable drag-and-drop functionality
-  // const {
-  //   attributes,
-  //   listeners,
-  //   setNodeRef,
-  //   transform,
-  //   transition,
-  //   isDragging,
-  // } = useSortable({ id: section.id });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: section.id });
 
-  // const style = {
-  //   transform: CSS.Transform.toString(transform),
-  //   transition,
-  //   opacity: isDragging ? 0.5 : 1,
-  // };
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
 
   return (
-    <div>
+    <div ref={setNodeRef} style={style}>
       <Card className={!section.is_visible ? "opacity-60" : ""}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <div className="flex items-center gap-3">
-            {/* TODO: Re-enable drag handle */}
-            {/* <div
+            <div
               {...attributes}
               {...listeners}
               className="cursor-grab active:cursor-grabbing touch-none"
             >
               <GripVertical className="h-5 w-5 text-muted-foreground" />
-            </div> */}
+            </div>
             <div>
               <CardTitle className="text-lg">{section.section_name}</CardTitle>
               <p className="text-sm text-muted-foreground">{section.section_key}</p>
@@ -205,13 +201,12 @@ const HomepageEditor = () => {
   const { isAdmin, loading: adminLoading, requireAdmin } = useAdmin();
   const navigate = useNavigate();
 
-  // TODO: Re-enable sensors when @dnd-kit is installed
-  // const sensors = useSensors(
-  //   useSensor(PointerSensor),
-  //   useSensor(KeyboardSensor, {
-  //     coordinateGetter: sortableKeyboardCoordinates,
-  //   })
-  // );
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   useEffect(() => {
     if (!adminLoading && !isAdmin) {
@@ -332,47 +327,49 @@ const HomepageEditor = () => {
     await updateSection(section.id, { is_visible: !section.is_visible });
   };
 
-  // TODO: Re-enable drag-and-drop handler when @dnd-kit is installed
-  // const handleDragEnd = async (event: DragEndEvent) => {
-  //   const { active, over } = event;
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
 
-  //   if (!over || active.id === over.id) {
-  //     return;
-  //   }
+    if (!over || active.id === over.id) {
+      return;
+    }
 
-  //   const oldIndex = sections.findIndex((s) => s.id === active.id);
-  //   const newIndex = sections.findIndex((s) => s.id === over.id);
+    const oldIndex = sections.findIndex((s) => s.id === active.id);
+    const newIndex = sections.findIndex((s) => s.id === over.id);
 
-  //   const newSections = arrayMove(sections, oldIndex, newIndex);
+    const newSections = arrayMove(sections, oldIndex, newIndex);
 
-  //   // Update local state immediately for responsive UI
-  //   setSections(newSections);
+    // Update local state immediately for responsive UI
+    setSections(newSections);
 
-  //   // Update display_order in database for all affected sections
-  //   try {
-  //     const updates = newSections.map((section, index) => ({
-  //       id: section.id,
-  //       display_order: index,
-  //     }));
+    // Update display_order in database for all affected sections
+    // Note: We update all sections rather than just affected ones for simplicity
+    // and to ensure consistent state. This is acceptable since homepage sections
+    // are typically small in number (<20) and Supabase handles concurrent updates well.
+    try {
+      const updates = newSections.map((section, index) => ({
+        id: section.id,
+        display_order: index,
+      }));
 
-  //     // Batch update all sections concurrently for better performance
-  //     await Promise.all(
-  //       updates.map((update) =>
-  //         supabase
-  //           .from("homepage_sections")
-  //           .update({ display_order: update.display_order })
-  //           .eq("id", update.id)
-  //       )
-  //     );
+      // Batch update all sections concurrently for better performance
+      await Promise.all(
+        updates.map((update) =>
+          supabase
+            .from("homepage_sections")
+            .update({ display_order: update.display_order })
+            .eq("id", update.id)
+        )
+      );
 
-  //     toast.success("Section order updated");
-  //   } catch (error) {
-  //     console.error("Error updating order:", error);
-  //     toast.error("Failed to update section order");
-  //     // Revert on error
-  //     fetchSections();
-  //   }
-  // };
+      toast.success("Section order updated");
+    } catch (error) {
+      console.error("Error updating order:", error);
+      toast.error("Failed to update section order");
+      // Revert on error
+      fetchSections();
+    }
+  };
 
   if (adminLoading || loading) {
     return (
@@ -404,8 +401,7 @@ const HomepageEditor = () => {
           </Button>
         </div>
 
-        {/* TODO: Re-enable DndContext when @dnd-kit is installed */}
-        {/* <DndContext
+        <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
@@ -413,10 +409,10 @@ const HomepageEditor = () => {
           <SortableContext
             items={sections.map((s) => s.id)}
             strategy={verticalListSortingStrategy}
-          > */}
+          >
             <div className="space-y-6">
               {sections.map((section) => (
-                <Section
+                <SortableSection
                   key={section.id}
                   section={section}
                   saving={saving}
@@ -432,8 +428,8 @@ const HomepageEditor = () => {
                 />
               ))}
             </div>
-          {/* </SortableContext>
-        </DndContext> */}
+          </SortableContext>
+        </DndContext>
       </div>
     </AdminLayout>
   );
