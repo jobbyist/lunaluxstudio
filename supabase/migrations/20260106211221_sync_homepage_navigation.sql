@@ -121,26 +121,12 @@ CREATE TRIGGER update_navigation_menu_updated_at
   EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Insert default navigation items matching Header.tsx
-INSERT INTO public.navigation_menu (label, path, icon, display_order, is_visible, is_desktop_only) VALUES
-  ('Shop All', '/', 'Home', 1, true, true),
-  ('About', '/about', 'Info', 2, true, true),
-  ('Explore', '/explore', 'Compass', 3, true, true),
-  ('Contact', '/contact', 'Mail', 4, true, true);
-
--- Insert "More" dropdown items
-INSERT INTO public.navigation_menu (label, path, icon, display_order, is_visible) VALUES
-  ('Loyalty Rewards', '/loyalty', 'Award', 5, true),
-  ('Leave A Review', '/reviews', 'Star', 6, true),
-  ('Store Policies', '/policies', 'FileText', 7, true),
-  ('Admin Dashboard', '/admin', 'Settings', 8, true);
-
--- Insert mobile menu items (including items from "More" dropdown)
-INSERT INTO public.navigation_menu (label, path, icon, display_order, is_visible, is_mobile_only) VALUES
-  ('Shop All', '/', 'Home', 1, true, true),
-  ('About', '/about', 'Info', 2, true, true),
-  ('Explore', '/explore', 'Compass', 3, true, true),
-  ('Contact', '/contact', 'Mail', 4, true, true),
-  ('Loyalty Rewards', '/loyalty', 'Award', 5, true, true),
-  ('Leave A Review', '/reviews', 'Star', 6, true, true),
-  ('Store Policies', '/policies', 'FileText', 7, true, true),
-  ('Admin Dashboard', '/admin', 'Settings', 8, true, true);
+INSERT INTO public.navigation_menu (label, path, icon, display_order, is_visible, is_desktop_only, is_mobile_only) VALUES
+  ('Shop All', '/', 'Home', 1, true, true, false),
+  ('About', '/about', 'Info', 2, true, true, false),
+  ('Explore', '/explore', 'Compass', 3, true, true, false),
+  ('Contact', '/contact', 'Mail', 4, true, true, false),
+  ('Loyalty Rewards', '/loyalty', 'Award', 5, true, false, false),
+  ('Leave A Review', '/reviews', 'Star', 6, true, false, false),
+  ('Store Policies', '/policies', 'FileText', 7, true, false, false),
+  ('Admin Dashboard', '/admin', 'Settings', 8, true, false, false);

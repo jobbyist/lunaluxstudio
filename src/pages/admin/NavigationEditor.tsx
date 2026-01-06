@@ -5,6 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { 
@@ -35,6 +45,8 @@ const NavigationEditor = () => {
   const [menuItems, setMenuItems] = useState<NavigationMenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
   const { isAdmin, loading: adminLoading } = useAdmin();
   const navigate = useNavigate();
 
@@ -90,10 +102,6 @@ const NavigationEditor = () => {
   };
 
   const deleteMenuItem = async (itemId: string) => {
-    if (!confirm("Are you sure you want to delete this menu item?")) {
-      return;
-    }
-
     try {
       const { error } = await supabase
         .from("navigation_menu")
@@ -107,7 +115,15 @@ const NavigationEditor = () => {
     } catch (error) {
       console.error("Error deleting menu item:", error);
       toast.error("Failed to delete menu item");
+    } finally {
+      setDeleteDialogOpen(false);
+      setItemToDelete(null);
     }
+  };
+
+  const handleDeleteClick = (itemId: string) => {
+    setItemToDelete(itemId);
+    setDeleteDialogOpen(true);
   };
 
   const addMenuItem = async () => {
@@ -211,7 +227,7 @@ const NavigationEditor = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => deleteMenuItem(item.id)}
+                    onClick={() => handleDeleteClick(item.id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -285,6 +301,27 @@ const NavigationEditor = () => {
             </Card>
           ))}
         </div>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Menu Item</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this menu item? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => itemToDelete && deleteMenuItem(itemToDelete)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </AdminLayout>
   );

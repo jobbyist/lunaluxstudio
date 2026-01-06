@@ -1,11 +1,27 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
+// Define a more specific type for section content
+export interface SectionContent {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
+  tagline?: string;
+  titleHighlight?: string;
+  privacyNote?: string;
+  limit?: string;
+  [key: string]: string | undefined; // Allow additional string properties
+}
+
 export interface HomepageSection {
   id: string;
   section_key: string;
   section_name: string;
-  content: Record<string, any>;
+  content: SectionContent;
   is_visible: boolean;
   display_order: number;
 }
@@ -32,7 +48,7 @@ export const useHomepageSections = (sectionKey?: string) => {
           if (error) throw error;
           const typedData = data ? {
             ...data,
-            content: data.content as Record<string, any>
+            content: data.content as SectionContent
           } : null;
           setSection(typedData);
         } else {
@@ -40,7 +56,7 @@ export const useHomepageSections = (sectionKey?: string) => {
           if (error) throw error;
           const typedData = (data || []).map(section => ({
             ...section,
-            content: section.content as Record<string, any>
+            content: section.content as SectionContent
           }));
           setSections(typedData);
         }

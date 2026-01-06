@@ -213,8 +213,8 @@ export const FeaturedStories = () => {
   };
 
   // Use database content or fallback
-  const content = section?.content || {};
-  const title = content.title || t('featuredStories').toUpperCase();
+  const sectionContent = section?.content || {};
+  const title = sectionContent.title || t('featuredStories').toUpperCase();
 
   if (loading || sectionLoading || !section?.is_visible) {
     return null;
