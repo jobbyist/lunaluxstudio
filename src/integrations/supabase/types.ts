@@ -116,6 +116,56 @@ export type Database = {
         }
         Relationships: []
       }
+      navigation_menu: {
+        Row: {
+          created_at: string
+          display_order: number
+          icon: string | null
+          id: string
+          is_desktop_only: boolean
+          is_mobile_only: boolean
+          is_visible: boolean
+          label: string
+          parent_id: string | null
+          path: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_desktop_only?: boolean
+          is_mobile_only?: boolean
+          is_visible?: boolean
+          label: string
+          parent_id?: string | null
+          path: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_desktop_only?: boolean
+          is_mobile_only?: boolean
+          is_visible?: boolean
+          label?: string
+          parent_id?: string | null
+          path?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "navigation_menu_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "navigation_menu"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       newsletter_subscriptions: {
         Row: {
           email: string

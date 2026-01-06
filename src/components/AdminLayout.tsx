@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Sparkles,
+  Navigation,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -30,6 +31,7 @@ const adminNavItems = [
   { path: '/manage/articles', label: 'Content Manager', icon: Home },
   { path: '/manage/publish', label: 'Publish Content', icon: Home },
   { path: '/manage/homepage', label: 'Homepage Editor', icon: Home },
+  { path: '/manage/navigation', label: 'Navigation Menu', icon: Navigation },
   { path: '/manage/analytics', label: 'Analytics', icon: LayoutDashboard },
   { path: '/manage/activity', label: 'Activity Logs', icon: Users },
   { path: '/manage/admins', label: 'Admin Access', icon: Users },
