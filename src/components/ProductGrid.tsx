@@ -4,7 +4,6 @@ import { ProductCard } from "./ProductCard";
 import { Loader2 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import productPlaceholder from "@/assets/product-placeholder.webp";
-import { useHomepageSections } from "@/hooks/useHomepageSections";
 
 interface ProductGridProps {
   title?: string;
@@ -61,25 +60,9 @@ const createSampleProducts = (count: number): ShopifyProduct[] => {
 
 export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps) => {
   const { t } = useCurrency();
-  const { section, loading: sectionLoading } = useHomepageSections("product_grid");
-  
-  // Use section content if available, otherwise use props
-  const sectionContent = section?.content || {};
-  const displayTitle = title || sectionContent.title || t('bestsellers');
-  const displayLimit = limit || parseInt(sectionContent.limit || "50");
-  
+  const displayTitle = title || t('bestsellers');
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Hide if section exists but is not visible
-  if (sectionLoading) {
-    return null;
-  }
-  
-  // Only check visibility if we're using the homepage section (no title prop)
-  if (!title && section && !section.is_visible) {
-    return null;
-  }
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -87,7 +70,7 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
         setLoading(true);
         // Fetch extra products to account for filtering (only needed when filtering is applied)
         // This ensures we can still display the full limit even if some products are filtered out
-        const fetchLimit = !searchQuery ? displayLimit + FILTER_BUFFER : displayLimit;
+        const fetchLimit = !searchQuery ? limit + FILTER_BUFFER : limit;
         const data = await fetchProducts(fetchLimit, searchQuery);
         
         // Filter out excluded products only when not performing a search
@@ -98,25 +81,25 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
           : data;
         
         // Limit to the requested number of products after filtering
-        const limitedData = filteredData.slice(0, displayLimit);
+        const limitedData = filteredData.slice(0, limit);
         
         // If no products from Shopify, use sample products
         if (limitedData.length === 0) {
-          setProducts(createSampleProducts(Math.min(displayLimit, 6)));
+          setProducts(createSampleProducts(Math.min(limit, 6)));
         } else {
           setProducts(limitedData);
         }
       } catch (error) {
         console.error("Error loading products:", error);
         // On error, show sample products (max 6 to avoid overwhelming the UI)
-        setProducts(createSampleProducts(Math.min(displayLimit, 6)));
+        setProducts(createSampleProducts(Math.min(limit, 6)));
       } finally {
         setLoading(false);
       }
     };
 
     loadProducts();
-  }, [searchQuery, displayLimit]);
+  }, [searchQuery, limit]);
 
   if (loading) {
     return (
