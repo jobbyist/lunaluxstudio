@@ -55,8 +55,8 @@ export const Collections = () => {
   const title = content.title || "SHOP BY COLLECTION";
   const subtitle = content.subtitle || "Discover our premium hair collections, each crafted with the finest quality materials";
 
-  if (loading) {
-    return null; // Or skeleton loader
+  if (loading || !section?.is_visible) {
+    return null;
   }
 
   return (

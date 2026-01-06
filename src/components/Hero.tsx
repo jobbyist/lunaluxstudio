@@ -66,8 +66,8 @@ export const Hero = () => {
   const secondaryCtaText = content.secondaryCtaText || t('bookExperience');
   const secondaryCtaLink = content.secondaryCtaLink || "/collections";
 
-  if (loading) {
-    return null; // Or a skeleton loader
+  if (loading || !section?.is_visible) {
+    return null;
   }
 
   return (
