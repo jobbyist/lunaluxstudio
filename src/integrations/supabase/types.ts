@@ -116,6 +116,36 @@ export type Database = {
         }
         Relationships: []
       }
+      navigation_settings: {
+        Row: {
+          created_at: string
+          id: string
+          links: Json
+          location: string
+          section: string | null
+          social_links: Json | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          links?: Json
+          location: string
+          section?: string | null
+          social_links?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          links?: Json
+          location?: string
+          section?: string | null
+          social_links?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscriptions: {
         Row: {
           email: string

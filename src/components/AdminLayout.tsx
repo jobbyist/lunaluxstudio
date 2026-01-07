@@ -25,11 +25,12 @@ interface AdminLayoutProps {
 const adminNavItems = [
   { path: '/manage', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/manage/products', label: 'Products', icon: Package },
+  { path: '/manage/navigation', label: 'Navigation', icon: Menu },
+  { path: '/manage/homepage', label: 'Homepage Editor', icon: Home },
   { path: '/manage/ai-site', label: 'AI Site Manager', icon: Sparkles },
   { path: '/manage/ai-tools', label: 'AI Content Tools', icon: Sparkles },
   { path: '/manage/articles', label: 'Content Manager', icon: Home },
   { path: '/manage/publish', label: 'Publish Content', icon: Home },
-  { path: '/manage/homepage', label: 'Homepage Editor', icon: Home },
   { path: '/manage/analytics', label: 'Analytics', icon: LayoutDashboard },
   { path: '/manage/activity', label: 'Activity Logs', icon: Users },
   { path: '/manage/admins', label: 'Admin Access', icon: Users },
