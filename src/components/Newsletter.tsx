@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
 import { z } from "zod";
-import { useHomepageSections } from "@/hooks/useHomepageSections";
 
 // Email validation schema
 const emailSchema = z.string().trim().email("Please enter a valid email address").max(255, "Email is too long");
@@ -16,7 +15,6 @@ export const Newsletter = () => {
   const { t } = useCurrency();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { section, loading } = useHomepageSections("newsletter");
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,16 +90,6 @@ export const Newsletter = () => {
     },
   };
 
-  // Use database content or fallback
-  const content = section?.content || {};
-  const title = content.title || t('joinMailingList');
-  const subtitle = content.subtitle || t('newsletterDescription');
-  const privacyNote = content.privacyNote || t('privacyNote');
-
-  if (loading || !section?.is_visible) {
-    return null;
-  }
-
   return (
     <section className="py-20 bg-gradient-to-b from-card to-background overflow-hidden">
       <div className="container mx-auto px-4">
@@ -122,10 +110,10 @@ export const Newsletter = () => {
               <Mail className="h-12 w-12 mx-auto text-primary" />
             </motion.div>
             <h2 className="text-3xl md:text-4xl font-serif tracking-wider">
-              {title}
+              {t('joinMailingList')}
             </h2>
             <p className="text-muted-foreground">
-              {subtitle}
+              {t('newsletterDescription')}
             </p>
           </motion.div>
 
@@ -160,7 +148,7 @@ export const Newsletter = () => {
             className="text-xs text-muted-foreground"
             variants={itemVariants}
           >
-            {privacyNote}
+            {t('privacyNote')}
           </motion.p>
         </motion.div>
       </div>

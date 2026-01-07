@@ -4,12 +4,10 @@ import { useEffect, useRef } from "react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
 import heroVideo from "@/assets/lunahero.mp4";
-import { useHomepageSections } from "@/hooks/useHomepageSections";
 
 export const Hero = () => {
   const { t } = useCurrency();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { section, loading } = useHomepageSections("hero");
 
   useEffect(() => {
     if (videoRef.current) {
@@ -54,22 +52,6 @@ export const Hero = () => {
     },
   };
 
-  // Use database content or fallback to translations
-  const content = section?.content || {};
-  const heroTagline = content.tagline || t('heroTagline');
-  const heroTitle = content.title || t('heroTitle');
-  const heroTitleHighlight = content.titleHighlight || t('heroTitleHighlight');
-  const heroSubtitle = content.subtitle || t('heroSubtitle');
-  const heroDescription = content.description || t('heroDescription');
-  const ctaText = content.ctaText || t('discoverCatalog');
-  const ctaLink = content.ctaLink || "/customize";
-  const secondaryCtaText = content.secondaryCtaText || t('bookExperience');
-  const secondaryCtaLink = content.secondaryCtaLink || "/collections";
-
-  if (loading || !section?.is_visible) {
-    return null;
-  }
-
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
@@ -109,7 +91,7 @@ export const Hero = () => {
               animate={{ opacity: 1, letterSpacing: "0.3em" }}
               transition={{ duration: 1, delay: 0.5 }}
             >
-              {heroTagline}
+              {t('heroTagline')}
             </motion.p>
 
             {/* Main Heading */}
@@ -117,13 +99,13 @@ export const Hero = () => {
               className="text-4xl md:text-6xl lg:text-7xl font-cursive tracking-tight"
               variants={itemVariants}
             >
-              {heroTitle} <span className="text-primary">{heroTitleHighlight}</span>
+              {t('heroTitle')} <span className="text-primary">{t('heroTitleHighlight')}</span>
             </motion.h1>
             <motion.p 
               className="text-xl md:text-2xl font-serif italic text-muted-foreground"
               variants={itemVariants}
             >
-              {heroSubtitle}
+              {t('heroSubtitle')}
             </motion.p>
           </motion.div>
 
@@ -138,8 +120,8 @@ export const Hero = () => {
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg relative animate-subtle-pulse"
               >
-                <Link to={ctaLink}>
-                  {ctaText}
+                <Link to="/customize">
+                  {t('discoverCatalog')}
                   <span className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg" aria-label="New feature">
                     New!
                   </span>
@@ -153,7 +135,7 @@ export const Hero = () => {
                 size="lg"
                 className="px-8 py-6 text-lg"
               >
-                <Link to={secondaryCtaLink}>{secondaryCtaText}</Link>
+                <Link to="/collections">{t('bookExperience')}</Link>
               </Button>
             </motion.div>
           </motion.div>
@@ -161,7 +143,7 @@ export const Hero = () => {
           {/* Feature Text */}
           <motion.div className="pt-12" variants={itemVariants}>
             <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-              {heroDescription}
+              {t('heroDescription')}
             </p>
           </motion.div>
         </motion.div>
