@@ -81,7 +81,6 @@ export const Header = () => {
     { label: "Loyalty Rewards", path: "/loyalty" },
     { label: "Leave A Review", path: "/reviews" },
     { label: "Store Policies", path: "/policies" },
-    { label: "Admin Dashboard", path: "/manage" },
   ];
 
   const displayMainNav = mainNav.length > 0 ? mainNav : defaultMainNav;
