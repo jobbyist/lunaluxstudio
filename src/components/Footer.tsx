@@ -90,12 +90,6 @@ export const Footer = () => {
               ))}
             </ul>
           </div>
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
 
           {/* Contact */}
           <div>
