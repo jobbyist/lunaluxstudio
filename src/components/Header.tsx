@@ -33,15 +33,32 @@ import {
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 import { NotificationBar } from "./NotificationBar";
 import lunaLogo from "@/assets/luna-logo.png";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
+import { useNavigation } from "@/hooks/useNavigation";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  home: Home,
+  info: Info,
+  compass: Compass,
+  mail: Mail,
+  star: Star,
+  filetext: FileText,
+  award: Award,
+  settings: Settings,
+};
 
 export const Header = () => {
   const { currency, language, setCurrency, setLanguage, t } = useCurrency();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { getHeaderNav, loading } = useNavigation();
 
   const currencies: Currency[] = ["ZAR", "USD", "EUR", "GBP"];
   const languages: Language[] = ["EN", "ES", "FR", "DE", "AF"];
+
+  // Get navigation from database
+  const mainNav = getHeaderNav('main');
+  const moreNav = getHeaderNav('more');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,6 +68,27 @@ export const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Fallback navigation if database is empty
+  const defaultMainNav = [
+    { label: "Shop All", path: "/", translationKey: "shopAll" },
+    { label: "About", path: "/about", translationKey: "about" },
+    { label: "Explore", path: "/explore", translationKey: "explore" },
+    { label: "Contact", path: "/contact", translationKey: "contact" },
+  ];
+
+  const defaultMoreNav = [
+    { label: "Loyalty Rewards", path: "/loyalty" },
+    { label: "Leave A Review", path: "/reviews" },
+    { label: "Store Policies", path: "/policies" },
+    { label: "Admin Dashboard", path: "/manage" },
+  ];
+
+  const displayMainNav = mainNav.length > 0 ? mainNav : defaultMainNav;
+  const displayMoreNav = moreNav.length > 0 ? moreNav : defaultMoreNav;
+
+  // Icons for mobile menu
+  const mobileIcons = ['home', 'info', 'compass', 'mail'];
 
   return (
     <motion.header 
@@ -97,18 +135,15 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
-            <Link to="/" className="text-foreground hover:text-primary transition-colors">
-              {t('shopAll')}
-            </Link>
-            <Link to="/about" className="text-foreground hover:text-primary transition-colors">
-              {t('about')}
-            </Link>
-            <Link to="/explore" className="text-foreground hover:text-primary transition-colors">
-              {t('explore')}
-            </Link>
-            <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
-              {t('contact')}
-            </Link>
+            {displayMainNav.map((item, index) => (
+              <Link 
+                key={index}
+                to={item.path} 
+                className="text-foreground hover:text-primary transition-colors"
+              >
+                {item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}
+              </Link>
+            ))}
             
             {/* More Dropdown */}
             <DropdownMenu>
@@ -119,18 +154,19 @@ export const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-background border-border">
-                <DropdownMenuItem asChild>
-                  <Link to="/loyalty" className="cursor-pointer">Loyalty Rewards</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/reviews" className="cursor-pointer">Leave A Review</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/policies" className="cursor-pointer">Store Policies</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/admin" className="cursor-pointer font-seasons">Admin Dashboard</Link>
-                </DropdownMenuItem>
+                {displayMoreNav.map((item, index) => (
+                  <DropdownMenuItem key={index} asChild>
+                    {(item as { external?: boolean }).external ? (
+                      <a href={item.path} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link to={item.path} className="cursor-pointer">
+                        {item.label}
+                      </Link>
+                    )}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </nav>
@@ -203,76 +239,41 @@ export const Header = () => {
             </SheetHeader>
             
             <nav className="flex flex-col p-4">
-              <Link
-                to="/"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Home className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                <span>{t('shopAll')}</span>
-              </Link>
-              <Link
-                to="/about"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Info className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                <span>{t('about')}</span>
-              </Link>
-              <Link
-                to="/explore"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Compass className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                <span>{t('explore')}</span>
-              </Link>
-              <Link
-                to="/contact"
-                className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Mail className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                <span>{t('contact')}</span>
-              </Link>
+              {displayMainNav.map((item, index) => {
+                const IconComponent = iconMap[mobileIcons[index] || 'home'] || Home;
+                return (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                    <span>{item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}</span>
+                  </Link>
+                );
+              })}
               
               {/* Mobile More Section */}
               <div className="mt-4 pt-4 border-t border-border">
                 <div className="px-3 mb-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   More
                 </div>
-                <Link 
-                  to="/loyalty" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Award className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                  <span>Loyalty Rewards</span>
-                </Link>
-                <Link 
-                  to="/reviews" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Star className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                  <span>Leave A Review</span>
-                </Link>
-                <Link 
-                  to="/policies" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <FileText className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                  <span>Store Policies</span>
-                </Link>
-                <Link 
-                  to="/admin" 
-                  className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group font-seasons" 
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Settings className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                  <span>Admin Dashboard</span>
-                </Link>
+                {displayMoreNav.map((item, index) => {
+                  const moreIcons = [Award, Star, FileText, Settings];
+                  const IconComponent = moreIcons[index] || Award;
+                  return (
+                    <Link 
+                      key={index}
+                      to={item.path} 
+                      className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </nav>
           </SheetContent>

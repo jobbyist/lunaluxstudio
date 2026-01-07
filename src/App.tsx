@@ -40,6 +40,7 @@ import AdminProducts from "./pages/admin/Products";
 import AdminProductEditor from "./pages/admin/ProductEditor";
 import AISiteManager from "./pages/admin/AISiteManager";
 import AdminAnalytics from "./pages/admin/Analytics";
+import NavigationEditor from "./pages/admin/NavigationEditor";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ const App = () => (
             
             {/* Admin Routes - /manage */}
             <Route path="/manage" element={<AdminDashboard />} />
+            <Route path="/manage/navigation" element={<NavigationEditor />} />
             <Route path="/manage/articles" element={<Articles />} />
             <Route path="/manage/publish" element={<ContentPublisher />} />
             <Route path="/manage/publish/:id" element={<ContentPublisher />} />
