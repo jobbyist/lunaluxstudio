@@ -6,6 +6,14 @@ import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Products allowed in the Main Character collection
+const ALLOWED_MAIN_CHARACTER_PRODUCTS = [
+  'The Ferina Unit',
+  'The Armani Unit',
+  'The Kendra Unit',
+  'Aphrodite Unit'
+];
+
 const MainCharacterCollectionPage = () => {
   const { formatPrice } = useCurrency();
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -18,9 +26,8 @@ const MainCharacterCollectionPage = () => {
         const collectionProducts = await fetchProducts(50, 'collection:"main character"');
         
         // Filter to only include specific products
-        const allowedProducts = ['The Ferina Unit', 'The Armani Unit', 'The Kendra Unit', 'Aphrodite Unit'];
         const filteredProducts = collectionProducts.filter(product => 
-          allowedProducts.includes(product.node.title)
+          ALLOWED_MAIN_CHARACTER_PRODUCTS.includes(product.node.title)
         );
         
         setProducts(filteredProducts);
