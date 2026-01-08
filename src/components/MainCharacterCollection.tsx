@@ -6,14 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
-
-// Products allowed in the Main Character collection
-const ALLOWED_MAIN_CHARACTER_PRODUCTS = [
-  'The Ferina Unit',
-  'The Armani Unit',
-  'The Kendra Unit',
-  'Aphrodite Unit (Double Drawn)'
-];
+import { ALLOWED_MAIN_CHARACTER_PRODUCTS } from "@/lib/constants";
 
 export const MainCharacterCollection = () => {
   const { formatPrice } = useCurrency();
