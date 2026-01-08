@@ -1,21 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useEffect, useRef } from "react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
-import heroVideo from "@/assets/lunahero.mp4";
+import heroImage from "@/assets/lunahero.png";
 
 export const Hero = () => {
   const { t } = useCurrency();
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(error => {
-        console.log("Video autoplay failed:", error);
-      });
-    }
-  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -61,17 +51,11 @@ export const Hero = () => {
           transition={{ duration: 1.5, ease: "easeOut" }}
           className="w-full h-full"
         >
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
+          <img
+            src={heroImage}
+            alt="LunaLuxHair Hero"
             className="w-full h-full object-cover opacity-50"
-          >
-            <source src={heroVideo} type="video/mp4" />
-            
-          </video>
+          />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60" />
       </div>
@@ -83,30 +67,14 @@ export const Hero = () => {
           initial="hidden"
           animate="visible"
         >
-          {/* Small caption */}
+          {/* Main Heading */}
           <motion.div className="space-y-4" variants={itemVariants}>
-            <motion.p 
-              className="text-primary text-sm md:text-base tracking-[0.3em] uppercase"
-              initial={{ opacity: 0, letterSpacing: "0.5em" }}
-              animate={{ opacity: 1, letterSpacing: "0.3em" }}
-              transition={{ duration: 1, delay: 0.5 }}
-            >
-              {t('heroTagline')}
-            </motion.p>
-
-            {/* Main Heading */}
             <motion.h1 
               className="text-4xl md:text-6xl lg:text-7xl font-cursive tracking-tight"
               variants={itemVariants}
             >
               {t('heroTitle')} <span className="text-primary">{t('heroTitleHighlight')}</span>
             </motion.h1>
-            <motion.p 
-              className="text-xl md:text-2xl font-serif italic text-muted-foreground"
-              variants={itemVariants}
-            >
-              {t('heroSubtitle')}
-            </motion.p>
           </motion.div>
 
           {/* CTA Buttons */}
