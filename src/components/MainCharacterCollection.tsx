@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ALLOWED_MAIN_CHARACTER_PRODUCTS } from "@/lib/constants";
 
 export const MainCharacterCollection = () => {
   const { formatPrice } = useCurrency();
@@ -20,7 +21,13 @@ export const MainCharacterCollection = () => {
       try {
         // Fetch products from the "Main Character" collection on Shopify
         const collectionProducts = await fetchProducts(50, 'collection:"main character"');
-        setProducts(collectionProducts.slice(0, 4));
+        
+        // Filter to only include specific products
+        const filteredProducts = collectionProducts.filter(product => 
+          ALLOWED_MAIN_CHARACTER_PRODUCTS.includes(product.node.title)
+        );
+        
+        setProducts(filteredProducts.slice(0, 4));
       } catch (error) {
         console.error('Failed to load Main Character products:', error);
       } finally {
