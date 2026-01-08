@@ -1,11 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import heroImage from "@/assets/lunahero.png";
 
 export const Hero = () => {
   const { t } = useCurrency();
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.3]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -43,21 +53,24 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
         <motion.div
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{ y, opacity }}
           className="w-full h-full"
         >
           <img
             src={heroImage}
             alt="LunaLuxHair Hero"
-            className="w-full h-full object-cover opacity-50"
+            className="w-full h-full object-cover"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60" />
+        {/* Enhanced overlay for better text visibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
       </div>
 
       <div className="container mx-auto px-4 py-20 relative z-10">
@@ -70,7 +83,7 @@ export const Hero = () => {
           {/* Main Heading */}
           <motion.div className="space-y-4" variants={itemVariants}>
             <motion.h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-cursive tracking-tight"
+              className="text-4xl md:text-6xl lg:text-7xl font-cursive tracking-tight drop-shadow-lg"
               variants={itemVariants}
             >
               {t('heroTitle')} <span className="text-primary">{t('heroTitleHighlight')}</span>
@@ -86,7 +99,7 @@ export const Hero = () => {
               <Button
                 asChild
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg relative animate-subtle-pulse"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg relative animate-subtle-pulse shadow-lg"
               >
                 <Link to="/customize">
                   {t('discoverCatalog')}
@@ -101,7 +114,7 @@ export const Hero = () => {
                 asChild
                 variant="outline"
                 size="lg"
-                className="px-8 py-6 text-lg"
+                className="px-8 py-6 text-lg backdrop-blur-sm bg-background/30 border-foreground/20"
               >
                 <Link to="/collections">{t('bookExperience')}</Link>
               </Button>
@@ -110,7 +123,7 @@ export const Hero = () => {
 
           {/* Feature Text */}
           <motion.div className="pt-12" variants={itemVariants}>
-            <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+            <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
               {t('heroDescription')}
             </p>
           </motion.div>
