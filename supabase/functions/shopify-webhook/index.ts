@@ -47,6 +47,125 @@ async function verifyShopifyHmac(rawBody: string, hmacHeader: string | null): Pr
   }
 }
 
+// Send loyalty points notification email
+async function sendPointsNotificationEmail(
+  email: string,
+  name: string | null,
+  pointsEarned: number,
+  totalPoints: number,
+  orderId: string,
+  orderTotal: string,
+  currency: string
+): Promise<void> {
+  const resendApiKey = Deno.env.get('RESEND_API_KEY');
+  
+  if (!resendApiKey) {
+    console.log('RESEND_API_KEY not configured, skipping email notification');
+    return;
+  }
+
+  const displayName = name || 'Valued Customer';
+
+  const emailHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #D4AF37, #B8860B); color: white; padding: 40px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .header p { margin: 10px 0 0; opacity: 0.9; }
+        .content { background: #ffffff; padding: 40px 30px; }
+        .points-box { background: linear-gradient(135deg, #fef9e7, #fdf2d0); border: 2px solid #D4AF37; border-radius: 12px; padding: 30px; text-align: center; margin: 20px 0; }
+        .points-earned { font-size: 48px; font-weight: bold; color: #B8860B; margin: 0; }
+        .points-label { font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        .total-points { margin-top: 20px; padding-top: 20px; border-top: 1px solid #D4AF37; }
+        .total-points span { font-size: 24px; font-weight: bold; color: #333; }
+        .order-details { background: #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .order-details p { margin: 5px 0; color: #666; }
+        .cta-button { display: inline-block; background: linear-gradient(135deg, #D4AF37, #B8860B); color: white; text-decoration: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; margin: 20px 0; }
+        .footer { background: #1a1a1a; color: #888; padding: 30px; text-align: center; font-size: 12px; }
+        .footer a { color: #D4AF37; text-decoration: none; }
+        .tier-info { margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; }
+        .tier-info p { margin: 5px 0; font-size: 13px; color: #666; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>🎉 You Earned Points!</h1>
+          <p>Thank you for your purchase, ${displayName}!</p>
+        </div>
+        <div class="content">
+          <p>Great news! Your recent order has earned you loyalty points in <strong>The Lux Club</strong>.</p>
+          
+          <div class="points-box">
+            <p class="points-label">Points Earned</p>
+            <p class="points-earned">+${pointsEarned}</p>
+            <div class="total-points">
+              <p class="points-label">Your Total Balance</p>
+              <span>${totalPoints} Points</span>
+            </div>
+          </div>
+
+          <div class="order-details">
+            <p><strong>Order #${orderId}</strong></p>
+            <p>Order Total: ${currency} ${orderTotal}</p>
+            <p>Points Rate: 1 point per R10 spent</p>
+          </div>
+
+          <div class="tier-info">
+            <p><strong>💎 Tier Benefits Reminder:</strong></p>
+            <p>• Bronze (0-499 pts): 5% discount on redemption</p>
+            <p>• Silver (500-999 pts): 10% discount + early access</p>
+            <p>• Gold (1000+ pts): 15% discount + VIP perks</p>
+          </div>
+
+          <p style="text-align: center;">
+            <a href="https://lunaluxhair.com/loyalty" class="cta-button">View Your Rewards</a>
+          </p>
+
+          <p>Keep shopping to unlock more exclusive rewards and climb the tiers!</p>
+          
+          <p>With love,<br><strong>The Luna Lux Hair Team</strong></p>
+        </div>
+        <div class="footer">
+          <p>Luna Lux Hair | Premium Hair Extensions</p>
+          <p><a href="https://lunaluxhair.com">Visit Our Store</a> | <a href="https://lunaluxhair.com/contact">Contact Us</a></p>
+          <p style="margin-top: 15px; color: #666;">You're receiving this because you're a member of The Lux Club loyalty program.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Luna Lux Hair <onboarding@resend.dev>',
+        to: [email],
+        subject: `🎉 You earned ${pointsEarned} loyalty points!`,
+        html: emailHtml,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Failed to send points notification email:', errorData);
+    } else {
+      console.log(`Points notification email sent to ${email}`);
+    }
+  } catch (error) {
+    console.error('Error sending points notification email:', error);
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -93,7 +212,7 @@ Deno.serve(async (req) => {
       // Find user by email in user_profiles
       const { data: profile, error: profileError } = await supabase
         .from('user_profiles')
-        .select('user_id, email')
+        .select('user_id, email, full_name, loyalty_points')
         .eq('email', email.toLowerCase())
         .single();
 
@@ -162,6 +281,24 @@ Deno.serve(async (req) => {
           }
 
           console.log(`Awarded ${pointsEarned} points to user ${authUser.id} for order ${orderId}`);
+
+          // Get updated profile for total points
+          const { data: updatedProfile } = await supabase
+            .from('user_profiles')
+            .select('loyalty_points, full_name')
+            .eq('user_id', authUser.id)
+            .single();
+
+          // Send email notification
+          await sendPointsNotificationEmail(
+            email,
+            updatedProfile?.full_name || null,
+            pointsEarned,
+            updatedProfile?.loyalty_points || pointsEarned,
+            orderId.toString(),
+            total_price,
+            currency
+          );
         }
 
         return new Response(JSON.stringify({ success: true, pointsEarned: pointsEarned || 0 }), {
@@ -207,6 +344,24 @@ Deno.serve(async (req) => {
         }
 
         console.log(`Awarded ${pointsEarned} points to user ${profile.user_id} for order ${orderId}`);
+
+        // Get updated profile for total points
+        const { data: updatedProfile } = await supabase
+          .from('user_profiles')
+          .select('loyalty_points, full_name')
+          .eq('user_id', profile.user_id)
+          .single();
+
+        // Send email notification
+        await sendPointsNotificationEmail(
+          email,
+          updatedProfile?.full_name || profile.full_name,
+          pointsEarned,
+          updatedProfile?.loyalty_points || profile.loyalty_points + pointsEarned,
+          orderId.toString(),
+          total_price,
+          currency
+        );
       }
 
       return new Response(JSON.stringify({ success: true, pointsEarned: pointsEarned || 0 }), {
