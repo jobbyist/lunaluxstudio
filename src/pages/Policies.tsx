@@ -121,7 +121,7 @@ const Policies = () => {
               
               <TabsContent value="privacy" className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Your Privacy Matters</h4>
+                  
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li>• We protect your personal information</li>
                     <li>• Data encrypted with industry-standard security</li>
@@ -134,7 +134,7 @@ const Policies = () => {
               
               <TabsContent value="terms" className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Terms of Service</h4>
+                  
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li>• By purchasing, you agree to our terms</li>
                     <li>• Products are for personal use only</li>
