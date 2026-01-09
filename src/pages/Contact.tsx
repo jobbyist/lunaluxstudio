@@ -110,7 +110,7 @@ const ContactContent = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="pt-32 md:pt-40 pb-16">
+      <main className="pt-36 md:pt-40 pb-16">
         <div className="container mx-auto px-4">
           {/* Page Header */}
           <motion.div

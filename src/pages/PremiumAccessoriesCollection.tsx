@@ -49,7 +49,7 @@ const PremiumAccessoriesCollection = () => {
       <Header />
       
       {/* Hero Section */}
-      <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
+      <div className="relative h-[40vh] md:h-[50vh] overflow-hidden mt-36 md:mt-40">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
