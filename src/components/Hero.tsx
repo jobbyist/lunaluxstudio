@@ -53,7 +53,7 @@ export const Hero = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
         <motion.div
           initial={{ scale: 1.1 }}
@@ -80,15 +80,6 @@ export const Hero = () => {
           initial="hidden"
           animate="visible"
         >
-          {/* Main Heading */}
-          <motion.div className="space-y-4" variants={itemVariants}>
-            <motion.h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-cursive tracking-tight drop-shadow-lg"
-              variants={itemVariants}
-            >
-              {t('heroTitle')} <span className="text-primary">{t('heroTitleHighlight')}</span>
-            </motion.h1>
-          </motion.div>
 
           {/* CTA Buttons */}
           <motion.div 
