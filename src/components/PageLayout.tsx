@@ -12,7 +12,7 @@ export const PageLayout = ({ children, title, subtitle }: PageLayoutProps) => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-40 md:pt-44 pb-20">
+      <main className="pt-32 md:pt-40 pb-20">
         {(title || subtitle) && (
           <div className="container mx-auto px-4 mb-12">
             {title && (
