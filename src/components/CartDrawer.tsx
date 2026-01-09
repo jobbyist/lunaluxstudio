@@ -183,7 +183,7 @@ export const CartDrawer = () => {
                 
                 <Button 
                   onClick={handleCheckoutClick}
-                  className="w-full bg-primary hover:bg-primary/90" 
+                  className="w-full bg-primary hover:bg-primary/90 btn-glow" 
                   size="lg"
                   disabled={items.length === 0 || isLoading}
                 >

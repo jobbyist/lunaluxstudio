@@ -87,7 +87,60 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* Glowing CTA Button Effect */
+@layer components {
+  .btn-glow {
+    @apply relative overflow-hidden;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4), 
+                0 0 40px hsl(var(--primary) / 0.2),
+                0 0 60px hsl(var(--primary) / 0.1);
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  .btn-glow::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(
+      45deg,
+      transparent 0%,
+      hsl(var(--primary) / 0.3) 50%,
+      transparent 100%
+    );
+  }
+
+  .btn-glow:hover::before {
+    @apply opacity-100;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.4), 
+                  0 0 40px hsl(var(--primary) / 0.2),
+                  0 0 60px hsl(var(--primary) / 0.1);
+    }
+    50% {
+      box-shadow: 0 0 30px hsl(var(--primary) / 0.6), 
+                  0 0 60px hsl(var(--primary) / 0.3),
+                  0 0 80px hsl(var(--primary) / 0.15);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%) rotate(45deg);
+    }
+    100% {
+      transform: translateX(100%) rotate(45deg);
+    }
   }
 }

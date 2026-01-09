@@ -125,7 +125,7 @@ export const QuickViewModal = ({ product, open, onOpenChange }: QuickViewModalPr
             <Button
               onClick={handleAddToCart}
               disabled={!selectedVariant?.availableForSale}
-              className="w-full mb-3"
+              className="w-full mb-3 btn-glow"
               size="lg"
             >
               <ShoppingCart className="h-4 w-4 mr-2" />

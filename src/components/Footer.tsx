@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Mail, Phone, MessageCircle, CreditCard, Instagram, Twitter, Facebook } from "lucide-react";
 import { LegalDialog, TermsContent, PrivacyContent, RefundsContent, ShippingContent } from "./LegalDialog";
 import { FaTiktok } from "react-icons/fa";
-import footerLogo from "@/assets/luna-logo-footer.png";
+import footerLogo from "@/assets/luna-logo-footer.svg";
 import { useNavigation } from "@/hooks/useNavigation";
 
 const socialIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
