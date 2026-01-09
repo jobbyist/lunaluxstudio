@@ -21,16 +21,16 @@ export const Footer = () => {
 
   // Fallback navigation if database is empty
   const defaultBrowseLinks = [
-    { label: "Catalog", path: "/shop" },
-    { label: "Customize", path: "/customize" },
-    { label: "Collections", path: "/explore" },
-    { label: "Support", path: "/contact" },
+    { label: "Explore", path: "/explore" },
+    { label: "Customise", path: "/customize" },
+    { label: "Collections", path: "/collections" },
+    { label: "Promotions", path: "/promotions" },
   ];
 
   const defaultDiscoverLinks = [
     { label: "About", path: "/about" },
-    { label: "Explore", path: "/explore" },
-    { label: "Shop", path: "/shop" },
+    { label: "Rewards", path: "/loyalty" },
+    { label: "Articles", path: "/articles" },
     { label: "Contact", path: "/contact" },
   ];
 

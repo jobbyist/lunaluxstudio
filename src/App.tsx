@@ -28,6 +28,9 @@ import Referral from "./pages/Referral";
 import Reviews from "./pages/Reviews";
 import Policies from "./pages/Policies";
 import Article from "./pages/Article";
+import ArticlesPage from "./pages/Articles";
+import Bestsellers from "./pages/Bestsellers";
+import Promotions from "./pages/Promotions";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminHomepageEditor from "./pages/admin/HomepageEditor";
@@ -77,6 +80,9 @@ const App = () => (
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/policies" element={<Policies />} />
             <Route path="/article/:slug" element={<Article />} />
+            <Route path="/articles" element={<ArticlesPage />} />
+            <Route path="/bestsellers" element={<Bestsellers />} />
+            <Route path="/promotions" element={<Promotions />} />
             
             {/* Admin Routes - /manage */}
             <Route path="/manage" element={<AdminDashboard />} />
