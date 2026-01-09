@@ -9,6 +9,19 @@ const corsHeaders = {
 // Points earning rate: 1 point per R10 spent
 const POINTS_PER_RAND = 0.1;
 
+// Tier thresholds
+const TIER_THRESHOLDS = {
+  bronze: { min: 0, max: 499 },
+  silver: { min: 500, max: 999 },
+  gold: { min: 1000, max: Infinity },
+};
+
+function getTierFromPoints(points: number): string {
+  if (points >= TIER_THRESHOLDS.gold.min) return 'gold';
+  if (points >= TIER_THRESHOLDS.silver.min) return 'silver';
+  return 'bronze';
+}
+
 // HMAC verification for Shopify webhooks
 async function verifyShopifyHmac(rawBody: string, hmacHeader: string | null): Promise<boolean> {
   const webhookSecret = Deno.env.get('SHOPIFY_WEBHOOK_SECRET');
@@ -166,6 +179,142 @@ async function sendPointsNotificationEmail(
   }
 }
 
+// Send tier upgrade notification email
+async function sendTierUpgradeEmail(
+  email: string,
+  name: string | null,
+  newTier: string,
+  totalPoints: number
+): Promise<void> {
+  const resendApiKey = Deno.env.get('RESEND_API_KEY');
+  
+  if (!resendApiKey) {
+    console.log('RESEND_API_KEY not configured, skipping tier upgrade email');
+    return;
+  }
+
+  const displayName = name || 'Valued Customer';
+  const tierEmoji = newTier === 'gold' ? '👑' : '🥈';
+  const tierColor = newTier === 'gold' ? '#FFD700' : '#C0C0C0';
+  const tierGradient = newTier === 'gold' 
+    ? 'linear-gradient(135deg, #FFD700, #B8860B)' 
+    : 'linear-gradient(135deg, #C0C0C0, #A8A8A8)';
+  
+  const tierBenefits = newTier === 'gold' 
+    ? `
+      <li>15% discount when redeeming points</li>
+      <li>VIP early access to new collections</li>
+      <li>Exclusive Gold member promotions</li>
+      <li>Priority customer support</li>
+      <li>Birthday surprise rewards</li>
+      <li>Free shipping on orders over R500</li>
+    `
+    : `
+      <li>10% discount when redeeming points</li>
+      <li>Early access to new collections</li>
+      <li>Exclusive Silver member promotions</li>
+      <li>Birthday bonus points</li>
+    `;
+
+  const nextTierInfo = newTier === 'silver' 
+    ? `<p style="margin-top: 20px; padding: 15px; background: #fff9e6; border-radius: 8px; border-left: 4px solid #FFD700;">
+        <strong>🎯 Next Goal:</strong> Reach 1,000 points to unlock Gold status and enjoy 15% discounts plus VIP perks!
+       </p>`
+    : '';
+
+  const emailHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background: ${tierGradient}; color: white; padding: 50px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 32px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header .emoji { font-size: 60px; display: block; margin-bottom: 15px; }
+        .header p { margin: 15px 0 0; opacity: 0.95; font-size: 18px; }
+        .content { background: #ffffff; padding: 40px 30px; }
+        .tier-badge { display: inline-block; background: ${tierGradient}; color: white; padding: 8px 25px; border-radius: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 10px 0; }
+        .benefits-box { background: #f9f9f9; border-radius: 12px; padding: 25px; margin: 25px 0; }
+        .benefits-box h3 { margin-top: 0; color: #333; }
+        .benefits-box ul { margin: 0; padding-left: 20px; }
+        .benefits-box li { margin: 10px 0; color: #555; }
+        .points-display { text-align: center; padding: 20px; background: linear-gradient(135deg, #fef9e7, #fdf2d0); border-radius: 12px; margin: 20px 0; }
+        .points-display .number { font-size: 42px; font-weight: bold; color: #B8860B; }
+        .points-display .label { font-size: 14px; color: #666; text-transform: uppercase; }
+        .cta-button { display: inline-block; background: ${tierGradient}; color: white; text-decoration: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; margin: 20px 0; }
+        .footer { background: #1a1a1a; color: #888; padding: 30px; text-align: center; font-size: 12px; }
+        .footer a { color: #D4AF37; text-decoration: none; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <span class="emoji">${tierEmoji}</span>
+          <h1>Congratulations, ${displayName}!</h1>
+          <p>You've been upgraded to <span class="tier-badge">${newTier.toUpperCase()}</span> status!</p>
+        </div>
+        <div class="content">
+          <p>Your loyalty has paid off! You've reached <strong>${newTier.charAt(0).toUpperCase() + newTier.slice(1)} Tier</strong> in The Lux Club, unlocking exclusive new benefits.</p>
+          
+          <div class="points-display">
+            <div class="label">Your Points Balance</div>
+            <div class="number">${totalPoints}</div>
+          </div>
+
+          <div class="benefits-box">
+            <h3>${tierEmoji} Your New ${newTier.charAt(0).toUpperCase() + newTier.slice(1)} Benefits:</h3>
+            <ul>
+              ${tierBenefits}
+            </ul>
+          </div>
+
+          ${nextTierInfo}
+
+          <p style="text-align: center;">
+            <a href="https://lunaluxhair.com/loyalty" class="cta-button">Explore Your Benefits</a>
+          </p>
+
+          <p>Thank you for being a valued member of The Lux Club. We appreciate your continued support!</p>
+          
+          <p>With love,<br><strong>The Luna Lux Hair Team</strong></p>
+        </div>
+        <div class="footer">
+          <p>Luna Lux Hair | Premium Hair Extensions</p>
+          <p><a href="https://lunaluxhair.com">Visit Our Store</a> | <a href="https://lunaluxhair.com/contact">Contact Us</a></p>
+          <p style="margin-top: 15px; color: #666;">You're receiving this because you're a member of The Lux Club loyalty program.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Luna Lux Hair <onboarding@resend.dev>',
+        to: [email],
+        subject: `${tierEmoji} You've been upgraded to ${newTier.charAt(0).toUpperCase() + newTier.slice(1)} status!`,
+        html: emailHtml,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Failed to send tier upgrade email:', errorData);
+    } else {
+      console.log(`Tier upgrade email (${newTier}) sent to ${email}`);
+    }
+  } catch (error) {
+    console.error('Error sending tier upgrade email:', error);
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -212,7 +361,7 @@ Deno.serve(async (req) => {
       // Find user by email in user_profiles
       const { data: profile, error: profileError } = await supabase
         .from('user_profiles')
-        .select('user_id, email, full_name, loyalty_points')
+        .select('user_id, email, full_name, loyalty_points, loyalty_tier')
         .eq('email', email.toLowerCase())
         .single();
 
@@ -282,23 +431,43 @@ Deno.serve(async (req) => {
 
           console.log(`Awarded ${pointsEarned} points to user ${authUser.id} for order ${orderId}`);
 
-          // Get updated profile for total points
+          // Get updated profile for total points and check tier upgrade
           const { data: updatedProfile } = await supabase
             .from('user_profiles')
-            .select('loyalty_points, full_name')
+            .select('loyalty_points, full_name, loyalty_tier')
             .eq('user_id', authUser.id)
             .single();
 
-          // Send email notification
+          const newTotalPoints = updatedProfile?.loyalty_points || pointsEarned;
+          const oldTier = 'bronze'; // New user starts at bronze
+          const newTier = getTierFromPoints(newTotalPoints);
+
+          // Send points notification email
           await sendPointsNotificationEmail(
             email,
             updatedProfile?.full_name || null,
             pointsEarned,
-            updatedProfile?.loyalty_points || pointsEarned,
+            newTotalPoints,
             orderId.toString(),
             total_price,
             currency
           );
+
+          // Check for tier upgrade and send email
+          if (newTier !== oldTier && (newTier === 'silver' || newTier === 'gold')) {
+            await sendTierUpgradeEmail(
+              email,
+              updatedProfile?.full_name || null,
+              newTier,
+              newTotalPoints
+            );
+
+            // Update tier in database
+            await supabase
+              .from('user_profiles')
+              .update({ loyalty_tier: newTier })
+              .eq('user_id', authUser.id);
+          }
         }
 
         return new Response(JSON.stringify({ success: true, pointsEarned: pointsEarned || 0 }), {
@@ -310,6 +479,8 @@ Deno.serve(async (req) => {
       // User found in profiles
       const amount = parseFloat(total_price);
       const pointsEarned = Math.floor(amount * POINTS_PER_RAND);
+      const oldTier = profile.loyalty_tier || 'bronze';
+      const oldPoints = profile.loyalty_points || 0;
 
       if (pointsEarned > 0) {
         // Check if this order already awarded points
@@ -348,20 +519,41 @@ Deno.serve(async (req) => {
         // Get updated profile for total points
         const { data: updatedProfile } = await supabase
           .from('user_profiles')
-          .select('loyalty_points, full_name')
+          .select('loyalty_points, full_name, loyalty_tier')
           .eq('user_id', profile.user_id)
           .single();
 
-        // Send email notification
+        const newTotalPoints = updatedProfile?.loyalty_points || oldPoints + pointsEarned;
+        const newTier = getTierFromPoints(newTotalPoints);
+
+        // Send points notification email
         await sendPointsNotificationEmail(
           email,
           updatedProfile?.full_name || profile.full_name,
           pointsEarned,
-          updatedProfile?.loyalty_points || profile.loyalty_points + pointsEarned,
+          newTotalPoints,
           orderId.toString(),
           total_price,
           currency
         );
+
+        // Check for tier upgrade and send email
+        if (newTier !== oldTier && (newTier === 'silver' || newTier === 'gold')) {
+          console.log(`Tier upgrade detected: ${oldTier} -> ${newTier}`);
+          
+          await sendTierUpgradeEmail(
+            email,
+            updatedProfile?.full_name || profile.full_name,
+            newTier,
+            newTotalPoints
+          );
+
+          // Update tier in database
+          await supabase
+            .from('user_profiles')
+            .update({ loyalty_tier: newTier })
+            .eq('user_id', profile.user_id);
+        }
       }
 
       return new Response(JSON.stringify({ success: true, pointsEarned: pointsEarned || 0 }), {
