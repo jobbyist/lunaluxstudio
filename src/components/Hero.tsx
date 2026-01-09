@@ -90,7 +90,7 @@ export const Hero = () => {
               <Button
                 asChild
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg relative animate-subtle-pulse shadow-lg"
+                className="btn-glow bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg relative"
               >
                 <Link to="/customize">
                   {t('discoverCatalog')}

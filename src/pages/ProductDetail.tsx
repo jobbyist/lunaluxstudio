@@ -199,7 +199,7 @@ const ProductDetail = () => {
 
               <Button
                 onClick={handleAddToCart}
-                className="w-full bg-primary hover:bg-primary/90"
+                className="w-full bg-primary hover:bg-primary/90 btn-glow"
                 size="lg"
                 disabled={!selectedVariant?.availableForSale}
               >
