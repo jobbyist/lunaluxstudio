@@ -1,14 +1,35 @@
+import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, Heart, PartyPopper } from "lucide-react";
+import { Sparkles, Heart, PartyPopper, Star, Loader2 } from "lucide-react";
+import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
+import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
 import brazilianImage from "@/assets/hero-1.jpg";
 import vietnameseImage from "@/assets/hero-2.jpg";
 import rawVietnameseImage from "@/assets/hero-3.jpg";
 import productPlaceholder from "@/assets/product-placeholder.webp";
 
 const Collections = () => {
+  const [mainCharacterProducts, setMainCharacterProducts] = useState<ShopifyProduct[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  useEffect(() => {
+    const loadMainCharacterProducts = async () => {
+      try {
+        const products = await fetchCollectionProducts("main character", 4);
+        setMainCharacterProducts(products);
+      } catch (error) {
+        console.error("Error loading main character products:", error);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    loadMainCharacterProducts();
+  }, []);
+
   const standardCollections = [
     {
       title: "Brazilian Virgin",
@@ -27,12 +48,6 @@ const Collections = () => {
       image: rawVietnameseImage,
       slug: "raw-vietnamese",
       description: "Unprocessed raw hair with superior quality and longevity"
-    },
-    {
-      title: "The Main Character",
-      image: productPlaceholder,
-      slug: "main-character",
-      description: "Ready-to-wear wigs for immediate purchase"
     }
   ];
 
@@ -83,6 +98,47 @@ const Collections = () => {
               </Card>
             ))}
           </div>
+        </div>
+
+        {/* Main Character Collection */}
+        <div>
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+              <Star className="h-8 w-8 text-primary fill-primary" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-serif mb-4">
+              The Main Character Collection
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
+              Ready-to-wear luxury wigs for those who are ready to shine. Every piece is crafted to make you the main character of your story.
+            </p>
+          </div>
+
+          {loadingProducts ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : mainCharacterProducts.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {mainCharacterProducts.map((product) => (
+                  <ProductCardWithQuickView key={product.node.id} product={product} />
+                ))}
+              </div>
+              <div className="text-center">
+                <Button asChild size="lg">
+                  <Link to="/collection/main-character">View Full Collection</Link>
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground mb-4">Explore our curated collection of ready-to-wear wigs</p>
+              <Button asChild>
+                <Link to="/collection/main-character">View Collection</Link>
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Curated Collections */}

@@ -1,6 +1,14 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import aboutHero from "@/assets/about-hero.png";
+import about1 from "@/assets/about-1.jpg";
+import about2 from "@/assets/about-2.jpg";
+import about3 from "@/assets/about-3.jpg";
+import about4 from "@/assets/about-4.jpg";
+import about5 from "@/assets/about-5.jpg";
+import about6 from "@/assets/about-6.jpg";
+import about7 from "@/assets/about-7.jpg";
 
 const About = () => {
   const { t } = useCurrency();
@@ -35,12 +43,12 @@ const About = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <img 
-                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=500&fit=crop" 
+                src={about1} 
                 alt="Luna Luxury Hair Story" 
                 className="rounded-lg w-full h-64 object-cover"
               />
               <img 
-                src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=500&fit=crop" 
+                src={about2} 
                 alt="Hair Extensions" 
                 className="rounded-lg w-full h-64 object-cover mt-8"
               />
@@ -65,32 +73,32 @@ const About = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <img 
-              src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=400&h=400&fit=crop" 
+              src={about3} 
               alt="Gallery 1" 
               className="rounded-lg w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
             />
             <img 
-              src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400&h=400&fit=crop" 
+              src={about4} 
               alt="Gallery 2" 
               className="rounded-lg w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
             />
             <img 
-              src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=400&fit=crop" 
+              src={about5} 
               alt="Gallery 3" 
               className="rounded-lg w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
             />
             <img 
-              src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop" 
+              src={about6} 
               alt="Gallery 4" 
               className="rounded-lg w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
             />
             <img 
-              src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=400&h=400&fit=crop" 
+              src={about7} 
               alt="Gallery 5" 
               className="rounded-lg w-full h-48 object-cover hover:scale-105 transition-transform duration-300 md:col-span-2"
             />
             <img 
-              src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&h=400&fit=crop" 
+              src={aboutHero} 
               alt="Gallery 6" 
               className="rounded-lg w-full h-48 object-cover hover:scale-105 transition-transform duration-300 md:col-span-2"
             />
