@@ -84,6 +84,7 @@ const App = () => (
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/bestsellers" element={<Bestsellers />} />
             <Route path="/promotions" element={<Promotions />} />
+            <Route path="/wishlist" element={<Wishlist />} />
             
             {/* Admin Routes - /manage */}
             <Route path="/manage" element={<AdminDashboard />} />
