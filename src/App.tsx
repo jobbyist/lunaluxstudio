@@ -31,6 +31,7 @@ import Article from "./pages/Article";
 import ArticlesPage from "./pages/Articles";
 import Bestsellers from "./pages/Bestsellers";
 import Promotions from "./pages/Promotions";
+import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminHomepageEditor from "./pages/admin/HomepageEditor";
