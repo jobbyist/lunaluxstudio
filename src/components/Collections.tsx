@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import brazilianImage from "@/assets/collection-brazilian.jpg";
 import vietnameseImage from "@/assets/collection-vietnamese.jpg";
 import rawVietnameseImage from "@/assets/collection-raw-vietnamese.jpg";
+import accessoriesImage from "@/assets/collection-accessories.jpg";
 
 export const Collections = () => {
 
@@ -21,6 +22,11 @@ export const Collections = () => {
       title: "Raw Vietnamese",
       image: rawVietnameseImage,
       slug: "raw-vietnamese",
+    },
+    {
+      title: "Premium Accessories",
+      image: accessoriesImage,
+      slug: "premium-accessories",
     },
   ];
 
@@ -71,7 +77,7 @@ export const Collections = () => {
         </motion.div>
 
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
