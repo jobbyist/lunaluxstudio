@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { encode as base64Encode } from 'https://deno.land/std@0.208.0/encoding/base64.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,20 +9,74 @@ const corsHeaders = {
 // Points earning rate: 1 point per R10 spent
 const POINTS_PER_RAND = 0.1;
 
+// HMAC verification for Shopify webhooks
+async function verifyShopifyHmac(rawBody: string, hmacHeader: string | null): Promise<boolean> {
+  const webhookSecret = Deno.env.get('SHOPIFY_WEBHOOK_SECRET');
+  
+  if (!webhookSecret) {
+    console.error('SHOPIFY_WEBHOOK_SECRET not configured');
+    return false;
+  }
+
+  if (!hmacHeader) {
+    console.error('No HMAC header provided');
+    return false;
+  }
+
+  try {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(webhookSecret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+
+    const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(rawBody));
+    const computedHmac = base64Encode(new Uint8Array(signature));
+    
+    const isValid = computedHmac === hmacHeader;
+    if (!isValid) {
+      console.error('HMAC verification failed');
+    }
+    return isValid;
+  } catch (error) {
+    console.error('HMAC verification error:', error);
+    return false;
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Get raw body for HMAC verification
+    const rawBody = await req.text();
+    const hmacHeader = req.headers.get('x-shopify-hmac-sha256');
+    const topic = req.headers.get('x-shopify-topic');
+
+    console.log('Received webhook:', topic);
+
+    // Verify HMAC signature
+    const isValid = await verifyShopifyHmac(rawBody, hmacHeader);
+    if (!isValid) {
+      console.error('Webhook HMAC verification failed - rejecting request');
+      return new Response(JSON.stringify({ error: 'Unauthorized - invalid signature' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log('HMAC verification successful');
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const topic = req.headers.get('x-shopify-topic');
-    const body = await req.json();
-
-    console.log('Received webhook:', topic);
+    const body = JSON.parse(rawBody);
 
     // Handle order paid webhook
     if (topic === 'orders/paid') {
