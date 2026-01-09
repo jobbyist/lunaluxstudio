@@ -145,9 +145,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       }
       
       checkAuthAndLoadData(); // Refresh average rating
-    } catch (error) {
+    } catch (error: any) {
       console.error("Rating error:", error);
-      toast.error("Failed to submit rating");
+      // Check if this is a rate limit error
+      if (error?.message?.includes("violates row-level security") || error?.code === "42501") {
+        toast.error("Too many ratings. Please try again later.");
+      } else {
+        toast.error("Failed to submit rating");
+      }
     }
   };
 

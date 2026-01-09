@@ -424,6 +424,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_rating_rate_limit: {
+        Args: { rating_user_id: string }
+        Returns: boolean
+      }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       cleanup_stale_visitors: { Args: never; Returns: undefined }
       has_role: {
