@@ -12,22 +12,27 @@ interface CollectionCardProps {
 // Category configurations per collection with specific product links
 const collectionCategories: Record<string, Array<{ name: string; path: string; productHandle?: string }>> = {
   "vietnamese-virgin": [
+    { name: "View All Products", path: "/collections/vietnamese-virgin" },
     { name: "Custom Wigs", path: "/customize" },
     { name: "Bundles", path: "/product/virgin-vietnamese-bundles", productHandle: "virgin-vietnamese-bundles" },
-    { name: "Frontals", path: "frontals" },
     { name: "Closures", path: "/product/hd-virgin-closures", productHandle: "hd-virgin-closures" },
   ],
   "brazilian-virgin": [
+    { name: "View All Products", path: "/collections/brazilian-virgin" },
     { name: "Custom Wigs", path: "/customize" },
     { name: "Bundles", path: "bundles" },
-    { name: "Frontals", path: "frontals" },
     { name: "Closures", path: "closures" },
   ],
   "raw-vietnamese": [
+    { name: "View All Products", path: "/collections/raw-vietnamese" },
     { name: "Custom Wigs", path: "/customize" },
     { name: "Bundles", path: "/product/raw-vietnamese-bundles", productHandle: "raw-vietnamese-bundles" },
-    { name: "Frontals", path: "frontals" },
     { name: "Closures", path: "/product/hd-virgin-closures", productHandle: "hd-virgin-closures" },
+  ],
+  "premium-accessories": [
+    { name: "View All Products", path: "/explore?category=accessories" },
+    { name: "Hair Storage Bags", path: "/product/luna-hair-storage-bag" },
+    { name: "Premium Brushes", path: "/product/luna-premium-brushes" },
   ],
 };
 
