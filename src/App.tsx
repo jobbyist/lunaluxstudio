@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { ChatBot } from "@/components/ChatBot";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { VisitorTracker } from "@/components/VisitorTracker";
 import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import CustomizeProduct from "./pages/CustomizeProduct";
@@ -58,6 +60,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <GoogleAnalytics />
+          <VisitorTracker />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/product/:handle" element={<ProductDetail />} />

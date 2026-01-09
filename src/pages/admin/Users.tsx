@@ -18,8 +18,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { supabase } from '@/integrations/supabase/client';
-import { Users, Search, Crown, Eye, TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
+import { Users, Search, Crown, Eye, TrendingUp, TrendingDown, RefreshCw, Download, FileSpreadsheet } from 'lucide-react';
+import { exportUserProfilesToCSV, exportLoyaltyTransactionsToCSV, exportCombinedReportToCSV } from '@/lib/csvExport';
+import { toast } from 'sonner';
 
 interface UserProfile {
   id: string;
@@ -164,10 +172,49 @@ const AdminUsers = () => {
               Manage user profiles and loyalty transactions
             </p>
           </div>
-          <Button onClick={fetchData} variant="outline" size="sm">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
+          <div className="flex gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export CSV
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => {
+                    exportUserProfilesToCSV(users);
+                    toast.success('User profiles exported');
+                  }}
+                >
+                  <Users className="h-4 w-4 mr-2" />
+                  User Profiles
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    exportLoyaltyTransactionsToCSV(transactions);
+                    toast.success('Transactions exported');
+                  }}
+                >
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
+                  Loyalty Transactions
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    exportCombinedReportToCSV(users, transactions);
+                    toast.success('Combined report exported');
+                  }}
+                >
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  Combined Report
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button onClick={fetchData} variant="outline" size="sm">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
         </div>
 
         {/* Stats Grid */}
