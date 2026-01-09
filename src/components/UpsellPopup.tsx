@@ -58,39 +58,41 @@ export const UpsellPopup = ({ isOpen, onClose, onProceedToCheckout }: UpsellPopu
   const loadRecommendations = async () => {
     setLoading(true);
     try {
-      // Fetch more products to filter intelligently
-      const allProducts = await fetchProducts(20);
+      // Fetch products to find accessories
+      const allProducts = await fetchProducts(50);
       
-      // Smart filtering: recommend complementary products
-      const complementaryProducts = allProducts.filter(p => {
+      // Target accessory product IDs - Luna Premium Brushes and Luna Hair Storage Bag
+      const accessoryTitles = ['luna premium brushes', 'luna hair storage bag', '2 pack wig caps'];
+      
+      // Filter to only show hair accessories
+      const accessories = allProducts.filter(p => {
         // Exclude products already in cart
         if (cartProductIds.includes(p.node.id)) return false;
         
         const title = p.node.title.toLowerCase();
         
-        // If cart has wigs, recommend care products, frontals, or accessories
-        if (cartProductTypes.includes('wig')) {
-          if (title.includes('care') || title.includes('oil') || title.includes('spray')) return true;
-          if (title.includes('cap') || title.includes('edge')) return true;
-        }
+        // Prioritize Luna accessories and wig caps
+        if (accessoryTitles.some(acc => title.includes(acc.toLowerCase()))) return true;
         
-        // If cart has bundles, recommend closures or frontals
-        if (cartProductTypes.includes('bundle')) {
-          if (title.includes('closure') || title.includes('frontal')) return true;
-        }
-        
-        // If cart has frontals/closures, recommend bundles or styling products
-        if (cartProductTypes.includes('frontal') || cartProductTypes.includes('closure')) {
-          if (title.includes('bundle')) return true;
-        }
-        
-        return true; // Include as fallback
+        return false;
       });
 
-      // Prioritize complementary items, limit to 4
-      const prioritized = complementaryProducts.slice(0, 4);
+      // If we found accessories, use them; otherwise show a subset of other products
+      let productsToShow = accessories.length > 0 ? accessories : [];
       
-      setRecommendations(prioritized.map(p => ({ product: p, quantity: 1 })));
+      // If we don't have enough accessories, add wig caps as a fallback
+      if (productsToShow.length < 2) {
+        const fallbackProducts = allProducts.filter(p => {
+          if (cartProductIds.includes(p.node.id)) return false;
+          if (productsToShow.some(acc => acc.node.id === p.node.id)) return false;
+          const title = p.node.title.toLowerCase();
+          return title.includes('cap') || title.includes('brush') || title.includes('bag');
+        });
+        productsToShow = [...productsToShow, ...fallbackProducts];
+      }
+      
+      // Limit to 4 products
+      setRecommendations(productsToShow.slice(0, 4).map(p => ({ product: p, quantity: 1 })));
     } catch (error) {
       console.error('Failed to load recommendations:', error);
     } finally {
