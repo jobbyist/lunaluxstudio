@@ -3,13 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Shield, Truck, RotateCcw, FileText } from "lucide-react";
 import { LegalDialog, TermsContent, PrivacyContent, RefundsContent, ShippingContent } from "@/components/LegalDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 const Policies = () => {
-  return (
-    <PageLayout
-      title="Store Policies"
-      subtitle="Everything you need to know about our terms, privacy, shipping, and refund policies"
-    >
+  return <PageLayout title="Store Policies" subtitle="Everything you need to know about our terms, privacy, shipping, and refund policies">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Quick Access Cards */}
         <div className="grid md:grid-cols-2 gap-6">
@@ -113,9 +108,9 @@ const Policies = () => {
               
               <TabsContent value="returns" className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Returns & Refunds</h4>
+                  
                   <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• 30-day return window for unused products</li>
+                    <li>• 7-day return window for unused products</li>
                     <li>• Products must be in original packaging</li>
                     <li>• Custom orders are non-refundable</li>
                     <li>• Refunds processed within 7-10 business days</li>
@@ -163,8 +158,6 @@ const Policies = () => {
           </CardContent>
         </Card>
       </div>
-    </PageLayout>
-  );
+    </PageLayout>;
 };
-
 export default Policies;
