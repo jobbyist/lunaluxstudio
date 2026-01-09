@@ -116,6 +116,36 @@ export type Database = {
         }
         Relationships: []
       }
+      loyalty_transactions: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          order_id: string | null
+          points: number
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          order_id?: string | null
+          points: number
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          order_id?: string | null
+          points?: number
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       navigation_settings: {
         Row: {
           created_at: string
@@ -257,6 +287,7 @@ export type Database = {
       user_profiles: {
         Row: {
           created_at: string
+          email: string | null
           full_name: string | null
           id: string
           loyalty_points: number
@@ -266,6 +297,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          email?: string | null
           full_name?: string | null
           id?: string
           loyalty_points?: number
@@ -275,6 +307,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          email?: string | null
           full_name?: string | null
           id?: string
           loyalty_points?: number
