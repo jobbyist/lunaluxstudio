@@ -120,7 +120,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
       const isFirstRating = !existingRating;
 
-      // Upsert the rating
+      // Upsert the rating - bonus points are awarded automatically via database trigger
       const { error } = await supabase
         .from("product_ratings")
         .upsert(
@@ -128,7 +128,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             user_id: user.id, 
             product_id: node.id, 
             rating,
-            points_awarded: true
+            points_awarded: false // Will be set to true by trigger when points are awarded
           },
           { onConflict: "user_id,product_id" }
         );
@@ -137,22 +137,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
       setUserRating(rating);
 
-      // Award bonus points for first review only
+      // Show appropriate toast - points are awarded server-side via trigger for first ratings
       if (isFirstRating) {
-        const { error: pointsError } = await supabase
-          .from("loyalty_transactions")
-          .insert({
-            user_id: user.id,
-            points: REVIEW_BONUS_POINTS,
-            transaction_type: "bonus",
-            description: `Earned ${REVIEW_BONUS_POINTS} points for rating a product`,
-          });
-
-        if (!pointsError) {
-          toast.success(`Rated ${rating} stars! +${REVIEW_BONUS_POINTS} bonus points earned`);
-        } else {
-          toast.success(`Rated ${rating} stars`);
-        }
+        toast.success(`Rated ${rating} stars! +${REVIEW_BONUS_POINTS} bonus points earned`);
       } else {
         toast.success(`Rating updated to ${rating} stars`);
       }
