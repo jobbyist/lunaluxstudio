@@ -3,20 +3,15 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CurrencyProvider, useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from "lucide-react";
+import { Mail, Phone, Clock, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
+import { PageTransition } from "@/components/PageTransition";
 
 // Validation schema for contact form
 const contactSchema = z.object({
@@ -25,33 +20,6 @@ const contactSchema = z.object({
   subject: z.string().trim().min(1, "Subject is required").max(200, "Subject must be less than 200 characters"),
   message: z.string().trim().min(1, "Message is required").max(5000, "Message must be less than 5000 characters"),
 });
-
-const faqs = [
-  {
-    question: "What is your shipping policy?",
-    answer: "We offer free shipping on all orders over $100. Standard shipping takes 5-7 business days, while express shipping takes 2-3 business days. International shipping is available to select countries."
-  },
-  {
-    question: "How do I care for my hair extensions?",
-    answer: "We recommend washing your extensions with sulfate-free shampoo and conditioner. Use a wide-tooth comb to detangle, starting from the ends. Avoid sleeping with wet hair and store extensions properly when not in use."
-  },
-  {
-    question: "What is your return policy?",
-    answer: "We accept returns within 14 days of purchase for unused, unopened products in their original packaging. Custom orders and wigs that have been cut or styled are not eligible for returns."
-  },
-  {
-    question: "How long do hair extensions last?",
-    answer: "With proper care, our premium hair extensions can last 6-12 months or longer. The longevity depends on how frequently they're worn and how well they're maintained."
-  },
-  {
-    question: "Do you offer installation services?",
-    answer: "Yes! We offer professional installation services at our studio. You can book an appointment through our booking page or contact us directly to schedule your session."
-  },
-  {
-    question: "Can I color or heat style the hair?",
-    answer: "Yes, all our hair extensions are 100% human hair and can be colored, bleached, and heat styled. We recommend consulting with a professional stylist for coloring services."
-  },
-];
 
 const ContactContent = () => {
   const { t } = useCurrency();
@@ -107,11 +75,12 @@ const ContactContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      <main className="pt-36 md:pt-40 pb-16">
-        <div className="container mx-auto px-4">
+    <PageTransition>
+      <div className="min-h-screen bg-background">
+        <Header />
+        
+        <main className="pt-36 md:pt-40 pb-16">
+          <div className="container mx-auto px-4">
           {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -211,8 +180,8 @@ const ContactContent = () => {
                     </div>
                     <div>
                       <h3 className="font-medium mb-1">Email</h3>
-                      <a href="mailto:hi@lunaluxhair.com" className="text-muted-foreground hover:text-primary transition-colors">
-                        hi@lunaluxhair.com
+                      <a href="mailto:info@lunaluxhair.com" className="text-muted-foreground hover:text-primary transition-colors">
+                        info@lunaluxhair.com
                       </a>
                     </div>
                   </div>
@@ -267,7 +236,7 @@ const ContactContent = () => {
                 <h3 className="font-medium mb-4">Quick Contact</h3>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button asChild variant="outline" className="flex-1">
-                    <a href="mailto:hi@lunaluxhair.com">
+                    <a href="mailto:info@lunaluxhair.com">
                       <Mail className="mr-2 h-4 w-4" />
                       Email Us
                     </a>
@@ -282,39 +251,12 @@ const ContactContent = () => {
               </div>
             </motion.div>
           </div>
-
-          {/* FAQ Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="max-w-3xl mx-auto"
-          >
-            <h2 className="font-heading text-3xl text-center mb-8">
-              Frequently Asked <span className="text-primary">Questions</span>
-            </h2>
-            <Accordion type="single" collapsible className="space-y-4">
-              {faqs.map((faq, index) => (
-                <AccordionItem
-                  key={index}
-                  value={`item-${index}`}
-                  className="bg-card border border-border rounded-lg px-6"
-                >
-                  <AccordionTrigger className="text-left hover:no-underline">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </motion.div>
         </div>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </PageTransition>
   );
 };
 
