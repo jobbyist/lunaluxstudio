@@ -21,8 +21,8 @@ export const Footer = () => {
 
   // Fallback navigation if database is empty
   const defaultBrowseLinks = [
-    { label: "Explore", path: "/explore" },
-    { label: "Customise", path: "/customize" },
+    { label: "Catalog", path: "/explore" },
+    { label: "Customize", path: "/customize" },
     { label: "Collections", path: "/collections" },
     { label: "Promotions", path: "/promotions" },
   ];
