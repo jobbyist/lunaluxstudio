@@ -9,7 +9,30 @@ interface CollectionCardProps {
   slug: string;
 }
 
-const categories = [
+// Category configurations per collection with specific product links
+const collectionCategories: Record<string, Array<{ name: string; path: string; productHandle?: string }>> = {
+  "vietnamese-virgin": [
+    { name: "Custom Wigs", path: "/customize" },
+    { name: "Bundles", path: "/product/virgin-vietnamese-bundles", productHandle: "virgin-vietnamese-bundles" },
+    { name: "Frontals", path: "frontals" },
+    { name: "Closures", path: "/product/hd-virgin-closures", productHandle: "hd-virgin-closures" },
+  ],
+  "brazilian-virgin": [
+    { name: "Custom Wigs", path: "/customize" },
+    { name: "Bundles", path: "bundles" },
+    { name: "Frontals", path: "frontals" },
+    { name: "Closures", path: "closures" },
+  ],
+  "raw-vietnamese": [
+    { name: "Custom Wigs", path: "/customize" },
+    { name: "Bundles", path: "/product/raw-vietnamese-bundles", productHandle: "raw-vietnamese-bundles" },
+    { name: "Frontals", path: "frontals" },
+    { name: "Closures", path: "/product/hd-virgin-closures", productHandle: "hd-virgin-closures" },
+  ],
+};
+
+// Default categories for collections not specifically configured
+const defaultCategories = [
   { name: "Custom Wigs", path: "custom-wigs" },
   { name: "Bundles", path: "bundles" },
   { name: "Frontals", path: "frontals" },
@@ -24,6 +47,19 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
     if ('ontouchstart' in window) {
       setIsExpanded(!isExpanded);
     }
+  };
+
+  // Get categories specific to this collection, or use defaults
+  const categories = collectionCategories[slug] || defaultCategories;
+
+  // Determine if the path is a direct link or a collection category path
+  const getCategoryLink = (category: { name: string; path: string; productHandle?: string }) => {
+    // If path starts with "/", it's a direct link to a page or product
+    if (category.path.startsWith("/")) {
+      return category.path;
+    }
+    // Otherwise, it's a relative collection category path
+    return `/collection/${slug}/${category.path}`;
   };
 
   return (
@@ -84,7 +120,7 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
                     transition={{ delay: index * 0.1 }}
                   >
                     <Link
-                      to={`/collection/${slug}/${category.path}`}
+                      to={getCategoryLink(category)}
                       className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all group/link"
                       onClick={(e) => e.stopPropagation()}
                     >
