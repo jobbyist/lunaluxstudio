@@ -1,9 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PageTransition } from "@/components/PageTransition";
+import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { CurrencyProvider, useCurrency } from "@/contexts/CurrencyContext";
 import { motion } from "framer-motion";
-import { Filter, Loader2 } from "lucide-react";
+import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -113,10 +115,22 @@ const ExploreContent = () => {
     selectedCategory !== "all",
   ].filter(Boolean).length;
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="pt-36 md:pt-40 pb-16">
+          <PageLoadingSkeleton variant="grid" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+      <PageTransition>
       <main className="pt-36 md:pt-40 pb-16">
         <div className="container mx-auto px-4">
           {/* Page Header */}
@@ -214,11 +228,7 @@ const ExploreContent = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : filteredProducts.length === 0 ? (
+            {filteredProducts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-muted-foreground text-lg">No products found in this category.</p>
                 <Button variant="link" onClick={clearFilters} className="mt-2">
@@ -235,7 +245,7 @@ const ExploreContent = () => {
           </motion.div>
         </div>
       </main>
-
+      </PageTransition>
       <Footer />
     </div>
   );

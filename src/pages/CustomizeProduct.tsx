@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PageTransition } from "@/components/PageTransition";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -142,6 +143,7 @@ export default function CustomizeProduct() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <PageTransition>
       <main className="pt-36 md:pt-40 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
@@ -382,6 +384,7 @@ export default function CustomizeProduct() {
           </div>
         </div>
       </main>
+      </PageTransition>
       <Footer />
     </div>
   );

@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PageTransition } from "@/components/PageTransition";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import aboutHero from "@/assets/about-hero.png";
 import about1 from "@/assets/about-1.jpg";
@@ -16,7 +17,7 @@ const About = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+      <PageTransition>
       <main className="container mx-auto px-4 pt-36 md:pt-40 pb-16">
         {/* Hero Section */}
         <section className="text-center mb-20">
@@ -141,7 +142,7 @@ const About = () => {
           </div>
         </section>
       </main>
-
+      </PageTransition>
       <Footer />
     </div>
   );
