@@ -1,8 +1,8 @@
 import { CollectionCard } from "./CollectionCard";
 import { motion } from "framer-motion";
-import brazilianImage from "@/assets/hero-1.jpg";
-import vietnameseImage from "@/assets/hero-2.jpg";
-import rawVietnameseImage from "@/assets/hero-3.jpg";
+import brazilianImage from "@/assets/collection-brazilian.jpg";
+import vietnameseImage from "@/assets/collection-vietnamese.jpg";
+import rawVietnameseImage from "@/assets/collection-raw-vietnamese.jpg";
 
 export const Collections = () => {
 
