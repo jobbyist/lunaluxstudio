@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/components/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -16,14 +14,10 @@ import {
 } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
 import { 
-  BarChart3, 
   TrendingUp, 
   Users, 
   Eye, 
   ShoppingCart,
-  MousePointerClick,
-  ExternalLink,
-  Info,
   RefreshCw,
   Calendar,
   Activity
@@ -39,6 +33,8 @@ import {
   BarChart,
   Bar
 } from 'recharts';
+import { RealTimeVisitorCard } from '@/components/admin/RealTimeVisitorCard';
+import { GASettingsCard } from '@/components/admin/GASettingsCard';
 
 interface ActivityLog {
   id: string;
@@ -55,7 +51,6 @@ interface DailyStats {
 
 const AdminAnalytics = () => {
   const [loading, setLoading] = useState(true);
-  const [gaMeasurementId, setGaMeasurementId] = useState('');
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
   const [dailyStats, setDailyStats] = useState<DailyStats[]>([]);
   const [stats, setStats] = useState({
@@ -158,7 +153,7 @@ const AdminAnalytics = () => {
     {
       title: 'Total Events (30 days)',
       value: stats.totalEvents,
-      icon: BarChart3,
+      icon: Activity,
       color: 'text-primary',
     },
     {
@@ -197,8 +192,9 @@ const AdminAnalytics = () => {
           </Button>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Stats Grid with Real-time Visitors */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          <RealTimeVisitorCard />
           {statsCards.map((stat) => {
             const Icon = stat.icon;
             return (
@@ -353,59 +349,14 @@ const AdminAnalytics = () => {
 
           <TabsContent value="setup">
             <div className="grid gap-6 md:grid-cols-2">
-              {/* Google Analytics Setup */}
-              <Card className="border-border bg-card">
-                <CardHeader>
-                  <CardTitle className="font-serif flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5" />
-                    Google Analytics 4
-                  </CardTitle>
-                  <CardDescription>
-                    Connect Google Analytics to track website traffic, user behavior, and conversions
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="ga-id">Measurement ID</Label>
-                    <Input
-                      id="ga-id"
-                      placeholder="G-XXXXXXXXXX"
-                      value={gaMeasurementId}
-                      onChange={(e) => setGaMeasurementId(e.target.value)}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Find your Measurement ID in Google Analytics → Admin → Data Streams
-                    </p>
-                  </div>
-                  
-                  <div className="bg-muted/50 p-4 rounded-lg space-y-2">
-                    <div className="flex items-start gap-2">
-                      <Info className="h-4 w-4 text-accent mt-0.5" />
-                      <div className="text-sm">
-                        <p className="font-medium">How to set up Google Analytics:</p>
-                        <ol className="list-decimal list-inside mt-2 space-y-1 text-muted-foreground">
-                          <li>Go to <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">analytics.google.com</a></li>
-                          <li>Create or select a property</li>
-                          <li>Set up a Web data stream</li>
-                          <li>Copy the Measurement ID (G-XXXXXXXXXX)</li>
-                          <li>Add it to your website's index.html</li>
-                        </ol>
-                      </div>
-                    </div>
-                  </div>
-
-                  <Button className="w-full" disabled>
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Open Google Analytics Dashboard
-                  </Button>
-                </CardContent>
-              </Card>
+              {/* Google Analytics Setup - now saves to database */}
+              <GASettingsCard />
 
               {/* Tracking Events */}
               <Card className="border-border bg-card">
                 <CardHeader>
                   <CardTitle className="font-serif flex items-center gap-2">
-                    <MousePointerClick className="h-5 w-5" />
+                    <Activity className="h-5 w-5" />
                     E-commerce Tracking
                   </CardTitle>
                   <CardDescription>
