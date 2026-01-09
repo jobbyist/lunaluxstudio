@@ -265,7 +265,7 @@ const Article = () => {
 
             <div className="text-center mt-12 mb-20">
               <Button asChild variant="outline" size="lg">
-                <Link to="/">Explore More</Link>
+                <Link to="/articles">Explore More Articles</Link>
               </Button>
             </div>
           </motion.div>
