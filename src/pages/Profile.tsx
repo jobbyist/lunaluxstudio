@@ -4,12 +4,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Heart, Star, Award, Crown, LogOut, User, Gift } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { Loader2, Heart, Star, Award, Crown, LogOut, User, Gift, Pencil, Save, X, History } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface UserProfile {
   id: string;
@@ -17,6 +19,7 @@ interface UserProfile {
   full_name: string | null;
   loyalty_points: number;
   loyalty_tier: string;
+  email: string | null;
 }
 
 interface WishlistItem {
@@ -29,6 +32,14 @@ interface RatingItem {
   id: string;
   product_id: string;
   rating: number;
+  created_at: string;
+}
+
+interface LoyaltyTransaction {
+  id: string;
+  points: number;
+  transaction_type: string;
+  description: string | null;
   created_at: string;
 }
 
@@ -63,8 +74,12 @@ const getTierColor = (tier: string) => {
 const Profile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -108,7 +123,8 @@ const Profile = () => {
             .from('user_profiles')
             .insert({ 
               user_id: user.id, 
-              full_name: user.user_metadata?.full_name || null 
+              full_name: user.user_metadata?.full_name || null,
+              email: user.email
             })
             .select()
             .single();
@@ -118,6 +134,24 @@ const Profile = () => {
         throw error;
       }
       return data as UserProfile;
+    },
+    enabled: !!user?.id,
+  });
+
+  // Fetch loyalty transactions
+  const { data: transactions = [], isLoading: transactionsLoading } = useQuery({
+    queryKey: ['loyalty-transactions', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data, error } = await supabase
+        .from('loyalty_transactions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (error) throw error;
+      return data as LoyaltyTransaction[];
     },
     enabled: !!user?.id,
   });
@@ -165,6 +199,48 @@ const Profile = () => {
     navigate("/");
   };
 
+  const handleEditStart = () => {
+    setEditName(profile?.full_name || "");
+    setIsEditing(true);
+  };
+
+  const handleEditCancel = () => {
+    setIsEditing(false);
+    setEditName("");
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user?.id) return;
+    
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ 
+          full_name: editName.trim() || null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      queryClient.invalidateQueries({ queryKey: ['user-profile', user.id] });
+      setIsEditing(false);
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update profile",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading || profileLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -186,21 +262,53 @@ const Profile = () => {
       <main className="pt-32 md:pt-40 pb-20">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Profile Header */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                <User className="h-8 w-8 text-primary" />
+          <Card className="mb-8">
+            <CardContent className="pt-6">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                    <User className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    {isEditing ? (
+                      <div className="space-y-2">
+                        <Label htmlFor="fullName">Full Name</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="fullName"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            placeholder="Enter your full name"
+                            className="max-w-xs"
+                          />
+                          <Button size="icon" onClick={handleSaveProfile} disabled={saving}>
+                            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                          </Button>
+                          <Button size="icon" variant="outline" onClick={handleEditCancel}>
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <h1 className="text-2xl font-serif">{profile?.full_name || 'Guest User'}</h1>
+                          <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleEditStart}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <p className="text-muted-foreground">{user?.email}</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <Button onClick={handleSignOut} variant="outline">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </Button>
               </div>
-              <div>
-                <h1 className="text-2xl font-serif">{profile?.full_name || user?.email}</h1>
-                <p className="text-muted-foreground">{user?.email}</p>
-              </div>
-            </div>
-            <Button onClick={handleSignOut} variant="outline">
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </Button>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Loyalty Points Card */}
           <Card className="mb-8 overflow-hidden">
@@ -247,18 +355,80 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          {/* Tabs for Wishlist and Ratings */}
-          <Tabs defaultValue="wishlist" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+          {/* Points Earning Info */}
+          <Card className="mb-8 bg-primary/5 border-primary/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3 mb-3">
+                <Star className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold">How to Earn Points</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Earn <span className="font-semibold text-foreground">1 point for every R10</span> spent on qualifying purchases. 
+                Points are automatically added to your account when your order is confirmed.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Tabs for Wishlist, Ratings, and Transactions */}
+          <Tabs defaultValue="transactions" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
+              <TabsTrigger value="transactions" className="flex items-center gap-2">
+                <History className="h-4 w-4" />
+                Points History
+              </TabsTrigger>
               <TabsTrigger value="wishlist" className="flex items-center gap-2">
                 <Heart className="h-4 w-4" />
                 Wishlist ({wishlist.length})
               </TabsTrigger>
               <TabsTrigger value="ratings" className="flex items-center gap-2">
                 <Star className="h-4 w-4" />
-                My Ratings ({ratings.length})
+                Ratings ({ratings.length})
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="transactions">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Points History</CardTitle>
+                  <CardDescription>Your recent loyalty points transactions</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {transactionsLoading ? (
+                    <div className="flex justify-center py-8">
+                      <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                    </div>
+                  ) : transactions.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>No transactions yet</p>
+                      <p className="text-sm mt-2">Make a purchase to start earning points!</p>
+                      <Button className="mt-4" onClick={() => navigate('/explore')}>
+                        Start Shopping
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {transactions.map((transaction) => (
+                        <div key={transaction.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                          <div className="flex-1">
+                            <p className="font-medium text-sm capitalize">{transaction.transaction_type}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {transaction.description || `${transaction.transaction_type} transaction`}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {new Date(transaction.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className={`text-lg font-semibold ${transaction.points > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {transaction.points > 0 ? '+' : ''}{transaction.points}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             <TabsContent value="wishlist">
               <Card>
