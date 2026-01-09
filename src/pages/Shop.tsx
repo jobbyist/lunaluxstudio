@@ -9,7 +9,7 @@ export default function Shop() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 pt-32 md:pt-40 pb-16">
+      <main className="container mx-auto px-4 pt-36 md:pt-40 pb-16">
         <h1 className="text-4xl md:text-5xl font-heading text-center mb-8">
           {t("shopCollection")}
         </h1>

@@ -95,7 +95,7 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="flex items-center justify-center min-h-[60vh] pt-32 md:pt-40">
+        <div className="flex items-center justify-center min-h-[60vh] pt-36 md:pt-40">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
         <Footer />
@@ -107,7 +107,7 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="container mx-auto px-4 pt-32 md:pt-40">
+        <div className="container mx-auto px-4 pt-36 md:pt-40">
           <p className="text-center text-muted-foreground">Product not found</p>
         </div>
         <Footer />
@@ -122,7 +122,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-32 md:pt-40 pb-20">
+      <main className="pt-36 md:pt-40 pb-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Image Gallery */}

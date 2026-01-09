@@ -27,7 +27,7 @@ export default function BrazilianVirginCollection() {
   return (
     <PageLayout>
       {/* Hero Section */}
-      <section className="relative -mx-4 md:-mx-8 lg:-mx-16 -mt-12 mb-12">
+      <section className="relative -mx-4 md:-mx-8 lg:-mx-16 -mt-8 md:-mt-12 mb-12">
         <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
           <img
             src={brazilianImage}
