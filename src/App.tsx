@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import CustomizeProduct from "./pages/CustomizeProduct";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
 import AdminLogin from "./pages/AdminLogin";
 import Booking from "./pages/Booking";
 import About from "./pages/About";
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="/customize" element={<CustomizeProduct />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/manage-login" element={<AdminLogin />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/about" element={<About />} />
