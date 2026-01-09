@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Heart, Star, Award, Crown, LogOut, User, Gift, Pencil, Save, X, History } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ReferralSection } from "@/components/ReferralSection";
 
 interface UserProfile {
   id: string;
@@ -362,12 +363,19 @@ const Profile = () => {
                 <Star className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">How to Earn Points</h3>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Earn <span className="font-semibold text-foreground">1 point for every R10</span> spent on qualifying purchases. 
-                Points are automatically added to your account when your order is confirmed.
-              </p>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• <span className="font-semibold text-foreground">1 point for every R10</span> spent on purchases</li>
+                <li>• <span className="font-semibold text-foreground">10 bonus points</span> for rating products</li>
+                <li>• <span className="font-semibold text-foreground">100 bonus points</span> for each friend you refer</li>
+                <li>• <span className="font-semibold text-foreground">Double points</span> on your birthday!</li>
+              </ul>
             </CardContent>
           </Card>
+
+          {/* Referral Section */}
+          <div className="mb-8">
+            <ReferralSection />
+          </div>
 
           {/* Tabs for Wishlist, Ratings, and Transactions */}
           <Tabs defaultValue="transactions" className="w-full">
