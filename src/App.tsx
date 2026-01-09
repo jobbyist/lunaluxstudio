@@ -34,6 +34,9 @@ import ArticlesPage from "./pages/Articles";
 import Bestsellers from "./pages/Bestsellers";
 import Promotions from "./pages/Promotions";
 import Wishlist from "./pages/Wishlist";
+import BrazilianVirginCollection from "./pages/BrazilianVirginCollection";
+import VietnameseVirginCollection from "./pages/VietnameseVirginCollection";
+import RawVietnameseCollection from "./pages/RawVietnameseCollection";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminHomepageEditor from "./pages/admin/HomepageEditor";
@@ -75,9 +78,13 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/shop" element={<Index />} />
             <Route path="/collections" element={<Collections />} />
+            <Route path="/collections/brazilian-virgin" element={<BrazilianVirginCollection />} />
+            <Route path="/collections/vietnamese-virgin" element={<VietnameseVirginCollection />} />
+            <Route path="/collections/raw-vietnamese" element={<RawVietnameseCollection />} />
             <Route path="/collection/main-character" element={<MainCharacterCollectionPage />} />
             <Route path="/collection/face-card-collection" element={<FaceCardCollection />} />
             <Route path="/collection/pop-out-collection" element={<PopOutCollection />} />
+            <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
             <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
             <Route path="/loyalty" element={<Loyalty />} />
             <Route path="/gift-vouchers" element={<GiftVouchers />} />
