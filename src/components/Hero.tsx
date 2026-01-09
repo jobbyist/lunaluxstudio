@@ -73,7 +73,7 @@ export const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
       </div>
 
-      <div className="container mx-auto px-4 py-20 relative z-10">
+      <div className="container mx-auto px-4 py-20 relative z-10 flex items-end justify-center min-h-screen pb-40">
         <motion.div
           className="text-center space-y-8 max-w-4xl mx-auto"
           variants={containerVariants}
@@ -83,7 +83,7 @@ export const Hero = () => {
 
           {/* CTA Buttons */}
           <motion.div 
-            className="pt-8 flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center"
             variants={itemVariants}
           >
             <motion.div variants={buttonVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
