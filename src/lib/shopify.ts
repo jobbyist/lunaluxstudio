@@ -131,6 +131,17 @@ export async function fetchProducts(limit: number = 20, searchQuery?: string) {
   return data.data.products.edges as ShopifyProduct[];
 }
 
+// Fetch products from a specific Shopify collection
+export async function fetchCollectionProducts(collectionHandle: string, limit: number = 20) {
+  const query = `collection:"${collectionHandle}"`;
+  return fetchProducts(limit, query);
+}
+
+// Fetch bestseller products directly from Shopify
+export async function fetchBestsellers(limit: number = 8) {
+  return fetchCollectionProducts('bestsellers', limit);
+}
+
 const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
