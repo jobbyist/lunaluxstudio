@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
+import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, Heart, PartyPopper, Star, Loader2 } from "lucide-react";
+import { Sparkles, Heart, PartyPopper, Star } from "lucide-react";
 import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
 import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
 import brazilianImage from "@/assets/hero-1.jpg";
@@ -115,8 +116,8 @@ const Collections = () => {
           </div>
 
           {loadingProducts ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <div className="py-12">
+              <PageLoadingSkeleton variant="grid" />
             </div>
           ) : mainCharacterProducts.length > 0 ? (
             <>

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PageLayout } from "@/components/PageLayout";
+import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
 import { RecentlyViewed } from "@/components/RecentlyViewed";
 import { fetchBestsellers, ShopifyProduct } from "@/lib/shopify";
-import { Loader2, Filter, ArrowUpDown, Star } from "lucide-react";
+import { Filter, ArrowUpDown, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -147,9 +148,7 @@ const Bestsellers = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
+            <PageLoadingSkeleton variant="grid" />
           ) : sortedProducts.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-muted-foreground">No products found.</p>

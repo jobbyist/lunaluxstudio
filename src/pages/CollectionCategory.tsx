@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PageTransition } from "@/components/PageTransition";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
@@ -25,6 +26,7 @@ export default function CollectionCategory() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <PageTransition>
       <main className="pt-36 md:pt-40">
         {/* Hero Section */}
         <section className="bg-card py-16">
@@ -53,6 +55,7 @@ export default function CollectionCategory() {
           />
         </section>
       </main>
+      </PageTransition>
       <Footer />
     </div>
   );

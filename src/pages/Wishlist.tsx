@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { PageLayout } from "@/components/PageLayout";
+import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
@@ -109,9 +110,7 @@ const Wishlist = () => {
   if (loading) {
     return (
       <PageLayout>
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
+        <PageLoadingSkeleton variant="grid" />
       </PageLayout>
     );
   }

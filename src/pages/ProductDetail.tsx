@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PageTransition } from "@/components/PageTransition";
+import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
-import { Loader2, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -95,9 +97,9 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="flex items-center justify-center min-h-[60vh] pt-36 md:pt-40">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
+        <main className="pt-36 md:pt-40 pb-20">
+          <PageLoadingSkeleton variant="product" />
+        </main>
         <Footer />
       </div>
     );
@@ -122,6 +124,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <PageTransition>
       <main className="pt-36 md:pt-40 pb-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -219,6 +222,7 @@ const ProductDetail = () => {
         {/* Recently Viewed Section */}
         <RecentlyViewed />
       </main>
+      </PageTransition>
       <Footer />
     </div>
   );

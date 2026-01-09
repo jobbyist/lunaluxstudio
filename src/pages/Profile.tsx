@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PageTransition } from "@/components/PageTransition";
+import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -244,8 +246,12 @@ const Profile = () => {
 
   if (loading || profileLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="pt-36 md:pt-40 pb-20">
+          <PageLoadingSkeleton variant="default" />
+        </main>
+        <Footer />
       </div>
     );
   }
@@ -260,6 +266,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <PageTransition>
       <main className="pt-36 md:pt-40 pb-20">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Profile Header */}
@@ -529,6 +536,7 @@ const Profile = () => {
           </Tabs>
         </div>
       </main>
+      </PageTransition>
       <Footer />
     </div>
   );
