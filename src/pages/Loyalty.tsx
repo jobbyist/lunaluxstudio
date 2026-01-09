@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const Loyalty = () => {
   return (
     <PageLayout
-      title="Luna Loyalty Program"
+      title="The Lux Club"
       subtitle="Earn points and unlock exclusive members-only perks and cash-back rewards"
     >
       <div className="max-w-4xl mx-auto space-y-8">
@@ -17,7 +17,7 @@ const Loyalty = () => {
             <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
               <Award className="h-8 w-8 text-primary" />
             </div>
-            <CardTitle className="text-2xl">Join the Luna Loyalty Program</CardTitle>
+            <CardTitle className="text-2xl">Join The Lux Club</CardTitle>
             <CardDescription>
               Become a VIP member and enjoy exclusive benefits every time you shop
             </CardDescription>
@@ -108,7 +108,7 @@ const Loyalty = () => {
           <CardContent className="pt-6 text-center">
             <h3 className="text-2xl font-serif mb-3">Ready to Start Earning?</h3>
             <p className="text-muted-foreground mb-6">
-              Create an account or sign in to join the Luna Loyalty Program today
+              Create an account or sign in to join The Lux Club today
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Button asChild size="lg">
