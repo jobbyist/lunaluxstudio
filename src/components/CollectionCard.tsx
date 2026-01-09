@@ -1,7 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronDown } from "lucide-react";
+
+interface ProductItem {
+  name: string;
+  path: string;
+}
+
+interface CategoryItem {
+  name: string;
+  path: string;
+  productHandle?: string;
+  isSubmenu?: boolean;
+  products?: ProductItem[];
+}
 
 interface CollectionCardProps {
   title: string;
@@ -10,7 +23,7 @@ interface CollectionCardProps {
 }
 
 // Category configurations per collection with specific product links
-const collectionCategories: Record<string, Array<{ name: string; path: string; productHandle?: string }>> = {
+const collectionCategories: Record<string, CategoryItem[]> = {
   "vietnamese-virgin": [
     { name: "View All Products", path: "/collections/vietnamese-virgin" },
     { name: "Custom Wigs", path: "/customize" },
@@ -20,8 +33,18 @@ const collectionCategories: Record<string, Array<{ name: string; path: string; p
   "brazilian-virgin": [
     { name: "View All Products", path: "/collections/brazilian-virgin" },
     { name: "Custom Wigs", path: "/customize" },
-    { name: "Bundles", path: "bundles" },
-    { name: "Closures", path: "closures" },
+    { name: "Frontals", path: "/collections/brazilian-virgin", isSubmenu: true, products: [
+      { name: "13x4 Frontals", path: "/product/13x4-frontals" },
+      { name: "The Jade Unit", path: "/product/the-jade-unit" },
+      { name: "The Armani Unit", path: "/product/the-armani-unit" },
+      { name: "The Ferina Unit", path: "/product/the-ferina-unit" },
+    ]},
+    { name: "Closures", path: "/collections/brazilian-virgin", isSubmenu: true, products: [
+      { name: "4x4 Closures", path: "/product/4x4-closures" },
+      { name: "The Jade Unit", path: "/product/the-jade-unit" },
+      { name: "The Armani Unit", path: "/product/the-armani-unit" },
+      { name: "The Ferina Unit", path: "/product/the-ferina-unit" },
+    ]},
   ],
   "raw-vietnamese": [
     { name: "View All Products", path: "/collections/raw-vietnamese" },
@@ -37,7 +60,7 @@ const collectionCategories: Record<string, Array<{ name: string; path: string; p
 };
 
 // Default categories for collections not specifically configured
-const defaultCategories = [
+const defaultCategories: CategoryItem[] = [
   { name: "Custom Wigs", path: "custom-wigs" },
   { name: "Bundles", path: "bundles" },
   { name: "Frontals", path: "frontals" },
@@ -46,6 +69,7 @@ const defaultCategories = [
 
 export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedSubmenu, setExpandedSubmenu] = useState<string | null>(null);
 
   const handleClick = () => {
     // Only toggle on click for touch devices (mobile)
@@ -58,7 +82,7 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
   const categories = collectionCategories[slug] || defaultCategories;
 
   // Determine if the path is a direct link or a collection category path
-  const getCategoryLink = (category: { name: string; path: string; productHandle?: string }) => {
+  const getCategoryLink = (category: CategoryItem) => {
     // If path starts with "/", it's a direct link to a page or product
     if (category.path.startsWith("/")) {
       return category.path;
@@ -67,11 +91,20 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
     return `/collection/${slug}/${category.path}`;
   };
 
+  const toggleSubmenu = (categoryName: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExpandedSubmenu(expandedSubmenu === categoryName ? null : categoryName);
+  };
+
   return (
     <motion.div
       className="relative h-[500px] rounded-lg overflow-hidden group cursor-pointer"
       onHoverStart={() => setIsExpanded(true)}
-      onHoverEnd={() => setIsExpanded(false)}
+      onHoverEnd={() => {
+        setIsExpanded(false);
+        setExpandedSubmenu(null);
+      }}
       onClick={handleClick}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}
@@ -111,29 +144,72 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="space-y-4"
+              className="space-y-4 max-h-[400px] overflow-y-auto"
             >
               <h3 className="text-2xl font-serif text-white mb-6 text-center">
                 {title}
               </h3>
-              <nav className="space-y-3">
+              <nav className="space-y-2">
                 {categories.map((category, index) => (
                   <motion.div
-                    key={category.path}
+                    key={category.name}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Link
-                      to={getCategoryLink(category)}
-                      className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all group/link"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <span className="text-white font-medium text-lg">
-                        {category.name}
-                      </span>
-                      <ChevronRight className="w-5 h-5 text-white/70 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
-                    </Link>
+                    {category.isSubmenu && category.products ? (
+                      <div>
+                        <button
+                          onClick={(e) => toggleSubmenu(category.name, e)}
+                          className="w-full flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all"
+                        >
+                          <span className="text-white font-medium">
+                            {category.name}
+                          </span>
+                          <ChevronDown 
+                            className={`w-5 h-5 text-white/70 transition-transform ${
+                              expandedSubmenu === category.name ? 'rotate-180' : ''
+                            }`} 
+                          />
+                        </button>
+                        <AnimatePresence>
+                          {expandedSubmenu === category.name && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="ml-4 mt-1 space-y-1 overflow-hidden"
+                            >
+                              {category.products.map((product) => (
+                                <Link
+                                  key={product.path}
+                                  to={product.path}
+                                  className="flex items-center justify-between p-2 bg-white/5 backdrop-blur-sm rounded-lg hover:bg-white/15 transition-all"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <span className="text-white/90 text-sm">
+                                    {product.name}
+                                  </span>
+                                  <ChevronRight className="w-4 h-4 text-white/50" />
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link
+                        to={getCategoryLink(category)}
+                        className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all group/link"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <span className="text-white font-medium">
+                          {category.name}
+                        </span>
+                        <ChevronRight className="w-5 h-5 text-white/70 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
+                      </Link>
+                    )}
                   </motion.div>
                 ))}
               </nav>
