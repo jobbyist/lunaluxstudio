@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,16 +38,16 @@ All colors MUST be HSL.
     --input: 0 0% 20%;
     --ring: 340 75% 85%;
 
-    --radius: 0.5rem;
+    --radius: 1.25rem;
 
     --gold: 45 100% 70%;
     --rose: 340 75% 85%;
     --dark: 0 0% 8%;
-    
+
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(340, 40%, 15%), hsl(0, 0%, 8%));
     --gradient-card: linear-gradient(180deg, hsl(0, 0%, 10%), hsl(0, 0%, 8%));
-    
+
     /* Shadows */
     --shadow-glow: 0 0 40px hsl(340 75% 85% / 0.3);
     --shadow-card: 0 10px 30px -10px hsl(0 0% 0% / 0.5);
@@ -79,6 +81,9 @@ All colors MUST be HSL.
     --border: 0 0% 85%;
     --input: 0 0% 85%;
     --ring: 340 75% 45%;
+  }
+  .dark {
+    --radius: 1.25rem;
   }
 }
 
