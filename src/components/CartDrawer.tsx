@@ -14,10 +14,13 @@ import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { UpsellPopup } from "./UpsellPopup";
+import { PointsRedemption } from "./PointsRedemption";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUpsell, setShowUpsell] = useState(false);
+  const [pointsDiscount, setPointsDiscount] = useState(0);
+  const [pointsUsed, setPointsUsed] = useState(0);
   const { 
     items, 
     isLoading, 
@@ -30,6 +33,17 @@ export const CartDrawer = () => {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   // Calculate total in ZAR (assuming prices from Shopify are in ZAR)
   const totalPriceZAR = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
+  const finalTotal = Math.max(0, totalPriceZAR - pointsDiscount);
+
+  const handleDiscountApplied = (discount: number, points: number) => {
+    setPointsDiscount(discount);
+    setPointsUsed(points);
+  };
+
+  const handleDiscountRemoved = () => {
+    setPointsDiscount(0);
+    setPointsUsed(0);
+  };
 
   // Show upsell popup when checkout button is clicked
   const handleCheckoutClick = () => {
@@ -143,10 +157,27 @@ export const CartDrawer = () => {
               </div>
               
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
+                {/* Points Redemption */}
+                <PointsRedemption
+                  cartTotal={totalPriceZAR}
+                  onDiscountApplied={handleDiscountApplied}
+                  onDiscountRemoved={handleDiscountRemoved}
+                  appliedDiscount={pointsDiscount}
+                />
+
+                {pointsDiscount > 0 && (
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground">Points Discount</span>
+                    <span className="text-green-600 font-medium">
+                      -{formatPrice(pointsDiscount)}
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Total</span>
                   <span className="text-xl font-bold text-primary">
-                    {formatPrice(totalPriceZAR)}
+                    {formatPrice(finalTotal)}
                   </span>
                 </div>
                 

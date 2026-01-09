@@ -12,6 +12,8 @@ interface ProductCardProps {
   product: ShopifyProduct;
 }
 
+const REVIEW_BONUS_POINTS = 10; // Points awarded for each review
+
 export const ProductCard = ({ product }: ProductCardProps) => {
   const addItem = useCartStore(state => state.addItem);
   const { node } = product;
@@ -19,6 +21,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const [userRating, setUserRating] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const { formatPrice, currency } = useCurrency();
 
   useEffect(() => {
@@ -28,6 +31,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const checkAuthAndLoadData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     setIsAuthenticated(!!user);
+    setUserId(user?.id || null);
 
     if (user) {
       // Check wishlist
@@ -106,17 +110,53 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     }
 
     try {
+      // Check if user already rated this product
+      const { data: existingRating } = await supabase
+        .from("product_ratings")
+        .select("id, points_awarded")
+        .eq("user_id", user.id)
+        .eq("product_id", node.id)
+        .single();
+
+      const isFirstRating = !existingRating;
+
+      // Upsert the rating
       const { error } = await supabase
         .from("product_ratings")
         .upsert(
-          { user_id: user.id, product_id: node.id, rating },
+          { 
+            user_id: user.id, 
+            product_id: node.id, 
+            rating,
+            points_awarded: true
+          },
           { onConflict: "user_id,product_id" }
         );
 
       if (error) throw error;
 
       setUserRating(rating);
-      toast.success(`Rated ${rating} stars`);
+
+      // Award bonus points for first review only
+      if (isFirstRating) {
+        const { error: pointsError } = await supabase
+          .from("loyalty_transactions")
+          .insert({
+            user_id: user.id,
+            points: REVIEW_BONUS_POINTS,
+            transaction_type: "bonus",
+            description: `Earned ${REVIEW_BONUS_POINTS} points for rating a product`,
+          });
+
+        if (!pointsError) {
+          toast.success(`Rated ${rating} stars! +${REVIEW_BONUS_POINTS} bonus points earned`);
+        } else {
+          toast.success(`Rated ${rating} stars`);
+        }
+      } else {
+        toast.success(`Rating updated to ${rating} stars`);
+      }
+      
       checkAuthAndLoadData(); // Refresh average rating
     } catch (error) {
       console.error("Rating error:", error);

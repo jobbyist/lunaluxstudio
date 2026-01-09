@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,12 +12,57 @@ serve(async (req) => {
   }
 
   try {
+    // Create Supabase client with user's auth token
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      {
+        global: {
+          headers: { Authorization: req.headers.get('Authorization')! },
+        },
+      }
+    );
+
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseClient.auth.getUser();
+
+    if (authError || !user) {
+      console.log('Unauthorized access attempt - no valid auth token');
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized - authentication required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check if user has admin role
+    const { data: isAdmin, error: roleError } = await supabaseClient
+      .rpc('has_role', { _user_id: user.id, _role: 'admin' });
+
+    if (roleError || !isAdmin) {
+      console.log(`Unauthorized access attempt by user ${user.id} - not an admin`);
+      return new Response(
+        JSON.stringify({ error: 'Forbidden - admin access required' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { prompt, currentContent, sectionKey } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
+
+    // Log admin activity
+    await supabaseClient.from('admin_activity_logs').insert({
+      user_id: user.id,
+      action_type: 'ai_content_edit',
+      action_details: { sectionKey, prompt: prompt.substring(0, 100) },
+      success: true,
+    });
 
     const systemPrompt = `You are an AI assistant that helps edit website content. 
 You receive the current content of a website section and a user's request to modify it.

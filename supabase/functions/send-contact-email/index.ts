@@ -14,6 +14,16 @@ interface ContactFormData {
   message: string;
 }
 
+// HTML escape function to prevent XSS
+function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 // Validation function
 function validateContact(data: unknown): { valid: boolean; error?: string; data?: ContactFormData } {
   const input = data as Record<string, unknown>;
@@ -82,6 +92,12 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { name, email, subject, message } = validationResult.data;
 
+    // Escape all user input for HTML safety
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeSubject = escapeHtml(subject);
+    const safeMessage = escapeHtml(message);
+
     console.log(`Processing contact form from: ${email}`);
 
     // Email to business (info@ and webmaster@)
@@ -109,15 +125,15 @@ const handler = async (req: Request): Promise<Response> => {
           <div class="content">
             <div class="field">
               <div class="label">From:</div>
-              <div class="value">${name} (${email})</div>
+              <div class="value">${safeName} (${safeEmail})</div>
             </div>
             <div class="field">
               <div class="label">Subject:</div>
-              <div class="value">${subject}</div>
+              <div class="value">${safeSubject}</div>
             </div>
             <div class="field">
               <div class="label">Message:</div>
-              <div class="value message-box">${message}</div>
+              <div class="value message-box">${safeMessage}</div>
             </div>
           </div>
         </div>
@@ -141,12 +157,12 @@ const handler = async (req: Request): Promise<Response> => {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Thank You, ${name}!</h1>
+            <h1>Thank You, ${safeName}!</h1>
             <p>We've received your message</p>
           </div>
           <div class="content">
             <p>Thank you for reaching out to Luna Lux Hair. We have received your inquiry and our team will get back to you within 24-48 hours.</p>
-            <p><strong>Your Subject:</strong> ${subject}</p>
+            <p><strong>Your Subject:</strong> ${safeSubject}</p>
             <p>If you have any urgent questions, feel free to reach us via WhatsApp at +27 66 286 9181.</p>
             <p>Best regards,<br><strong>The Luna Lux Hair Team</strong></p>
           </div>
