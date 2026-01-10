@@ -187,28 +187,31 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Link to={`/product/${node.handle}`} className="group">
-      <div className="bg-background rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+      <div className="bg-card rounded-xl overflow-hidden transition-all duration-300 hover-lift shine border border-border/50">
         <div className="aspect-[3/4] bg-muted overflow-hidden relative">
           <img
             src={imageUrl}
             alt={node.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
           />
+          
+          {/* Gradient overlay on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           {isAuthenticated && (
             <button
               onClick={toggleWishlist}
-              className="absolute top-3 right-3 p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors"
+              className="absolute top-3 right-3 p-2.5 glass rounded-full hover:scale-110 transition-all duration-300"
             >
               <Heart
-                className={`h-5 w-5 ${isInWishlist ? "fill-primary text-primary" : "text-foreground"}`}
+                className={`h-5 w-5 transition-colors duration-300 ${isInWishlist ? "fill-primary text-primary" : "text-foreground"}`}
               />
             </button>
           )}
         </div>
         
-        <div className="p-4 space-y-3">
-          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2">
+        <div className="p-5 space-y-3">
+          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
             {node.title}
           </h3>
           
@@ -218,13 +221,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 <button
                   key={star}
                   onClick={(e) => handleRating(star, e)}
-                  className="p-0.5 hover:scale-110 transition-transform"
+                  className="p-0.5 hover:scale-125 transition-transform duration-200"
                 >
                   <Star
-                    className={`h-4 w-4 ${
+                    className={`h-4 w-4 transition-all duration-200 ${
                       star <= userRating
-                        ? "fill-primary text-primary"
-                        : "text-muted-foreground"
+                        ? "fill-gold text-gold"
+                        : "text-muted-foreground hover:text-gold/50"
                     }`}
                   />
                 </button>
@@ -238,14 +241,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           )}
           
           <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold text-primary">
+            <span className="text-lg font-semibold gradient-text">
               {displayPrice}
             </span>
           </div>
 
           <Button
             onClick={handleAddToCart}
-            className="w-full bg-primary hover:bg-primary/90"
+            className="w-full btn-glow bg-primary hover:bg-primary/90 transition-all duration-300"
             size="sm"
           >
             <ShoppingCart className="h-4 w-4 mr-2" />
