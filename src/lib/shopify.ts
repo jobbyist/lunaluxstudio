@@ -1,3 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
+
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || 'luna-hair-boutique-9dwzm.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
@@ -209,59 +211,21 @@ export interface CartLineInput {
 
 export async function createStorefrontCheckout(items: any[]): Promise<string> {
   try {
-    const lines: CartLineInput[] = items.map(item => {
-      // Check if this is a custom wig item
-      const isCustomWig = item.isCustomWig === true ||
-                          item.product?.node?.handle === 'custom-wig';
-      
-      if (isCustomWig) {
-        // Get the variant ID for the selected bundle
-        const bundleOption = item.selectedOptions?.find((opt: any) => opt.name === 'Base Bundle');
-        const bundleValue = bundleOption?.value || '';
-        
-        // Map bundle name to variant ID
-        let variantId = CUSTOM_WIG_VARIANTS['straight-18']; // default
-        if (bundleValue.toLowerCase().includes('bodywave') || bundleValue.toLowerCase().includes('22')) {
-          variantId = CUSTOM_WIG_VARIANTS['bodywave-22'];
-        }
-        
-        // Calculate add-on costs for display in order notes
-        const basePrice = bundleValue.toLowerCase().includes('bodywave') ? 3700 : 3000;
-        const totalPrice = parseFloat(item.price?.amount || '0');
-        const addOnCost = totalPrice - basePrice;
-        
-        // Build attributes for order processing
-        const attributes = [
-          { key: '_custom_wig', value: 'true' },
-          { key: '_custom_sku', value: item.customSku || 'LUNA-CUSTOM' },
-          { key: '_total_price', value: totalPrice.toString() },
-          { key: '_addon_cost', value: addOnCost.toString() },
-          { key: '_configuration', value: item.variantTitle || '' },
-          { key: '_free_shipping', value: 'true' },
-        ];
-        
-        // Add selected options as attributes for order processing
-        if (item.selectedOptions) {
-          item.selectedOptions.forEach((opt: any) => {
-            if (opt.name && opt.value && opt.name !== 'SKU') {
-              attributes.push({ key: opt.name, value: opt.value });
-            }
-          });
-        }
-        
-        return {
-          quantity: item.quantity,
-          merchandiseId: variantId,
-          attributes,
-        };
-      }
-      
-      // Regular product
-      return {
-        quantity: item.quantity,
-        merchandiseId: item.variantId,
-      };
-    });
+    // Check if any items are custom wigs
+    const hasCustomWig = items.some(item => 
+      item.isCustomWig === true || item.product?.node?.handle === 'custom-wig'
+    );
+
+    // If there are custom wigs, use the Admin API draft order approach
+    if (hasCustomWig) {
+      return await createCustomWigCheckout(items);
+    }
+
+    // For regular items, use the standard Storefront API cart
+    const lines: CartLineInput[] = items.map(item => ({
+      quantity: item.quantity,
+      merchandiseId: item.variantId,
+    }));
 
     const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
       input: {
@@ -286,4 +250,75 @@ export async function createStorefrontCheckout(items: any[]): Promise<string> {
     console.error('Error creating storefront checkout:', error);
     throw error;
   }
+}
+
+// Create checkout for custom wigs using Admin API draft orders
+async function createCustomWigCheckout(items: any[]): Promise<string> {
+  const customWigItems: any[] = [];
+  const regularItems: any[] = [];
+
+  for (const item of items) {
+    const isCustomWig = item.isCustomWig === true || item.product?.node?.handle === 'custom-wig';
+
+    if (isCustomWig) {
+      // Get bundle selection
+      const bundleOption = item.selectedOptions?.find((opt: any) => opt.name === 'Base Bundle');
+      const bundleValue = bundleOption?.value || 'Straight 18"';
+      
+      // Calculate pricing
+      const basePrice = bundleValue.toLowerCase().includes('bodywave') ? 3700 : 3000;
+      const totalPrice = parseFloat(item.price?.amount || '0');
+      const addonCost = totalPrice - basePrice;
+
+      customWigItems.push({
+        quantity: item.quantity,
+        title: item.product?.node?.title || 'Custom Luna Luxury Wig',
+        baseBundle: bundleValue,
+        basePrice,
+        addonCost,
+        totalPrice,
+        configuration: item.variantTitle || '',
+        customSku: item.customSku || 'LUNA-CUSTOM',
+        selectedOptions: item.selectedOptions || [],
+      });
+    } else {
+      regularItems.push({
+        quantity: item.quantity,
+        variantId: item.variantId,
+        title: item.product?.node?.title || 'Product',
+        price: parseFloat(item.price?.amount || '0'),
+      });
+    }
+  }
+
+  console.log('Creating custom checkout via edge function:', {
+    customWigItems: customWigItems.length,
+    regularItems: regularItems.length,
+  });
+
+  // Call the edge function to create a draft order
+  const { data, error } = await supabase.functions.invoke('create-custom-checkout', {
+    body: {
+      customWigItems,
+      regularItems,
+    },
+  });
+
+  if (error) {
+    console.error('Edge function error:', error);
+    throw new Error(`Failed to create custom checkout: ${error.message}`);
+  }
+
+  if (!data?.success || !data?.checkoutUrl) {
+    console.error('Custom checkout response:', data);
+    throw new Error(data?.error || 'Failed to create checkout URL');
+  }
+
+  console.log('Custom checkout created:', {
+    checkoutUrl: data.checkoutUrl,
+    orderName: data.orderName,
+    totalPrice: data.totalPrice,
+  });
+
+  return data.checkoutUrl;
 }
