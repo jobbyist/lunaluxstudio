@@ -358,8 +358,7 @@ const Loyalty = () => {
               <div className="flex-1 text-center md:text-left">
                 <h3 className="text-2xl font-serif mb-2 text-primary-foreground">Reach Gold Status</h3>
                 <p className="text-muted-foreground mb-4">
-                  Our most exclusive tier unlocks the ultimate luxury experience. Enjoy 2x points, 
-                  free shipping on every order, priority support, and exclusive VIP-only sales.
+                  Our most exclusive tier unlocks the ultimate luxury experience. Enjoy 2x points,  priority support, exclusive VIP-only sales & more!  
                 </p>
                 <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                   <Badge variant="secondary" className="bg-yellow-200 text-yellow-800">
