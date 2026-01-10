@@ -110,6 +110,63 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_wig_orders: {
+        Row: {
+          addon_cost: number
+          base_bundle: string
+          base_price: number
+          configuration: Json
+          created_at: string
+          custom_sku: string | null
+          customer_email: string
+          customer_name: string | null
+          id: string
+          notes: string | null
+          processed_at: string | null
+          shopify_order_id: string
+          shopify_order_number: string | null
+          status: string
+          total_price: number
+          updated_at: string
+        }
+        Insert: {
+          addon_cost?: number
+          base_bundle: string
+          base_price: number
+          configuration?: Json
+          created_at?: string
+          custom_sku?: string | null
+          customer_email: string
+          customer_name?: string | null
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          shopify_order_id: string
+          shopify_order_number?: string | null
+          status?: string
+          total_price: number
+          updated_at?: string
+        }
+        Update: {
+          addon_cost?: number
+          base_bundle?: string
+          base_price?: number
+          configuration?: Json
+          created_at?: string
+          custom_sku?: string | null
+          customer_email?: string
+          customer_name?: string | null
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          shopify_order_id?: string
+          shopify_order_number?: string | null
+          status?: string
+          total_price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       homepage_sections: {
         Row: {
           content: Json

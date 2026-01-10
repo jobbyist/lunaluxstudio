@@ -56,6 +56,7 @@ import AdminAnalytics from "./pages/admin/Analytics";
 import NavigationEditor from "./pages/admin/NavigationEditor";
 import AdminUsers from "./pages/admin/Users";
 import AdminReferrals from "./pages/admin/Referrals";
+import CustomWigOrders from "./pages/admin/CustomWigOrders";
 
 const queryClient = new QueryClient();
 
@@ -120,6 +121,7 @@ const App = () => (
             <Route path="/manage/analytics" element={<AdminAnalytics />} />
             <Route path="/manage/users" element={<AdminUsers />} />
             <Route path="/manage/referrals" element={<AdminReferrals />} />
+            <Route path="/manage/custom-wigs" element={<CustomWigOrders />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
