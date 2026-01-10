@@ -4,6 +4,12 @@ import { ArrowLeft, ExternalLink, Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/PageLayout";
 
+// Import new article images
+import articleClosures from "@/assets/article-closures.jpg";
+import articleFrontals from "@/assets/article-frontals.jpg";
+import articleBundles from "@/assets/article-bundles.jpg";
+import articleTextures from "@/assets/article-textures.jpg";
+
 interface ArticleData {
   slug: string;
   title: string;
@@ -51,7 +57,7 @@ const articles: Record<string, ArticleData> = {
     title: "The Ultimate Guide to Wig Care: Keep Your Investment Looking Flawless",
     description: "Learn professional tips and tricks to maintain your wig's longevity, shine, and natural movement for months to come.",
     topic: "Hair Care",
-    coverImage: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800",
+    coverImage: articleClosures,
     publishDate: "January 4, 2025",
     readTime: "5 min read",
     content: (
@@ -83,7 +89,7 @@ const articles: Record<string, ArticleData> = {
     title: "How to Choose the Perfect Hair Texture for Your Lifestyle",
     description: "From sleek straight to bouncy curls, discover which hair texture complements your daily routine and personal style.",
     topic: "Style Guide",
-    coverImage: "https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?w=800",
+    coverImage: articleTextures,
     publishDate: "December 28, 2024",
     readTime: "4 min read",
     content: (
@@ -115,7 +121,7 @@ const articles: Record<string, ArticleData> = {
     title: "Frontal vs. Closure: Which One Is Right for You?",
     description: "Understand the key differences between lace frontals and closures to make the best choice for your next install.",
     topic: "Education",
-    coverImage: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=800",
+    coverImage: articleFrontals,
     publishDate: "December 20, 2024",
     readTime: "4 min read",
     content: (
@@ -143,7 +149,7 @@ const articles: Record<string, ArticleData> = {
     title: "The Hidden Benefits of Protective Styling with Extensions",
     description: "Discover how wearing wigs and extensions can actually promote natural hair growth and health.",
     topic: "Hair Health",
-    coverImage: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800",
+    coverImage: articleBundles,
     publishDate: "December 15, 2024",
     readTime: "3 min read",
     content: (
@@ -198,6 +204,8 @@ const Article = () => {
           <img
             src={article.coverImage}
             alt={article.title}
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
