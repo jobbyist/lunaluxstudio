@@ -484,6 +484,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      award_birthday_bonus_if_eligible: {
+        Args: { target_user_id: string }
+        Returns: boolean
+      }
+      check_and_award_birthday_bonus: { Args: never; Returns: undefined }
       check_rating_rate_limit: {
         Args: { rating_user_id: string }
         Returns: boolean
