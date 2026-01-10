@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { QuickViewModal } from "./QuickViewModal";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 interface ProductCardWithQuickViewProps {
   product: ShopifyProduct;
@@ -194,10 +195,13 @@ export const ProductCardWithQuickView = ({ product }: ProductCardWithQuickViewPr
       <Link to={`/product/${node.handle}`} className="group">
         <div className="bg-background rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
           <div className="aspect-[3/4] bg-muted overflow-hidden relative">
-            <img
+            <OptimizedImage
               src={imageUrl}
               alt={node.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              containerClassName="w-full h-full"
+              className="group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
             
             {/* Overlay on hover */}

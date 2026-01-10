@@ -109,11 +109,16 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
       whileHover={{ scale: 1.02, y: -8 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      {/* Background Image with enhanced zoom */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-115"
-        style={{ backgroundImage: `url(${image})` }}
-      />
+      {/* Background Image with enhanced zoom and blur placeholder */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-115"
+          style={{ 
+            backgroundImage: `url(${image})`,
+            backgroundSize: 'cover',
+          }}
+        />
+      </div>
       
       {/* Enhanced gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:from-black/80 transition-colors duration-500" />
