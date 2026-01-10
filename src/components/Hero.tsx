@@ -2,12 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import heroImage from "@/assets/lunahero.png";
+import { preloadImage } from "@/components/OptimizedImage";
 
 export const Hero = () => {
   const { t } = useCurrency();
   const sectionRef = useRef<HTMLElement>(null);
+  
+  // Preload hero image on mount
+  useEffect(() => {
+    preloadImage(heroImage, 'high');
+  }, []);
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -65,6 +71,10 @@ export const Hero = () => {
           <img
             src={heroImage}
             alt="LunaLuxHair Hero"
+            loading="eager"
+            decoding="async"
+            // @ts-ignore - fetchpriority is valid
+            fetchpriority="high"
             className="w-full h-full object-cover"
           />
         </motion.div>

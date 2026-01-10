@@ -4,9 +4,10 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShoppingCart, Heart, Star } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -188,20 +189,23 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Link to={`/product/${node.handle}`} className="group">
       <div className="bg-card rounded-xl overflow-hidden transition-all duration-300 hover-lift shine border border-border/50">
-        <div className="aspect-[3/4] bg-muted overflow-hidden relative">
-          <img
+        <div className="aspect-[3/4] overflow-hidden relative">
+          <OptimizedImage
             src={imageUrl}
             alt={node.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+            containerClassName="w-full h-full"
+            className="group-hover:scale-110 transition-transform duration-700 ease-out"
+            loading="lazy"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           
           {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           
           {isAuthenticated && (
             <button
               onClick={toggleWishlist}
-              className="absolute top-3 right-3 p-2.5 glass rounded-full hover:scale-110 transition-all duration-300"
+              className="absolute top-3 right-3 p-2.5 glass rounded-full hover:scale-110 transition-all duration-300 z-10"
             >
               <Heart
                 className={`h-5 w-5 transition-colors duration-300 ${isInWishlist ? "fill-primary text-primary" : "text-foreground"}`}
