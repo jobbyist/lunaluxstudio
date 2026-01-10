@@ -22,12 +22,7 @@ const TIERS = {
     borderColor: "border-amber-300 dark:border-amber-700",
     icon: Award,
     multiplier: 1,
-    benefits: [
-      "1 point per R10 spent",
-      "Birthday double points",
-      "10 bonus points per review",
-      "100 points per referral",
-    ],
+    benefits: ["1 point per R10 spent", "Birthday double points", "10 bonus points per review", "100 points per referral"]
   },
   Silver: {
     name: "Silver",
@@ -39,14 +34,7 @@ const TIERS = {
     borderColor: "border-gray-300 dark:border-gray-600",
     icon: Star,
     multiplier: 1.5,
-    benefits: [
-      "1.5x points on all purchases",
-      "Birthday double points",
-      "15 bonus points per review",
-      "150 points per referral",
-      "Early access to sales",
-      "Free shipping on orders over R1000",
-    ],
+    benefits: ["1.5x points on all purchases", "Birthday double points", "15 bonus points per review", "150 points per referral", "Early access to sales", "Free shipping on orders over R1000"]
   },
   Gold: {
     name: "Gold",
@@ -58,27 +46,26 @@ const TIERS = {
     borderColor: "border-yellow-300 dark:border-yellow-600",
     icon: Crown,
     multiplier: 2,
-    benefits: [
-      "2x points on all purchases",
-      "Birthday triple points",
-      "25 bonus points per review",
-      "200 points per referral",
-      "Priority early access",
-      "Free shipping on all orders",
-      "Exclusive VIP sales",
-      "Priority customer support",
-      "Free gift with every order",
-    ],
-  },
+    benefits: ["2x points on all purchases", "Birthday triple points", "25 bonus points per review", "200 points per referral", "Priority early access", "Free shipping on all orders", "Exclusive VIP sales", "Priority customer support", "Free gift with every order"]
+  }
 };
-
-const REDEMPTION_OPTIONS = [
-  { points: 500, value: 50, label: "R50 off" },
-  { points: 1000, value: 120, label: "R120 off + Free Shipping" },
-  { points: 2000, value: 300, label: "R300 off + Exclusive Gift" },
-  { points: 3000, value: 500, label: "R500 off + VIP Treatment" },
-];
-
+const REDEMPTION_OPTIONS = [{
+  points: 500,
+  value: 50,
+  label: "R50 off"
+}, {
+  points: 1000,
+  value: 120,
+  label: "R120 off + Free Shipping"
+}, {
+  points: 2000,
+  value: 300,
+  label: "R300 off + Exclusive Gift"
+}, {
+  points: 3000,
+  value: 500,
+  label: "R500 off + VIP Treatment"
+}];
 const Loyalty = () => {
   const [spendAmount, setSpendAmount] = useState("");
   const [currentPoints, setCurrentPoints] = useState("");
@@ -86,7 +73,7 @@ const Loyalty = () => {
 
   // Calculate points from spend
   const calculatedPoints = spendAmount ? Math.floor((parseFloat(spendAmount) || 0) / 10) * TIERS[selectedTier].multiplier : 0;
-  
+
   // Calculate what you can redeem with current points
   const pointsValue = currentPoints ? parseInt(currentPoints) || 0 : 0;
   const availableRedemptions = REDEMPTION_OPTIONS.filter(opt => opt.points <= pointsValue);
@@ -94,18 +81,24 @@ const Loyalty = () => {
 
   // Calculate progress to next tier
   const getTierProgress = (points: number) => {
-    if (points >= 1500) return { current: "Gold", next: null, progress: 100 };
-    if (points >= 500) return { current: "Silver", next: "Gold", progress: ((points - 500) / 1000) * 100 };
-    return { current: "Bronze", next: "Silver", progress: (points / 500) * 100 };
+    if (points >= 1500) return {
+      current: "Gold",
+      next: null,
+      progress: 100
+    };
+    if (points >= 500) return {
+      current: "Silver",
+      next: "Gold",
+      progress: (points - 500) / 1000 * 100
+    };
+    return {
+      current: "Bronze",
+      next: "Silver",
+      progress: points / 500 * 100
+    };
   };
-
   const tierProgress = getTierProgress(pointsValue);
-
-  return (
-    <PageLayout
-      title="The Lux Club"
-      subtitle="Your exclusive gateway to premium rewards, VIP benefits, and unforgettable luxury experiences"
-    >
+  return <PageLayout title="The Lux Club" subtitle="Your exclusive gateway to premium rewards, VIP benefits, and unforgettable luxury experiences">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/90 to-primary p-8 md:p-12 text-white">
@@ -145,13 +138,23 @@ const Loyalty = () => {
             <p className="text-muted-foreground">Earning rewards has never been easier</p>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { icon: ShoppingBag, title: "Shop", desc: "Make a purchase on any product" },
-              { icon: Star, title: "Earn", desc: "Get 1 point for every R10 spent" },
-              { icon: TrendingUp, title: "Level Up", desc: "Unlock higher tiers & multipliers" },
-              { icon: Gift, title: "Redeem", desc: "Convert points to rewards" },
-            ].map((step, i) => (
-              <div key={i} className="relative">
+            {[{
+            icon: ShoppingBag,
+            title: "Shop",
+            desc: "Make a purchase on any product"
+          }, {
+            icon: Star,
+            title: "Earn",
+            desc: "Get 1 point for every R10 spent"
+          }, {
+            icon: TrendingUp,
+            title: "Level Up",
+            desc: "Unlock higher tiers & multipliers"
+          }, {
+            icon: Gift,
+            title: "Redeem",
+            desc: "Convert points to rewards"
+          }].map((step, i) => <div key={i} className="relative">
                 <div className="flex flex-col items-center">
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                     <step.icon className="h-8 w-8 text-primary" />
@@ -159,11 +162,8 @@ const Loyalty = () => {
                   <h4 className="font-semibold mb-1">{step.title}</h4>
                   <p className="text-sm text-muted-foreground">{step.desc}</p>
                 </div>
-                {i < 3 && (
-                  <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-primary/50 to-transparent" />
-                )}
-              </div>
-            ))}
+                {i < 3 && <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-primary/50 to-transparent" />}
+              </div>)}
           </div>
         </div>
 
@@ -176,19 +176,10 @@ const Loyalty = () => {
           
           <div className="grid md:grid-cols-3 gap-6">
             {Object.entries(TIERS).map(([key, tier]) => {
-              const TierIcon = tier.icon;
-              const isCurrentTier = tierProgress.current === key;
-              
-              return (
-                <Card 
-                  key={key} 
-                  className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                    isCurrentTier ? 'ring-2 ring-primary' : ''
-                  }`}
-                >
-                  {isCurrentTier && (
-                    <Badge className="absolute top-4 right-4 bg-primary">Your Tier</Badge>
-                  )}
+            const TierIcon = tier.icon;
+            const isCurrentTier = tierProgress.current === key;
+            return <Card key={key} className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${isCurrentTier ? 'ring-2 ring-primary' : ''}`}>
+                  {isCurrentTier && <Badge className="absolute top-4 right-4 bg-primary">Your Tier</Badge>}
                   <div className={`h-2 bg-gradient-to-r ${tier.color}`} />
                   <CardHeader className="text-center pb-2">
                     <div className={`mx-auto w-16 h-16 rounded-full ${tier.bgColor} flex items-center justify-center mb-3`}>
@@ -196,9 +187,7 @@ const Loyalty = () => {
                     </div>
                     <CardTitle className="text-xl">{tier.name}</CardTitle>
                     <CardDescription>
-                      {tier.max === Infinity 
-                        ? `${tier.min}+ points` 
-                        : `${tier.min} - ${tier.max} points`}
+                      {tier.max === Infinity ? `${tier.min}+ points` : `${tier.min} - ${tier.max} points`}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -207,17 +196,14 @@ const Loyalty = () => {
                       <span className="text-sm text-muted-foreground ml-1">points multiplier</span>
                     </div>
                     <ul className="space-y-2">
-                      {tier.benefits.map((benefit, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
+                      {tier.benefits.map((benefit, i) => <li key={i} className="flex items-start gap-2 text-sm">
                           <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                           <span>{benefit}</span>
-                        </li>
-                      ))}
+                        </li>)}
                     </ul>
                   </CardContent>
-                </Card>
-              );
-            })}
+                </Card>;
+          })}
           </div>
         </div>
 
@@ -247,28 +233,14 @@ const Loyalty = () => {
                     <div>
                       <Label htmlFor="tier">Your Current Tier</Label>
                       <div className="flex gap-2 mt-2">
-                        {Object.keys(TIERS).map((tier) => (
-                          <Button
-                            key={tier}
-                            variant={selectedTier === tier ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => setSelectedTier(tier as keyof typeof TIERS)}
-                          >
+                        {Object.keys(TIERS).map(tier => <Button key={tier} variant={selectedTier === tier ? "default" : "outline"} size="sm" onClick={() => setSelectedTier(tier as keyof typeof TIERS)}>
                             {tier}
-                          </Button>
-                        ))}
+                          </Button>)}
                       </div>
                     </div>
                     <div>
                       <Label htmlFor="spend">Purchase Amount (R)</Label>
-                      <Input
-                        id="spend"
-                        type="number"
-                        placeholder="Enter amount"
-                        value={spendAmount}
-                        onChange={(e) => setSpendAmount(e.target.value)}
-                        className="mt-2"
-                      />
+                      <Input id="spend" type="number" placeholder="Enter amount" value={spendAmount} onChange={e => setSpendAmount(e.target.value)} className="mt-2" />
                     </div>
                   </div>
                   
@@ -288,59 +260,35 @@ const Loyalty = () => {
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="points">Your Current Points</Label>
-                      <Input
-                        id="points"
-                        type="number"
-                        placeholder="Enter your points"
-                        value={currentPoints}
-                        onChange={(e) => setCurrentPoints(e.target.value)}
-                        className="mt-2"
-                      />
+                      <Input id="points" type="number" placeholder="Enter your points" value={currentPoints} onChange={e => setCurrentPoints(e.target.value)} className="mt-2" />
                     </div>
                     
-                    {pointsValue > 0 && tierProgress.next && (
-                      <div className="p-4 bg-background rounded-lg border">
+                    {pointsValue > 0 && tierProgress.next && <div className="p-4 bg-background rounded-lg border">
                         <div className="flex justify-between text-sm mb-2">
                           <span>Progress to {tierProgress.next}</span>
                           <span className="font-medium">{Math.round(tierProgress.progress)}%</span>
                         </div>
                         <Progress value={tierProgress.progress} className="h-2" />
                         <p className="text-xs text-muted-foreground mt-2">
-                          {tierProgress.next === "Silver" 
-                            ? `${500 - pointsValue} points to Silver`
-                            : `${1500 - pointsValue} points to Gold`}
+                          {tierProgress.next === "Silver" ? `${500 - pointsValue} points to Silver` : `${1500 - pointsValue} points to Gold`}
                         </p>
-                      </div>
-                    )}
+                      </div>}
                   </div>
                   
                   <div className="space-y-3">
                     <p className="text-sm font-medium">Available Redemptions:</p>
-                    {REDEMPTION_OPTIONS.map((option) => {
-                      const isAvailable = option.points <= pointsValue;
-                      return (
-                        <div 
-                          key={option.points}
-                          className={`flex items-center justify-between p-3 rounded-lg border ${
-                            isAvailable 
-                              ? 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800' 
-                              : 'bg-muted/50 opacity-60'
-                          }`}
-                        >
+                    {REDEMPTION_OPTIONS.map(option => {
+                    const isAvailable = option.points <= pointsValue;
+                    return <div key={option.points} className={`flex items-center justify-between p-3 rounded-lg border ${isAvailable ? 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800' : 'bg-muted/50 opacity-60'}`}>
                           <div className="flex items-center gap-2">
-                            {isAvailable ? (
-                              <Check className="h-4 w-4 text-green-600" />
-                            ) : (
-                              <div className="h-4 w-4" />
-                            )}
+                            {isAvailable ? <Check className="h-4 w-4 text-green-600" /> : <div className="h-4 w-4" />}
                             <span className="font-medium">{option.label}</span>
                           </div>
                           <Badge variant={isAvailable ? "default" : "secondary"}>
                             {option.points} pts
                           </Badge>
-                        </div>
-                      );
-                    })}
+                        </div>;
+                  })}
                   </div>
                 </div>
               </TabsContent>
@@ -408,7 +356,7 @@ const Loyalty = () => {
                 <Crown className="h-10 w-10 text-white" />
               </div>
               <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-serif mb-2">Reach Gold Status</h3>
+                <h3 className="text-2xl font-serif mb-2 text-primary-foreground">Reach Gold Status</h3>
                 <p className="text-muted-foreground mb-4">
                   Our most exclusive tier unlocks the ultimate luxury experience. Enjoy 2x points, 
                   free shipping on every order, priority support, and exclusive VIP-only sales.
@@ -451,8 +399,6 @@ const Loyalty = () => {
           </CardContent>
         </Card>
       </div>
-    </PageLayout>
-  );
+    </PageLayout>;
 };
-
 export default Loyalty;
