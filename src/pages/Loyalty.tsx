@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Award, Gift, Star, TrendingUp, Crown, Calculator, Sparkles, Check, Users, Zap, ShoppingBag, Truck, HeadphonesIcon } from "lucide-react";
+import { Award, Gift, Star, TrendingUp, Crown, Calculator, Sparkles, Check, Users, Zap, ShoppingBag, HeadphonesIcon, Cake, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,35 +10,35 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 
-// Tier configurations
+// Tier configurations - Updated: 1 point per R25, new thresholds
 const TIERS = {
   Bronze: {
     name: "Bronze",
     min: 0,
-    max: 499,
+    max: 2499,
     color: "from-amber-600 to-amber-800",
     bgColor: "bg-amber-100 dark:bg-amber-950",
     textColor: "text-amber-800 dark:text-amber-200",
     borderColor: "border-amber-300 dark:border-amber-700",
     icon: Award,
     multiplier: 1,
-    benefits: ["1 point per R10 spent", "Birthday double points", "10 bonus points per review", "100 points per referral"]
+    benefits: ["1 point per R25 spent", "50 birthday bonus points", "10 bonus points per review", "100 points per successful referral"]
   },
   Silver: {
     name: "Silver",
-    min: 500,
-    max: 1499,
+    min: 2500,
+    max: 4999,
     color: "from-gray-400 to-gray-600",
     bgColor: "bg-gray-100 dark:bg-gray-800",
     textColor: "text-gray-800 dark:text-gray-200",
     borderColor: "border-gray-300 dark:border-gray-600",
     icon: Star,
     multiplier: 1.5,
-    benefits: ["1.5x points on all purchases", "Birthday double points", "15 bonus points per review", "150 points per referral", "Early access to sales", "Free shipping on orders over R1000"]
+    benefits: ["1.5x points on all purchases", "100 birthday bonus points", "15 bonus points per review", "150 points per successful referral", "Early access to sales"]
   },
   Gold: {
     name: "Gold",
-    min: 1500,
+    min: 5000,
     max: Infinity,
     color: "from-yellow-400 to-yellow-600",
     bgColor: "bg-yellow-50 dark:bg-yellow-950",
@@ -46,9 +46,10 @@ const TIERS = {
     borderColor: "border-yellow-300 dark:border-yellow-600",
     icon: Crown,
     multiplier: 2,
-    benefits: ["2x points on all purchases", "Birthday triple points", "25 bonus points per review", "200 points per referral", "Priority early access", "Free shipping on all orders", "Exclusive VIP sales", "Priority customer support", "Free gift with every order"]
+    benefits: ["2x points on all purchases", "200 birthday bonus points", "25 bonus points per review", "200 points per successful referral", "Priority early access", "Exclusive VIP sales", "Priority customer support", "Free gift with every order"]
   }
 };
+
 const REDEMPTION_OPTIONS = [{
   points: 500,
   value: 50,
@@ -56,7 +57,7 @@ const REDEMPTION_OPTIONS = [{
 }, {
   points: 1000,
   value: 120,
-  label: "R120 off + Free Shipping"
+  label: "R120 off + Free Gift"
 }, {
   points: 2000,
   value: 300,
@@ -66,38 +67,39 @@ const REDEMPTION_OPTIONS = [{
   value: 500,
   label: "R500 off + VIP Treatment"
 }];
+
 const Loyalty = () => {
   const [spendAmount, setSpendAmount] = useState("");
   const [currentPoints, setCurrentPoints] = useState("");
   const [selectedTier, setSelectedTier] = useState<keyof typeof TIERS>("Bronze");
 
-  // Calculate points from spend
-  const calculatedPoints = spendAmount ? Math.floor((parseFloat(spendAmount) || 0) / 10) * TIERS[selectedTier].multiplier : 0;
+  // Calculate points from spend (1 point per R25)
+  const calculatedPoints = spendAmount ? Math.floor((parseFloat(spendAmount) || 0) / 25) * TIERS[selectedTier].multiplier : 0;
 
   // Calculate what you can redeem with current points
   const pointsValue = currentPoints ? parseInt(currentPoints) || 0 : 0;
   const availableRedemptions = REDEMPTION_OPTIONS.filter(opt => opt.points <= pointsValue);
-  const bestRedemption = availableRedemptions[availableRedemptions.length - 1];
 
   // Calculate progress to next tier
   const getTierProgress = (points: number) => {
-    if (points >= 1500) return {
+    if (points >= 5000) return {
       current: "Gold",
       next: null,
       progress: 100
     };
-    if (points >= 500) return {
+    if (points >= 2500) return {
       current: "Silver",
       next: "Gold",
-      progress: (points - 500) / 1000 * 100
+      progress: (points - 2500) / 2500 * 100
     };
     return {
       current: "Bronze",
       next: "Silver",
-      progress: points / 500 * 100
+      progress: points / 2500 * 100
     };
   };
   const tierProgress = getTierProgress(pointsValue);
+
   return <PageLayout title="The Lux Club" subtitle="Your exclusive gateway to premium rewards, VIP benefits, and unforgettable luxury experiences">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Hero Banner */}
@@ -145,7 +147,7 @@ const Loyalty = () => {
           }, {
             icon: Star,
             title: "Earn",
-            desc: "Get 1 point for every R10 spent"
+            desc: "Get 1 point for every R25 spent"
           }, {
             icon: TrendingUp,
             title: "Level Up",
@@ -187,7 +189,7 @@ const Loyalty = () => {
                     </div>
                     <CardTitle className="text-xl">{tier.name}</CardTitle>
                     <CardDescription>
-                      {tier.max === Infinity ? `${tier.min}+ points` : `${tier.min} - ${tier.max} points`}
+                      {tier.max === Infinity ? `${tier.min.toLocaleString()}+ points` : `${tier.min.toLocaleString()} - ${tier.max.toLocaleString()} points`}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -241,6 +243,7 @@ const Loyalty = () => {
                     <div>
                       <Label htmlFor="spend">Purchase Amount (R)</Label>
                       <Input id="spend" type="number" placeholder="Enter amount" value={spendAmount} onChange={e => setSpendAmount(e.target.value)} className="mt-2" />
+                      <p className="text-xs text-muted-foreground mt-1">* Excludes delivery/shipping fees</p>
                     </div>
                   </div>
                   
@@ -270,7 +273,7 @@ const Loyalty = () => {
                         </div>
                         <Progress value={tierProgress.progress} className="h-2" />
                         <p className="text-xs text-muted-foreground mt-2">
-                          {tierProgress.next === "Silver" ? `${500 - pointsValue} points to Silver` : `${1500 - pointsValue} points to Gold`}
+                          {tierProgress.next === "Silver" ? `${(2500 - pointsValue).toLocaleString()} points to Silver` : `${(5000 - pointsValue).toLocaleString()} points to Gold`}
                         </p>
                       </div>}
                   </div>
@@ -303,7 +306,7 @@ const Loyalty = () => {
             <p className="text-muted-foreground">Beyond shopping, there are many ways to grow your points</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-pink-100 dark:bg-pink-950 flex items-center justify-center mb-3">
@@ -324,25 +327,42 @@ const Loyalty = () => {
                   <Users className="h-6 w-6 text-blue-600" />
                 </div>
                 <CardTitle>Refer Friends</CardTitle>
-                <CardDescription>Share the love and get rewarded</CardDescription>
+                <CardDescription>Earn when they make their first purchase</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-primary mb-1">+100-200 pts</p>
-                <p className="text-sm text-muted-foreground">Per successful referral</p>
+                <p className="text-sm text-muted-foreground">After friend's first order</p>
               </CardContent>
             </Card>
             
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-950 flex items-center justify-center mb-3">
-                  <Zap className="h-6 w-6 text-purple-600" />
+                  <Cake className="h-6 w-6 text-purple-600" />
                 </div>
                 <CardTitle>Birthday Bonus</CardTitle>
-                <CardDescription>Celebrate with extra points</CardDescription>
+                <CardDescription>Celebrate with bonus points</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-primary mb-1">2x-3x pts</p>
-                <p className="text-sm text-muted-foreground">On all birthday purchases</p>
+                <p className="text-2xl font-bold text-primary mb-1">+50-200 pts</p>
+                <p className="text-sm text-muted-foreground">Free points on your birthday</p>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-3">
+                  <Percent className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle>Custom Wigs</CardTitle>
+                <CardDescription>Free shipping included!</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold text-primary mb-1">FREE</p>
+                <p className="text-sm text-muted-foreground">Shipping on all custom orders</p>
+                <Button asChild size="sm" className="mt-3 w-full">
+                  <Link to="/customize">Build Your Wig</Link>
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -358,46 +378,44 @@ const Loyalty = () => {
               <div className="flex-1 text-center md:text-left">
                 <h3 className="text-2xl font-serif mb-2 text-primary-foreground">Reach Gold Status</h3>
                 <p className="text-muted-foreground mb-4">
-                  Our most exclusive tier unlocks the ultimate luxury experience. Enjoy 2x points,  priority support, exclusive VIP-only sales & more!  
+                  Our most exclusive tier unlocks the ultimate luxury experience. Enjoy 2x points, priority support, exclusive VIP-only sales & more!  
                 </p>
                 <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                   <Badge variant="secondary" className="bg-yellow-200 text-yellow-800">
-                    <Truck className="h-3 w-3 mr-1" /> Free Shipping
+                    <Crown className="h-3 w-3 mr-1" /> 2x Points
                   </Badge>
                   <Badge variant="secondary" className="bg-yellow-200 text-yellow-800">
                     <HeadphonesIcon className="h-3 w-3 mr-1" /> Priority Support
                   </Badge>
                   <Badge variant="secondary" className="bg-yellow-200 text-yellow-800">
-                    <Gift className="h-3 w-3 mr-1" /> Free Gifts
+                    <Gift className="h-3 w-3 mr-1" /> 200 Birthday Pts
                   </Badge>
                 </div>
               </div>
               <Button asChild size="lg" className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700">
-                <Link to="/auth">Start Earning Now</Link>
+                <Link to="/explore">Start Earning</Link>
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* CTA */}
-        <Card className="bg-primary text-white border-0">
-          <CardContent className="py-12 text-center">
-            <h3 className="text-3xl font-serif mb-4">Ready to Join The Lux Club?</h3>
-            <p className="text-white/80 mb-8 max-w-xl mx-auto">
-              Sign up today and start earning points on every purchase. 
-              It's free to join and you'll unlock exclusive benefits immediately.
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Button asChild size="lg" variant="secondary">
-                <Link to="/auth">Create Free Account</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                <Link to="/explore">Start Shopping</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* CTA Section */}
+        <div className="text-center space-y-6 py-8">
+          <h3 className="text-2xl md:text-3xl font-serif">Ready to Start Earning?</h3>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Join The Lux Club today and start earning points on every purchase. It's free to join and you'll start earning immediately.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button asChild size="lg" className="btn-glow">
+              <Link to="/auth">Join The Lux Club</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/explore">Browse Products</Link>
+            </Button>
+          </div>
+        </div>
       </div>
     </PageLayout>;
 };
+
 export default Loyalty;
