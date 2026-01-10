@@ -11,7 +11,7 @@ const notifications = [
     link: null
   },
   {
-    text: "Join the Luna Loyalty Program to earn points and unlock exclusive members-only perks and cash-back rewards",
+    text: "Join The Lux Club to earn loyalty rewards and unlock exclusive members-only perks.",
     link: "/loyalty"
   }
 ];
