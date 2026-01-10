@@ -211,7 +211,7 @@ export default function CustomizeProduct() {
           options: []
         }
       },
-      variantId: sku, // Custom SKU - will be handled specially in checkout
+      variantId: sku,
       variantTitle: getConfigSummary(),
       price: {
         amount: total.toString(),
@@ -227,9 +227,9 @@ export default function CustomizeProduct() {
         { name: "Parting", value: selectedParting.name },
         { name: "Cut", value: selectedCut.name },
         { name: "Closure/Frontal", value: selectedClosureFrontal?.name || "None" },
-        { name: "SKU", value: sku },
         { name: "Free Shipping", value: "Yes" },
       ],
+      customSku: sku, // Custom SKU for order processing
       isCustomWig: true, // Flag for custom wig checkout handling
     };
 
