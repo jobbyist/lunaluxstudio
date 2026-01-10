@@ -64,12 +64,13 @@ export const Preloader = () => {
           >
             {/* Progress bar background */}
             <div className="w-full h-1.5 rounded-full overflow-hidden bg-white/10">
-              {/* Progress bar fill with gradient */}
+              {/* Progress bar fill with gradient and glow */}
               <motion.div
                 className="h-full rounded-full"
                 style={{
                   background: "linear-gradient(90deg, hsl(340, 75%, 65%) 0%, hsl(340, 75%, 85%) 50%, hsl(347, 34%, 82%) 100%)",
                   width: `${progress}%`,
+                  boxShadow: "0 0 12px hsl(340, 75%, 75%), 0 0 24px hsl(340, 75%, 70% / 0.5), 0 0 40px hsl(340, 75%, 65% / 0.3)",
                 }}
                 initial={{ width: 0 }}
                 transition={{ ease: "linear" }}
