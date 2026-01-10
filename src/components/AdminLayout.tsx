@@ -26,6 +26,7 @@ const adminNavItems = [
   { path: '/manage', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/manage/products', label: 'Products', icon: Package },
   { path: '/manage/users', label: 'Users & Loyalty', icon: Users },
+  { path: '/manage/referrals', label: 'Referrals', icon: Users },
   { path: '/manage/navigation', label: 'Navigation', icon: Menu },
   { path: '/manage/homepage', label: 'Homepage Editor', icon: Home },
   { path: '/manage/ai-site', label: 'AI Site Manager', icon: Sparkles },

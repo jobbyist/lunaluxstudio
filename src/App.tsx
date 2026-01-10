@@ -55,6 +55,7 @@ import AISiteManager from "./pages/admin/AISiteManager";
 import AdminAnalytics from "./pages/admin/Analytics";
 import NavigationEditor from "./pages/admin/NavigationEditor";
 import AdminUsers from "./pages/admin/Users";
+import AdminReferrals from "./pages/admin/Referrals";
 
 const queryClient = new QueryClient();
 
@@ -118,6 +119,7 @@ const App = () => (
             <Route path="/manage/ai-site" element={<AISiteManager />} />
             <Route path="/manage/analytics" element={<AdminAnalytics />} />
             <Route path="/manage/users" element={<AdminUsers />} />
+            <Route path="/manage/referrals" element={<AdminReferrals />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

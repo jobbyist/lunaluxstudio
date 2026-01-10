@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Heart, Star, Award, Crown, LogOut, User, Gift, Pencil, Save, X, History } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReferralSection } from "@/components/ReferralSection";
+import { BirthdayDatePicker } from "@/components/BirthdayDatePicker";
 
 interface UserProfile {
   id: string;
@@ -23,6 +24,7 @@ interface UserProfile {
   loyalty_points: number;
   loyalty_tier: string;
   email: string | null;
+  birthday: string | null;
 }
 
 interface WishlistItem {
@@ -317,6 +319,18 @@ const Profile = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Birthday Section */}
+          {user?.id && (
+            <Card className="mb-8">
+              <CardContent className="pt-6">
+                <BirthdayDatePicker 
+                  userId={user.id} 
+                  currentBirthday={profile?.birthday || null}
+                />
+              </CardContent>
+            </Card>
+          )}
 
           {/* Loyalty Points Card */}
           <Card className="mb-8 overflow-hidden">
