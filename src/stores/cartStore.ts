@@ -15,6 +15,7 @@ export interface CartItem {
     name: string;
     value: string;
   }>;
+  isCustomWig?: boolean; // Flag for custom wig products
 }
 
 interface CartStore {

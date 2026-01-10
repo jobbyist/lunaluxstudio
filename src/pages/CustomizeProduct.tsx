@@ -211,7 +211,7 @@ export default function CustomizeProduct() {
           options: []
         }
       },
-      variantId: sku,
+      variantId: sku, // Custom SKU - will be handled specially in checkout
       variantTitle: getConfigSummary(),
       price: {
         amount: total.toString(),
@@ -228,12 +228,14 @@ export default function CustomizeProduct() {
         { name: "Cut", value: selectedCut.name },
         { name: "Closure/Frontal", value: selectedClosureFrontal?.name || "None" },
         { name: "SKU", value: sku },
-      ]
+        { name: "Free Shipping", value: "Yes" },
+      ],
+      isCustomWig: true, // Flag for custom wig checkout handling
     };
 
     addItem(cartItem);
     toast.success("Added to cart!", {
-      description: `Your custom wig (${sku}) has been added.`
+      description: `Your custom wig (${sku}) with FREE SHIPPING has been added.`
     });
   };
 

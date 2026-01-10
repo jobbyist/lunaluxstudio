@@ -113,12 +113,22 @@ export const CartDrawer = () => {
                       
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium truncate">{item.product.node.title}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {item.selectedOptions.map(option => option.value).join(' • ')}
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {item.selectedOptions
+                            .filter(opt => opt.name !== 'SKU' && opt.name !== 'Free Shipping')
+                            .map(option => option.value)
+                            .join(' • ')}
                         </p>
-                        <p className="font-semibold text-primary">
-                          {formatPrice(parseFloat(item.price.amount))}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-primary">
+                            {formatPrice(parseFloat(item.price.amount))}
+                          </p>
+                          {(item.isCustomWig || item.variantId?.startsWith('LUNA-CUSTOM-')) && (
+                            <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                              Free Shipping
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                       
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">
