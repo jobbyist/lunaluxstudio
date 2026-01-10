@@ -314,6 +314,63 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_codes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          user_id: string
+          uses: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          user_id: string
+          uses?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+          uses?: number
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          first_purchase_at: string | null
+          first_purchase_completed: boolean
+          id: string
+          points_awarded: boolean
+          referral_code: string
+          referred_user_id: string
+          referrer_id: string
+        }
+        Insert: {
+          created_at?: string
+          first_purchase_at?: string | null
+          first_purchase_completed?: boolean
+          id?: string
+          points_awarded?: boolean
+          referral_code: string
+          referred_user_id: string
+          referrer_id: string
+        }
+        Update: {
+          created_at?: string
+          first_purchase_at?: string | null
+          first_purchase_completed?: boolean
+          id?: string
+          points_awarded?: boolean
+          referral_code?: string
+          referred_user_id?: string
+          referrer_id?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           created_at: string
@@ -346,6 +403,7 @@ export type Database = {
       }
       user_profiles: {
         Row: {
+          birthday: string | null
           created_at: string
           email: string | null
           full_name: string | null
@@ -356,6 +414,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          birthday?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
@@ -366,6 +425,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          birthday?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null

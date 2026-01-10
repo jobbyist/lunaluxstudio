@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ExternalLink, Loader2, Mail, Lock, User, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { ExternalLink, Loader2, Mail, Lock, User, Eye, EyeOff, ArrowLeft, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,6 +16,7 @@ const SHOPIFY_STORE_DOMAIN = "luna-hair-boutique-9dwzm.myshopify.com";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +24,7 @@ const Auth = () => {
   const [showResetForm, setShowResetForm] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
   
   // Login form state
   const [loginEmail, setLoginEmail] = useState("");
@@ -33,6 +35,14 @@ const Auth = () => {
   const [signupPassword, setSignupPassword] = useState("");
   const [signupConfirmPassword, setSignupConfirmPassword] = useState("");
   const [signupName, setSignupName] = useState("");
+
+  // Check for referral code in URL
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      setReferralCode(ref);
+    }
+  }, [searchParams]);
 
   // Check if user is already logged in
   useEffect(() => {
@@ -106,22 +116,27 @@ const Auth = () => {
     setIsLoading(true);
     
     try {
-      const { error } = await supabase.auth.signUp({
+      const signupOptions: any = {
         email: signupEmail,
         password: signupPassword,
         options: {
           emailRedirectTo: window.location.origin,
           data: {
             full_name: signupName,
+            ...(referralCode && { referral_code: referralCode }),
           },
         },
-      });
+      };
+
+      const { error } = await supabase.auth.signUp(signupOptions);
       
       if (error) throw error;
       
       toast({
         title: "Account created!",
-        description: "Welcome to Luna Luxury Hair. You are now signed in.",
+        description: referralCode 
+          ? "Welcome to The Lux Club! You've been referred by a friend." 
+          : "Welcome to The Lux Club. You are now signed in.",
       });
     } catch (error: any) {
       toast({

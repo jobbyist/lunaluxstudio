@@ -6,14 +6,21 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-shopify-hmac-sha256, x-shopify-topic',
 };
 
-// Points earning rate: 1 point per R10 spent
-const POINTS_PER_RAND = 0.1;
+// Points earning rate: 1 point per R25 spent (excluding shipping)
+const POINTS_PER_RAND = 0.04; // 1/25 = 0.04
 
 // Tier thresholds
 const TIER_THRESHOLDS = {
-  bronze: { min: 0, max: 499 },
-  silver: { min: 500, max: 999 },
-  gold: { min: 1000, max: Infinity },
+  bronze: { min: 0, max: 2499 },
+  silver: { min: 2500, max: 4999 },
+  gold: { min: 5000, max: Infinity },
+};
+
+// Referral bonus points by tier
+const REFERRAL_BONUS = {
+  Bronze: 100,
+  Silver: 150,
+  Gold: 200,
 };
 
 function getTierFromPoints(points: number): string {
@@ -130,9 +137,9 @@ async function sendPointsNotificationEmail(
 
           <div class="tier-info">
             <p><strong>💎 Tier Benefits Reminder:</strong></p>
-            <p>• Bronze (0-499 pts): 5% discount on redemption</p>
-            <p>• Silver (500-999 pts): 10% discount + early access</p>
-            <p>• Gold (1000+ pts): 15% discount + VIP perks</p>
+            <p>• Bronze (0-2,499 pts): 1x points multiplier</p>
+            <p>• Silver (2,500-4,999 pts): 1.5x points + early access</p>
+            <p>• Gold (5,000+ pts): 2x points + VIP perks</p>
           </div>
 
           <p style="text-align: center;">

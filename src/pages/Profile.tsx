@@ -47,9 +47,9 @@ interface LoyaltyTransaction {
 }
 
 const TIER_THRESHOLDS = {
-  Bronze: { min: 0, max: 499, next: 'Silver', pointsToNext: 500 },
-  Silver: { min: 500, max: 1499, next: 'Gold', pointsToNext: 1500 },
-  Gold: { min: 1500, max: Infinity, next: null, pointsToNext: null },
+  Bronze: { min: 0, max: 2499, next: 'Silver', pointsToNext: 2500 },
+  Silver: { min: 2500, max: 4999, next: 'Gold', pointsToNext: 5000 },
+  Gold: { min: 5000, max: Infinity, next: null, pointsToNext: null },
 };
 
 const getTierIcon = (tier: string) => {
@@ -371,10 +371,10 @@ const Profile = () => {
                 <h3 className="font-semibold">How to Earn Points</h3>
               </div>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• <span className="font-semibold text-foreground">1 point for every R10</span> spent on purchases</li>
+                <li>• <span className="font-semibold text-foreground">1 point for every R25</span> spent on purchases (excl. shipping)</li>
                 <li>• <span className="font-semibold text-foreground">10 bonus points</span> for rating products</li>
-                <li>• <span className="font-semibold text-foreground">100 bonus points</span> for each friend you refer</li>
-                <li>• <span className="font-semibold text-foreground">Double points</span> on your birthday!</li>
+                <li>• <span className="font-semibold text-foreground">100+ bonus points</span> when referred friends make their first purchase</li>
+                <li>• <span className="font-semibold text-foreground">Birthday bonus</span> points on your special day!</li>
               </ul>
             </CardContent>
           </Card>
