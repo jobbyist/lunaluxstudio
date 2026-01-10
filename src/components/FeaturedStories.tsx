@@ -5,6 +5,13 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 
+// Import new article images
+import articleClosures from "@/assets/article-closures.jpg";
+import articleFrontals from "@/assets/article-frontals.jpg";
+import articleBundles from "@/assets/article-bundles.jpg";
+import articleClipIns from "@/assets/article-clip-ins.jpg";
+import articleTextures from "@/assets/article-textures.jpg";
+
 interface ContentItem {
   id: string;
   title: string;
@@ -22,7 +29,7 @@ export const FeaturedStories = () => {
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
 
-  // Real article content
+  // Real article content with new cover images
   const articles: ContentItem[] = [
     {
       id: '1',
@@ -39,7 +46,7 @@ export const FeaturedStories = () => {
       title: "The Ultimate Guide to Wig Care",
       description: "Keep your investment looking flawless with professional tips",
       content_type: "blog",
-      cover_image_url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800",
+      cover_image_url: articleClosures,
       topic: "Hair Care",
       link: "/article/ultimate-wig-care-guide",
       isExternal: false
@@ -49,7 +56,7 @@ export const FeaturedStories = () => {
       title: "Choosing the Perfect Hair Texture",
       description: "Discover which texture complements your lifestyle",
       content_type: "blog",
-      cover_image_url: "https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?w=800",
+      cover_image_url: articleTextures,
       topic: "Style Guide",
       link: "/article/choosing-perfect-hair-texture",
       isExternal: false
@@ -59,7 +66,7 @@ export const FeaturedStories = () => {
       title: "Frontal vs. Closure: Which One?",
       description: "Understand the key differences to make the best choice",
       content_type: "blog",
-      cover_image_url: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=800",
+      cover_image_url: articleFrontals,
       topic: "Education",
       link: "/article/frontal-vs-closure",
       isExternal: false
@@ -69,7 +76,7 @@ export const FeaturedStories = () => {
       title: "Benefits of Protective Styling",
       description: "How extensions promote natural hair growth and health",
       content_type: "blog",
-      cover_image_url: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800",
+      cover_image_url: articleBundles,
       topic: "Hair Health",
       link: "/article/protective-styling-benefits",
       isExternal: false
@@ -116,6 +123,8 @@ export const FeaturedStories = () => {
         <img
           src={item.cover_image_url || ""}
           alt={item.title}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
