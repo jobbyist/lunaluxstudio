@@ -322,6 +322,92 @@ async function sendTierUpgradeEmail(
   }
 }
 
+// Process custom wig orders from line items
+async function processCustomWigOrders(
+  supabase: any,
+  lineItems: any[],
+  orderId: string,
+  orderNumber: string,
+  customerEmail: string,
+  customer: any
+): Promise<void> {
+  if (!lineItems || !Array.isArray(lineItems)) {
+    console.log('No line items to process');
+    return;
+  }
+
+  for (const item of lineItems) {
+    // Check if this is a custom wig order by looking at properties/attributes
+    const properties = item.properties || [];
+    const isCustomWig = properties.some((p: any) => p.name === '_custom_wig' && p.value === 'true');
+
+    if (!isCustomWig) continue;
+
+    console.log('Processing custom wig order:', item);
+
+    // Extract custom wig details from properties
+    const getProperty = (name: string): string => {
+      const prop = properties.find((p: any) => p.name === name);
+      return prop?.value || '';
+    };
+
+    const customSku = getProperty('_custom_sku');
+    const totalPriceStr = getProperty('_total_price');
+    const addonCostStr = getProperty('_addon_cost');
+    const configuration = getProperty('_configuration');
+    const baseBundle = getProperty('Base Bundle');
+
+    // Calculate prices
+    const totalPrice = parseFloat(totalPriceStr) || parseFloat(item.price) || 0;
+    const addonCost = parseFloat(addonCostStr) || 0;
+    const basePrice = totalPrice - addonCost;
+
+    // Build configuration JSON from all properties
+    const configJson: Record<string, string> = {};
+    const excludeProps = ['_custom_wig', '_custom_sku', '_total_price', '_addon_cost', '_configuration', '_free_shipping'];
+    for (const prop of properties) {
+      if (!excludeProps.includes(prop.name)) {
+        configJson[prop.name] = prop.value;
+      }
+    }
+
+    // Check if order already exists
+    const { data: existing } = await supabase
+      .from('custom_wig_orders')
+      .select('id')
+      .eq('shopify_order_id', orderId.toString())
+      .single();
+
+    if (existing) {
+      console.log('Custom wig order already processed:', orderId);
+      continue;
+    }
+
+    // Insert custom wig order
+    const { error } = await supabase
+      .from('custom_wig_orders')
+      .insert({
+        shopify_order_id: orderId.toString(),
+        shopify_order_number: orderNumber?.toString() || null,
+        customer_email: customerEmail,
+        customer_name: customer?.first_name ? `${customer.first_name} ${customer.last_name || ''}`.trim() : null,
+        base_bundle: baseBundle || 'Unknown',
+        base_price: basePrice,
+        addon_cost: addonCost,
+        total_price: totalPrice,
+        configuration: configJson,
+        custom_sku: customSku || null,
+        status: 'pending',
+      });
+
+    if (error) {
+      console.error('Error inserting custom wig order:', error);
+    } else {
+      console.log(`Custom wig order ${customSku} saved with total: ${totalPrice}, add-ons: ${addonCost}`);
+    }
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -355,7 +441,10 @@ Deno.serve(async (req) => {
 
     // Handle order paid webhook
     if (topic === 'orders/paid') {
-      const { email, total_price, id: orderId, currency } = body;
+      const { email, total_price, id: orderId, currency, order_number, line_items, customer } = body;
+
+      // Process custom wig orders from line items
+      await processCustomWigOrders(supabase, line_items, orderId, order_number, email, customer);
 
       if (!email || !total_price) {
         console.log('Missing required fields:', { email, total_price });
