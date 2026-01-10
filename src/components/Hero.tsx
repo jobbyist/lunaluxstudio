@@ -87,18 +87,26 @@ export const Hero = () => {
             variants={itemVariants}
           >
             <motion.div variants={buttonVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                asChild
-                size="lg"
-                className="btn-glow bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg relative"
-              >
-                <Link to="/customize">
-                  {t('discoverCatalog')}
-                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg" aria-label="New feature">
-                    New!
-                  </span>
-                </Link>
-              </Button>
+              <div className="relative inline-block">
+                <Button
+                  asChild
+                  size="lg"
+                  className="btn-glow bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
+                >
+                  <Link to="/customize">
+                    {t('discoverCatalog')}
+                  </Link>
+                </Button>
+                <motion.span 
+                  className="absolute -top-3 -right-3 bg-gradient-to-r from-gold to-accent text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full shadow-lg pointer-events-none"
+                  initial={{ scale: 0, rotate: -12 }}
+                  animate={{ scale: 1, rotate: -12 }}
+                  transition={{ delay: 1, type: "spring", stiffness: 300 }}
+                  aria-label="New feature"
+                >
+                  New!
+                </motion.span>
+              </div>
             </motion.div>
             <motion.div variants={buttonVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Button

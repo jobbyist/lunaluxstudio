@@ -99,24 +99,29 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
 
   return (
     <motion.div
-      className="relative h-[500px] rounded-lg overflow-hidden group cursor-pointer"
+      className="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer border-gradient"
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => {
         setIsExpanded(false);
         setExpandedSubmenu(null);
       }}
       onClick={handleClick}
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.3 }}
+      whileHover={{ scale: 1.02, y: -8 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      {/* Background Image */}
+      {/* Background Image with enhanced zoom */}
       <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-115"
         style={{ backgroundImage: `url(${image})` }}
       />
       
-      {/* Dark Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+      {/* Enhanced gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:from-black/80 transition-colors duration-500" />
+      
+      {/* Decorative glow on hover */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-primary/20 blur-3xl" />
+      </div>
       
       {/* Content */}
       <div className="relative h-full flex flex-col justify-end p-8">
