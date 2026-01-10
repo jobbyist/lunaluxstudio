@@ -147,8 +147,11 @@ export async function fetchBestsellers(limit: number = 8) {
 }
 
 // Custom wig product constants
-export const CUSTOM_WIG_VARIANT_ID = 'gid://shopify/ProductVariant/51870264066341';
 export const CUSTOM_WIG_PRODUCT_ID = 'gid://shopify/Product/10321451811109';
+export const CUSTOM_WIG_VARIANTS: Record<string, string> = {
+  'straight-18': 'gid://shopify/ProductVariant/51870947672357', // R3000
+  'bodywave-22': 'gid://shopify/ProductVariant/51870947705125', // R3700
+};
 
 const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
@@ -207,26 +210,40 @@ export interface CartLineInput {
 export async function createStorefrontCheckout(items: any[]): Promise<string> {
   try {
     const lines: CartLineInput[] = items.map(item => {
-      // Check if this is a custom wig item using multiple detection methods
+      // Check if this is a custom wig item
       const isCustomWig = item.isCustomWig === true ||
-                          item.variantId?.startsWith('LUNA-CUSTOM-') || 
-                          item.product?.node?.handle === 'custom-wig' ||
-                          item.product?.node?.id?.startsWith('LUNA-CUSTOM-');
+                          item.product?.node?.handle === 'custom-wig';
       
       if (isCustomWig) {
-        // For custom wigs, use the real Shopify variant and pass details as attributes
+        // Get the variant ID for the selected bundle
+        const bundleOption = item.selectedOptions?.find((opt: any) => opt.name === 'Base Bundle');
+        const bundleValue = bundleOption?.value || '';
+        
+        // Map bundle name to variant ID
+        let variantId = CUSTOM_WIG_VARIANTS['straight-18']; // default
+        if (bundleValue.toLowerCase().includes('bodywave') || bundleValue.toLowerCase().includes('22')) {
+          variantId = CUSTOM_WIG_VARIANTS['bodywave-22'];
+        }
+        
+        // Calculate add-on costs for display in order notes
+        const basePrice = bundleValue.toLowerCase().includes('bodywave') ? 3700 : 3000;
+        const totalPrice = parseFloat(item.price?.amount || '0');
+        const addOnCost = totalPrice - basePrice;
+        
+        // Build attributes for order processing
         const attributes = [
           { key: '_custom_wig', value: 'true' },
-          { key: '_custom_sku', value: item.variantId || 'LUNA-CUSTOM' },
-          { key: '_custom_price', value: item.price?.amount || '0' },
-          { key: '_configuration', value: item.variantTitle || item.product?.node?.description || '' },
+          { key: '_custom_sku', value: item.customSku || 'LUNA-CUSTOM' },
+          { key: '_total_price', value: totalPrice.toString() },
+          { key: '_addon_cost', value: addOnCost.toString() },
+          { key: '_configuration', value: item.variantTitle || '' },
           { key: '_free_shipping', value: 'true' },
         ];
         
         // Add selected options as attributes for order processing
         if (item.selectedOptions) {
           item.selectedOptions.forEach((opt: any) => {
-            if (opt.name && opt.value) {
+            if (opt.name && opt.value && opt.name !== 'SKU') {
               attributes.push({ key: opt.name, value: opt.value });
             }
           });
@@ -234,7 +251,7 @@ export async function createStorefrontCheckout(items: any[]): Promise<string> {
         
         return {
           quantity: item.quantity,
-          merchandiseId: CUSTOM_WIG_VARIANT_ID,
+          merchandiseId: variantId,
           attributes,
         };
       }
