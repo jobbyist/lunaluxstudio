@@ -146,6 +146,10 @@ export async function fetchBestsellers(limit: number = 8) {
   return fetchCollectionProducts('bestsellers', limit);
 }
 
+// Custom wig product constants
+export const CUSTOM_WIG_VARIANT_ID = 'gid://shopify/ProductVariant/51870264066341';
+export const CUSTOM_WIG_PRODUCT_ID = 'gid://shopify/Product/10321451811109';
+
 const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
@@ -178,6 +182,10 @@ const CART_CREATE_MUTATION = `
                   }
                 }
               }
+              attributes {
+                key
+                value
+              }
             }
           }
         }
@@ -190,12 +198,53 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
+export interface CartLineInput {
+  quantity: number;
+  merchandiseId: string;
+  attributes?: Array<{ key: string; value: string }>;
+}
+
 export async function createStorefrontCheckout(items: any[]): Promise<string> {
   try {
-    const lines = items.map(item => ({
-      quantity: item.quantity,
-      merchandiseId: item.variantId,
-    }));
+    const lines: CartLineInput[] = items.map(item => {
+      // Check if this is a custom wig item using multiple detection methods
+      const isCustomWig = item.isCustomWig === true ||
+                          item.variantId?.startsWith('LUNA-CUSTOM-') || 
+                          item.product?.node?.handle === 'custom-wig' ||
+                          item.product?.node?.id?.startsWith('LUNA-CUSTOM-');
+      
+      if (isCustomWig) {
+        // For custom wigs, use the real Shopify variant and pass details as attributes
+        const attributes = [
+          { key: '_custom_wig', value: 'true' },
+          { key: '_custom_sku', value: item.variantId || 'LUNA-CUSTOM' },
+          { key: '_custom_price', value: item.price?.amount || '0' },
+          { key: '_configuration', value: item.variantTitle || item.product?.node?.description || '' },
+          { key: '_free_shipping', value: 'true' },
+        ];
+        
+        // Add selected options as attributes for order processing
+        if (item.selectedOptions) {
+          item.selectedOptions.forEach((opt: any) => {
+            if (opt.name && opt.value) {
+              attributes.push({ key: opt.name, value: opt.value });
+            }
+          });
+        }
+        
+        return {
+          quantity: item.quantity,
+          merchandiseId: CUSTOM_WIG_VARIANT_ID,
+          attributes,
+        };
+      }
+      
+      // Regular product
+      return {
+        quantity: item.quantity,
+        merchandiseId: item.variantId,
+      };
+    });
 
     const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
       input: {
