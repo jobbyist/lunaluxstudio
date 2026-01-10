@@ -306,12 +306,35 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
 
   if (error) {
     console.error('Edge function error:', error);
-    throw new Error(`Failed to create custom checkout: ${error.message}`);
+
+    const msg = error.message || 'Failed to create custom checkout';
+    if (
+      msg.includes('SHOPIFY_DRAFT_ORDERS_SCOPE_APPROVAL_REQUIRED') ||
+      msg.includes('write_draft_orders') ||
+      msg.toLowerCase().includes('merchant approval')
+    ) {
+      throw new Error(
+        'Checkout is temporarily unavailable: Shopify needs approval for Draft Orders permission. Please re-authorize the Shopify Admin API token with the Draft Orders scope (write_draft_orders), then try again.'
+      );
+    }
+
+    throw new Error(`Failed to create custom checkout: ${msg}`);
   }
 
   if (!data?.success || !data?.checkoutUrl) {
     console.error('Custom checkout response:', data);
-    throw new Error(data?.error || 'Failed to create checkout URL');
+
+    const msg = data?.error || 'Failed to create checkout URL';
+    if (
+      data?.code === 'SHOPIFY_DRAFT_ORDERS_SCOPE_APPROVAL_REQUIRED' ||
+      String(msg).includes('write_draft_orders')
+    ) {
+      throw new Error(
+        'Checkout is temporarily unavailable: Shopify needs approval for Draft Orders permission. Please re-authorize the Shopify Admin API token with the Draft Orders scope (write_draft_orders), then try again.'
+      );
+    }
+
+    throw new Error(msg);
   }
 
   console.log('Custom checkout created:', {

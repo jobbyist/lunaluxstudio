@@ -145,6 +145,27 @@ serve(async (req) => {
     if (!draftOrderResponse.ok) {
       const errorText = await draftOrderResponse.text();
       console.error("Draft order creation failed:", errorText);
+
+      // Shopify can require merchant approval when an access token/app scope changes.
+      // Surface a clear error so the frontend can show actionable guidance.
+      if (
+        errorText.includes("merchant approval") ||
+        errorText.includes("write_draft_orders")
+      ) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error:
+              "Shopify requires merchant approval for draft orders (write_draft_orders). Please re-authorize the Shopify Admin API access token with the Draft Orders permission, then try again.",
+            code: "SHOPIFY_DRAFT_ORDERS_SCOPE_APPROVAL_REQUIRED",
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 403,
+          }
+        );
+      }
+
       throw new Error(`Failed to create draft order: ${errorText}`);
     }
 
