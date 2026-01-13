@@ -10,9 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { Scissors, Search, RefreshCw, Eye, CheckCircle, Clock, AlertCircle, Package } from "lucide-react";
+import { Scissors, Search, RefreshCw, Eye, CheckCircle, Clock, AlertCircle, Package, CreditCard, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { PrintableOrderSheet } from "@/components/admin/PrintableOrderSheet";
 
 interface CustomWigOrder {
   id: string;
@@ -30,6 +31,8 @@ interface CustomWigOrder {
   notes: string | null;
   created_at: string;
   processed_at: string | null;
+  payment_status: string | null;
+  payment_link_id: string | null;
 }
 
 const statusColors: Record<string, string> = {
@@ -98,6 +101,35 @@ export default function CustomWigOrders() {
     },
   });
 
+  const sendPaymentLinkMutation = useMutation({
+    mutationFn: async (order: CustomWigOrder) => {
+      if (Number(order.addon_cost) <= 0) {
+        throw new Error("No add-on cost to charge");
+      }
+
+      const { data, error } = await supabase.functions.invoke('create-addon-payment-link', {
+        body: {
+          orderId: order.id,
+          amount: Math.round(Number(order.addon_cost) * 100), // Convert to cents
+          customerEmail: order.customer_email,
+          customerName: order.customer_name,
+          orderReference: order.shopify_order_number || order.shopify_order_id,
+          customSku: order.custom_sku,
+        },
+      });
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["custom-wig-orders"] });
+      toast.success("Payment link sent to customer");
+    },
+    onError: (error) => {
+      toast.error("Failed to send payment link: " + error.message);
+    },
+  });
+
   const handleStatusChange = (order: CustomWigOrder, newStatus: string) => {
     updateStatusMutation.mutate({ id: order.id, status: newStatus });
   };
@@ -105,6 +137,10 @@ export default function CustomWigOrders() {
   const handleSaveNotes = () => {
     if (!selectedOrder) return;
     updateStatusMutation.mutate({ id: selectedOrder.id, status: selectedOrder.status, notes });
+  };
+
+  const handleSendPaymentLink = (order: CustomWigOrder) => {
+    sendPaymentLinkMutation.mutate(order);
   };
 
   const formatCurrency = (amount: number) => {
@@ -121,6 +157,7 @@ export default function CustomWigOrders() {
     completed: orders?.filter(o => o.status === "completed").length || 0,
     totalRevenue: orders?.reduce((sum, o) => sum + Number(o.total_price), 0) || 0,
     totalAddons: orders?.reduce((sum, o) => sum + Number(o.addon_cost), 0) || 0,
+    pendingAddonPayments: orders?.filter(o => Number(o.addon_cost) > 0 && o.payment_status !== 'paid').length || 0,
   };
 
   return (
@@ -308,7 +345,7 @@ export default function CustomWigOrders() {
 
         {/* Order Detail Dialog */}
         <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 Order #{selectedOrder?.shopify_order_number || selectedOrder?.shopify_order_id}
@@ -320,6 +357,41 @@ export default function CustomWigOrders() {
 
             {selectedOrder && (
               <div className="space-y-6">
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-2">
+                  <PrintableOrderSheet order={selectedOrder} />
+                  
+                  {Number(selectedOrder.addon_cost) > 0 && selectedOrder.payment_status !== 'paid' && (
+                    <Button
+                      onClick={() => handleSendPaymentLink(selectedOrder)}
+                      variant="default"
+                      size="sm"
+                      disabled={sendPaymentLinkMutation.isPending}
+                    >
+                      {sendPaymentLinkMutation.isPending ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4 mr-2" />
+                      )}
+                      Send Payment Link ({formatCurrency(Number(selectedOrder.addon_cost))})
+                    </Button>
+                  )}
+                  
+                  {selectedOrder.payment_status === 'paid' && (
+                    <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" />
+                      Add-ons Paid
+                    </Badge>
+                  )}
+                  
+                  {selectedOrder.payment_link_id && selectedOrder.payment_status !== 'paid' && (
+                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 flex items-center gap-1">
+                      <CreditCard className="w-3 h-3" />
+                      Payment Link Sent
+                    </Badge>
+                  )}
+                </div>
+
                 {/* Customer Info */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -349,6 +421,15 @@ export default function CustomWigOrders() {
                     <span>Total</span>
                     <span>{formatCurrency(Number(selectedOrder.total_price))}</span>
                   </div>
+                  {Number(selectedOrder.addon_cost) > 0 && (
+                    <div className="flex justify-between text-xs pt-2 border-t">
+                      <span className="text-muted-foreground">Payment Status</span>
+                      <span className={selectedOrder.payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600'}>
+                        {selectedOrder.payment_status === 'paid' ? 'Paid' : 
+                         selectedOrder.payment_link_id ? 'Link Sent' : 'Pending'}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Configuration */}
