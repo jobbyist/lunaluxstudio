@@ -209,16 +209,16 @@ export interface CartLineInput {
   attributes?: Array<{ key: string; value: string }>;
 }
 
-export async function createStorefrontCheckout(items: any[]): Promise<string> {
+export async function createStorefrontCheckout(items: any[], customerEmail?: string): Promise<string> {
   try {
     // Check if any items are custom wigs
     const hasCustomWig = items.some(item => 
       item.isCustomWig === true || item.product?.node?.handle === 'custom-wig'
     );
 
-    // If there are custom wigs, use the Admin API draft order approach
+    // If there are custom wigs, use the Stitch Express API
     if (hasCustomWig) {
-      return await createCustomWigCheckout(items);
+      return await createCustomWigCheckout(items, customerEmail);
     }
 
     // For regular items, use the standard Storefront API cart
@@ -253,7 +253,7 @@ export async function createStorefrontCheckout(items: any[]): Promise<string> {
 }
 
 // Create checkout for custom wigs using Stitch Express API
-async function createCustomWigCheckout(items: any[]): Promise<string> {
+async function createCustomWigCheckout(items: any[], customerEmail?: string): Promise<string> {
   const customWigItems: any[] = [];
   const regularItems: any[] = [];
 
@@ -294,6 +294,7 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
   console.log('Creating custom checkout via Stitch Express:', {
     customWigItems: customWigItems.length,
     regularItems: regularItems.length,
+    customerEmail: customerEmail || 'not provided',
   });
 
   // Call the edge function to create a Stitch Express payment link
@@ -301,6 +302,7 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
     body: {
       customWigItems,
       regularItems,
+      customerEmail,
     },
   });
 
