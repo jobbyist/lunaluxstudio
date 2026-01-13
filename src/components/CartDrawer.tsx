@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetContent,
@@ -11,15 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Mail } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -29,8 +19,6 @@ import { PointsRedemption } from "./PointsRedemption";
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUpsell, setShowUpsell] = useState(false);
-  const [showEmailDialog, setShowEmailDialog] = useState(false);
-  const [customerEmail, setCustomerEmail] = useState("");
   const [pointsDiscount, setPointsDiscount] = useState(0);
   const [pointsUsed, setPointsUsed] = useState(0);
   const { 
@@ -38,12 +26,12 @@ export const CartDrawer = () => {
     isLoading, 
     updateQuantity, 
     removeItem, 
-    createCheckout,
-    hasCustomWig
+    createCheckout 
   } = useCartStore();
   const { formatPrice } = useCurrency();
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  // Calculate total in ZAR (assuming prices from Shopify are in ZAR)
   const totalPriceZAR = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
   const finalTotal = Math.max(0, totalPriceZAR - pointsDiscount);
 
@@ -57,44 +45,25 @@ export const CartDrawer = () => {
     setPointsUsed(0);
   };
 
+  // Show upsell popup when checkout button is clicked
   const handleCheckoutClick = () => {
     setShowUpsell(true);
   };
 
-  const handleAfterUpsell = () => {
+  // Proceed with actual checkout after upsell
+  const handleProceedToCheckout = async () => {
     setShowUpsell(false);
-    // If cart has custom wigs, ask for email
-    if (hasCustomWig()) {
-      setShowEmailDialog(true);
-    } else {
-      proceedToCheckout();
-    }
-  };
-
-  const proceedToCheckout = async (email?: string) => {
-    setShowEmailDialog(false);
     try {
-      await createCheckout(email);
+      await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
         setIsOpen(false);
-        if (email) {
-          toast.success("Order confirmation sent to your email!");
-        }
       }
     } catch (error) {
       console.error('Checkout failed:', error);
       toast.error("Failed to create checkout. Please try again.");
     }
-  };
-
-  const handleEmailSubmit = () => {
-    if (!customerEmail || !customerEmail.includes('@')) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-    proceedToCheckout(customerEmail);
   };
 
   return (
@@ -265,45 +234,8 @@ export const CartDrawer = () => {
       <UpsellPopup
         isOpen={showUpsell}
         onClose={() => setShowUpsell(false)}
-        onProceedToCheckout={handleAfterUpsell}
+        onProceedToCheckout={handleProceedToCheckout}
       />
-
-      {/* Email Collection Dialog for Custom Wigs */}
-      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Mail className="h-5 w-5 text-primary" />
-              Get Your Order Confirmation
-            </DialogTitle>
-            <DialogDescription>
-              Enter your email to receive order details, payment link, and updates about your custom wig.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="your@email.com"
-                value={customerEmail}
-                onChange={(e) => setCustomerEmail(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleEmailSubmit()}
-              />
-            </div>
-          </div>
-          <DialogFooter className="flex gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => proceedToCheckout()}>
-              Skip
-            </Button>
-            <Button onClick={handleEmailSubmit} disabled={isLoading}>
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              Continue to Payment
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </Sheet>
   );
 };
