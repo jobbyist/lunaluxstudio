@@ -122,8 +122,13 @@ export type Database = {
           customer_name: string | null
           id: string
           notes: string | null
+          order_reference: string | null
+          paid_at: string | null
+          payment_link_id: string | null
+          payment_method: string | null
+          payment_status: string | null
           processed_at: string | null
-          shopify_order_id: string
+          shopify_order_id: string | null
           shopify_order_number: string | null
           status: string
           total_price: number
@@ -140,8 +145,13 @@ export type Database = {
           customer_name?: string | null
           id?: string
           notes?: string | null
+          order_reference?: string | null
+          paid_at?: string | null
+          payment_link_id?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
           processed_at?: string | null
-          shopify_order_id: string
+          shopify_order_id?: string | null
           shopify_order_number?: string | null
           status?: string
           total_price: number
@@ -158,8 +168,13 @@ export type Database = {
           customer_name?: string | null
           id?: string
           notes?: string | null
+          order_reference?: string | null
+          paid_at?: string | null
+          payment_link_id?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
           processed_at?: string | null
-          shopify_order_id?: string
+          shopify_order_id?: string | null
           shopify_order_number?: string | null
           status?: string
           total_price?: number
