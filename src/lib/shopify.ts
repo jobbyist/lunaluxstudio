@@ -252,7 +252,7 @@ export async function createStorefrontCheckout(items: any[]): Promise<string> {
   }
 }
 
-// Create checkout for custom wigs using Admin API draft orders
+// Create checkout for custom wigs using Stitch Express API
 async function createCustomWigCheckout(items: any[]): Promise<string> {
   const customWigItems: any[] = [];
   const regularItems: any[] = [];
@@ -291,12 +291,12 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
     }
   }
 
-  console.log('Creating custom checkout via edge function:', {
+  console.log('Creating custom checkout via Stitch Express:', {
     customWigItems: customWigItems.length,
     regularItems: regularItems.length,
   });
 
-  // Call the edge function to create a draft order
+  // Call the edge function to create a Stitch Express payment link
   const { data, error } = await supabase.functions.invoke('create-custom-checkout', {
     body: {
       customWigItems,
@@ -306,40 +306,18 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
 
   if (error) {
     console.error('Edge function error:', error);
-
-    const msg = error.message || 'Failed to create custom checkout';
-    if (
-      msg.includes('SHOPIFY_DRAFT_ORDERS_SCOPE_APPROVAL_REQUIRED') ||
-      msg.includes('write_draft_orders') ||
-      msg.toLowerCase().includes('merchant approval')
-    ) {
-      throw new Error(
-        'Checkout is temporarily unavailable: Shopify needs approval for Draft Orders permission. Please re-authorize the Shopify Admin API token with the Draft Orders scope (write_draft_orders), then try again.'
-      );
-    }
-
-    throw new Error(`Failed to create custom checkout: ${msg}`);
+    throw new Error(`Failed to create custom checkout: ${error.message || 'Unknown error'}`);
   }
 
   if (!data?.success || !data?.checkoutUrl) {
     console.error('Custom checkout response:', data);
-
-    const msg = data?.error || 'Failed to create checkout URL';
-    if (
-      data?.code === 'SHOPIFY_DRAFT_ORDERS_SCOPE_APPROVAL_REQUIRED' ||
-      String(msg).includes('write_draft_orders')
-    ) {
-      throw new Error(
-        'Checkout is temporarily unavailable: Shopify needs approval for Draft Orders permission. Please re-authorize the Shopify Admin API token with the Draft Orders scope (write_draft_orders), then try again.'
-      );
-    }
-
-    throw new Error(msg);
+    throw new Error(data?.error || 'Failed to create checkout URL');
   }
 
-  console.log('Custom checkout created:', {
+  console.log('Stitch Express checkout created:', {
     checkoutUrl: data.checkoutUrl,
-    orderName: data.orderName,
+    paymentLinkId: data.paymentLinkId,
+    orderReference: data.orderReference,
     totalPrice: data.totalPrice,
   });
 
