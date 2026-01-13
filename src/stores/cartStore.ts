@@ -32,7 +32,8 @@ interface CartStore {
   setCartId: (cartId: string) => void;
   setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
-  createCheckout: () => Promise<void>;
+  createCheckout: (customerEmail?: string) => Promise<void>;
+  hasCustomWig: () => boolean;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -87,13 +88,13 @@ export const useCartStore = create<CartStore>()(
       setCheckoutUrl: (checkoutUrl) => set({ checkoutUrl }),
       setLoading: (isLoading) => set({ isLoading }),
 
-      createCheckout: async () => {
+      createCheckout: async (customerEmail?: string) => {
         const { items, setLoading, setCheckoutUrl } = get();
         if (items.length === 0) return;
 
         setLoading(true);
         try {
-          const checkoutUrl = await createStorefrontCheckout(items);
+          const checkoutUrl = await createStorefrontCheckout(items, customerEmail);
           setCheckoutUrl(checkoutUrl);
         } catch (error) {
           console.error('Failed to create checkout:', error);
@@ -101,6 +102,13 @@ export const useCartStore = create<CartStore>()(
         } finally {
           setLoading(false);
         }
+      },
+
+      hasCustomWig: () => {
+        const { items } = get();
+        return items.some(item => 
+          item.isCustomWig === true || item.product?.node?.handle === 'custom-wig'
+        );
       }
     }),
     {
