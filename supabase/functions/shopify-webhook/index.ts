@@ -322,153 +322,6 @@ async function sendTierUpgradeEmail(
   }
 }
 
-// Send admin notification email for custom wig orders
-async function sendCustomWigOrderNotification(
-  orderNumber: string,
-  customerEmail: string,
-  customerName: string | null,
-  baseBundle: string,
-  basePrice: number,
-  addonCost: number,
-  totalPrice: number,
-  configJson: Record<string, string>,
-  customSku: string
-): Promise<void> {
-  const resendApiKey = Deno.env.get('RESEND_API_KEY');
-  
-  if (!resendApiKey) {
-    console.log('RESEND_API_KEY not configured, skipping admin notification');
-    return;
-  }
-
-  const formatCurrency = (amount: number) => `R${amount.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`;
-  
-  // Build configuration table rows
-  const configRows = Object.entries(configJson)
-    .filter(([key]) => !key.startsWith('_'))
-    .map(([key, value]) => `
-      <tr>
-        <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #666; font-size: 14px;">${key}</td>
-        <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: 500; font-size: 14px;">${value}</td>
-      </tr>
-    `).join('');
-
-  const emailHtml = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background: #f5f5f5; }
-        .container { max-width: 600px; margin: 0 auto; background: #ffffff; }
-        .header { background: linear-gradient(135deg, #1a1a1a, #333); color: white; padding: 30px 20px; text-align: center; }
-        .header h1 { margin: 0; font-size: 24px; }
-        .header .badge { display: inline-block; background: #D4AF37; color: #1a1a1a; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-top: 10px; }
-        .content { padding: 30px; }
-        .order-info { background: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-        .order-info h3 { margin: 0 0 15px 0; color: #1a1a1a; }
-        .order-info p { margin: 5px 0; color: #666; }
-        .order-info .value { color: #1a1a1a; font-weight: 500; }
-        .pricing { background: linear-gradient(135deg, #fef9e7, #fdf2d0); border: 2px solid #D4AF37; border-radius: 8px; padding: 20px; margin: 20px 0; }
-        .pricing-row { display: flex; justify-content: space-between; padding: 8px 0; }
-        .pricing-row.total { border-top: 2px solid #D4AF37; margin-top: 10px; padding-top: 15px; font-size: 18px; font-weight: bold; }
-        .pricing-row .addon { color: #D4AF37; }
-        .config-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        .config-table th { background: #f5f5f5; padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #ddd; }
-        .action-btn { display: inline-block; background: #D4AF37; color: #1a1a1a; text-decoration: none; padding: 12px 30px; border-radius: 6px; font-weight: bold; margin-top: 15px; }
-        .footer { background: #1a1a1a; color: #888; padding: 20px; text-align: center; font-size: 12px; }
-        .urgent { background: #fee2e2; border: 1px solid #ef4444; color: #dc2626; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="header">
-          <h1>🎉 New Custom Wig Order!</h1>
-          <span class="badge">REQUIRES ATTENTION</span>
-        </div>
-        <div class="content">
-          ${addonCost > 0 ? `
-            <div class="urgent">
-              ⚠️ <strong>Add-on Cost:</strong> This order includes ${formatCurrency(addonCost)} in customization add-ons that need to be processed.
-            </div>
-          ` : ''}
-          
-          <div class="order-info">
-            <h3>📦 Order Details</h3>
-            <p><strong>Order #:</strong> <span class="value">${orderNumber}</span></p>
-            <p><strong>SKU:</strong> <span class="value">${customSku}</span></p>
-            <p><strong>Customer:</strong> <span class="value">${customerName || 'Not provided'}</span></p>
-            <p><strong>Email:</strong> <span class="value">${customerEmail}</span></p>
-          </div>
-
-          <div class="pricing">
-            <div class="pricing-row">
-              <span>Base Bundle (${baseBundle})</span>
-              <span>${formatCurrency(basePrice)}</span>
-            </div>
-            ${addonCost > 0 ? `
-              <div class="pricing-row">
-                <span class="addon">+ Customization Add-ons</span>
-                <span class="addon">${formatCurrency(addonCost)}</span>
-              </div>
-            ` : ''}
-            <div class="pricing-row total">
-              <span>Total Order Value</span>
-              <span>${formatCurrency(totalPrice)}</span>
-            </div>
-          </div>
-
-          <h3>🔧 Configuration Details</h3>
-          <table class="config-table">
-            <thead>
-              <tr>
-                <th>Option</th>
-                <th>Selection</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${configRows}
-            </tbody>
-          </table>
-
-          <p style="text-align: center;">
-            <a href="https://lunaluxhair.com/manage/custom-wigs" class="action-btn">View Order in Admin</a>
-          </p>
-        </div>
-        <div class="footer">
-          <p>Luna Lux Hair | Custom Wig Order Notification</p>
-          <p>This is an automated message from your order management system.</p>
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
-
-  try {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Luna Lux Hair <onboarding@resend.dev>',
-        to: ['info@lunaluxhair.com'],
-        subject: `🎉 New Custom Wig Order #${orderNumber} - ${formatCurrency(totalPrice)}${addonCost > 0 ? ' (includes add-ons)' : ''}`,
-        html: emailHtml,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Failed to send custom wig order notification:', errorData);
-    } else {
-      console.log(`Custom wig order notification sent for order #${orderNumber}`);
-    }
-  } catch (error) {
-    console.error('Error sending custom wig order notification:', error);
-  }
-}
-
 // Process custom wig orders from line items
 async function processCustomWigOrders(
   supabase: any,
@@ -498,14 +351,14 @@ async function processCustomWigOrders(
       return prop?.value || '';
     };
 
-    const customSku = getProperty('_custom_sku') || `LUNA-CUSTOM-${orderId}`;
+    const customSku = getProperty('_custom_sku');
     const totalPriceStr = getProperty('_total_price');
     const addonCostStr = getProperty('_addon_cost');
-    const baseBundle = getProperty('Base Bundle') || 'Unknown Bundle';
+    const configuration = getProperty('_configuration');
+    const baseBundle = getProperty('Base Bundle');
 
-    // Calculate prices - use item price as fallback
-    const itemPrice = parseFloat(item.price) || 0;
-    const totalPrice = parseFloat(totalPriceStr) || itemPrice || 0;
+    // Calculate prices
+    const totalPrice = parseFloat(totalPriceStr) || parseFloat(item.price) || 0;
     const addonCost = parseFloat(addonCostStr) || 0;
     const basePrice = totalPrice - addonCost;
 
@@ -513,21 +366,17 @@ async function processCustomWigOrders(
     const configJson: Record<string, string> = {};
     const excludeProps = ['_custom_wig', '_custom_sku', '_total_price', '_addon_cost', '_configuration', '_free_shipping'];
     for (const prop of properties) {
-      if (!excludeProps.includes(prop.name) && prop.value) {
+      if (!excludeProps.includes(prop.name)) {
         configJson[prop.name] = prop.value;
       }
     }
-
-    const customerName = customer?.first_name 
-      ? `${customer.first_name} ${customer.last_name || ''}`.trim() 
-      : null;
 
     // Check if order already exists
     const { data: existing } = await supabase
       .from('custom_wig_orders')
       .select('id')
       .eq('shopify_order_id', orderId.toString())
-      .maybeSingle();
+      .single();
 
     if (existing) {
       console.log('Custom wig order already processed:', orderId);
@@ -539,15 +388,15 @@ async function processCustomWigOrders(
       .from('custom_wig_orders')
       .insert({
         shopify_order_id: orderId.toString(),
-        shopify_order_number: orderNumber?.toString() || orderId.toString(),
+        shopify_order_number: orderNumber?.toString() || null,
         customer_email: customerEmail,
-        customer_name: customerName,
-        base_bundle: baseBundle,
+        customer_name: customer?.first_name ? `${customer.first_name} ${customer.last_name || ''}`.trim() : null,
+        base_bundle: baseBundle || 'Unknown',
         base_price: basePrice,
         addon_cost: addonCost,
         total_price: totalPrice,
         configuration: configJson,
-        custom_sku: customSku,
+        custom_sku: customSku || null,
         status: 'pending',
       });
 
@@ -555,19 +404,6 @@ async function processCustomWigOrders(
       console.error('Error inserting custom wig order:', error);
     } else {
       console.log(`Custom wig order ${customSku} saved with total: ${totalPrice}, add-ons: ${addonCost}`);
-      
-      // Send admin notification email
-      await sendCustomWigOrderNotification(
-        orderNumber?.toString() || orderId.toString(),
-        customerEmail,
-        customerName,
-        baseBundle,
-        basePrice,
-        addonCost,
-        totalPrice,
-        configJson,
-        customSku
-      );
     }
   }
 }

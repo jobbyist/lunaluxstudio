@@ -181,6 +181,14 @@ export const CartDrawer = () => {
               </div>
               
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
+                {/* Custom Wig Add-on Notice */}
+                {items.some(item => item.isCustomWig) && (
+                  <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
+                    <p className="text-xs text-amber-700 dark:text-amber-300">
+                      <strong>Custom Wig Order:</strong> Your checkout will show the base bundle price. Add-on customizations are included in your order details and will be processed together.
+                    </p>
+                  </div>
+                )}
 
                 {/* Points Redemption */}
                 <PointsRedemption
