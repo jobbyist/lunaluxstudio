@@ -212,7 +212,6 @@ const ProductDetail = () => {
 
               <div className="border-t border-border pt-6 space-y-2 text-sm text-muted-foreground">
                 <p>• 7-day return policy</p>
-                <p>• Eligible for international shipping</p>
                 <p>• Authentic premium hair</p>
               </div>
             </div>

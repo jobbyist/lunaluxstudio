@@ -30,6 +30,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 import { NotificationBar } from "./NotificationBar";
 import lunaLogo from "@/assets/luna-logo.png";
@@ -51,6 +58,7 @@ export const Header = () => {
   const { currency, language, setCurrency, setLanguage, t } = useCurrency();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [trackOrderOpen, setTrackOrderOpen] = useState(false);
   const { getHeaderNav, loading } = useNavigation();
 
   const currencies: Currency[] = ["ZAR", "USD", "EUR", "GBP"];
@@ -85,6 +93,7 @@ export const Header = () => {
 
   const displayMainNav = mainNav.length > 0 ? mainNav : defaultMainNav;
   const displayMoreNav = moreNav.length > 0 ? moreNav : defaultMoreNav;
+  const isTrackOrderLink = (label?: string) => label?.toLowerCase() === "track my order";
 
   // Icons for mobile menu
   const mobileIcons = ['home', 'info', 'compass', 'mail'];
@@ -135,13 +144,24 @@ export const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
             {displayMainNav.map((item, index) => (
-              <Link 
-                key={index}
-                to={item.path} 
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                {item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}
-              </Link>
+              isTrackOrderLink(item.label) ? (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setTrackOrderOpen(true)}
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link 
+                  key={index}
+                  to={item.path} 
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}
+                </Link>
+              )
             ))}
             
             {/* More Dropdown */}
@@ -155,7 +175,15 @@ export const Header = () => {
               <DropdownMenuContent className="bg-background border-border">
                 {displayMoreNav.map((item, index) => (
                   <DropdownMenuItem key={index} asChild>
-                    {(item as { external?: boolean }).external ? (
+                    {isTrackOrderLink(item.label) ? (
+                      <button
+                        type="button"
+                        onClick={() => setTrackOrderOpen(true)}
+                        className="cursor-pointer"
+                      >
+                        {item.label}
+                      </button>
+                    ) : (item as { external?: boolean }).external ? (
                       <a href={item.path} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
                         {item.label}
                       </a>
@@ -241,15 +269,30 @@ export const Header = () => {
               {displayMainNav.map((item, index) => {
                 const IconComponent = iconMap[mobileIcons[index] || 'home'] || Home;
                 return (
-                  <Link
-                    key={index}
-                    to={item.path}
-                    className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                    <span>{item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}</span>
-                  </Link>
+                  isTrackOrderLink(item.label) ? (
+                    <button
+                      key={index}
+                      type="button"
+                      className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setTrackOrderOpen(true);
+                      }}
+                    >
+                      <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                      <span>{item.label}</span>
+                    </button>
+                  ) : (
+                    <Link
+                      key={index}
+                      to={item.path}
+                      className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                      <span>{item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}</span>
+                    </Link>
+                  )
                 );
               })}
               
@@ -262,15 +305,30 @@ export const Header = () => {
                   const moreIcons = [Award, Star, FileText, Settings];
                   const IconComponent = moreIcons[index] || Award;
                   return (
-                    <Link 
-                      key={index}
-                      to={item.path} 
-                      className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
-                      <span>{item.label}</span>
-                    </Link>
+                    isTrackOrderLink(item.label) ? (
+                      <button
+                        key={index}
+                        type="button"
+                        className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setTrackOrderOpen(true);
+                        }}
+                      >
+                        <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                        <span>{item.label}</span>
+                      </button>
+                    ) : (
+                      <Link 
+                        key={index}
+                        to={item.path} 
+                        className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
+                        <span>{item.label}</span>
+                      </Link>
+                    )
                   );
                 })}
               </div>
@@ -278,6 +336,46 @@ export const Header = () => {
           </SheetContent>
         </Sheet>
       </div>
+      <Dialog open={trackOrderOpen} onOpenChange={setTrackOrderOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-serif">Track My Order</DialogTitle>
+            <DialogDescription>
+              Use the waybill number from your order confirmation email to track your delivery.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 text-sm text-muted-foreground">
+            <p>
+              Track your order with The Courier Guy using your waybill number.
+            </p>
+            <a
+              href="https://thecourierguy.co.za/tracking/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-primary underline-offset-4 hover:underline"
+            >
+              Open The Courier Guy tracking
+            </a>
+            <p>
+              Need help? Email us at{" "}
+              <a
+                href="mailto:info@lunaluxhair.com"
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                info@lunaluxhair.com
+              </a>{" "}
+              or WhatsApp{" "}
+              <a
+                href="https://wa.me/27662869181"
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                +27 66 286 9181
+              </a>
+              .
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </motion.header>
   );
 };
