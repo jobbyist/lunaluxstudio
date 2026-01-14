@@ -5,8 +5,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const STITCH_API_URL = "https://api.stitch.money/graphql";
-const STITCH_TOKEN_URL = "https://secure.stitch.money/connect/token";
+// Stitch Express API endpoints
+const STITCH_EXPRESS_URL = "https://express.stitch.money";
 
 interface CustomWigItem {
   quantity: number;
@@ -35,36 +35,36 @@ interface PaymentRequest {
   redirectUrl: string;
 }
 
-async function getStitchAccessToken(): Promise<string> {
+async function getStitchExpressToken(): Promise<string> {
   const clientId = Deno.env.get("STITCH_EXPRESS_CLIENT_ID");
   const clientSecret = Deno.env.get("STITCH_EXPRESS_CLIENT_SECRET");
 
   if (!clientId || !clientSecret) {
-    throw new Error("Stitch credentials not configured");
+    throw new Error("Stitch Express credentials not configured");
   }
 
-  const body = new URLSearchParams({
-    grant_type: "client_credentials",
-    client_id: clientId,
-    scope: "client_paymentrequest",
-    audience: "https://secure.stitch.money/connect/token",
-    client_secret: clientSecret,
-  });
+  console.log("Getting Stitch Express token...");
 
-  const response = await fetch(STITCH_TOKEN_URL, {
+  const response = await fetch(`${STITCH_EXPRESS_URL}/api/v1/token`, {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: body.toString(),
+    headers: { 
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      clientId,
+      clientSecret,
+    }),
   });
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Stitch token error:", errorText);
-    throw new Error(`Failed to get Stitch access token: ${response.status}`);
+    console.error("Stitch Express token error:", errorText);
+    throw new Error(`Failed to get Stitch Express access token: ${response.status} - ${errorText}`);
   }
 
   const data = await response.json();
-  return data.access_token;
+  console.log("Stitch Express token obtained successfully");
+  return data.accessToken || data.access_token;
 }
 
 function generateOrderReference(): string {
@@ -82,108 +82,105 @@ serve(async (req) => {
   try {
     const { customWigItems, regularItems, customerEmail, customerName, redirectUrl }: PaymentRequest = await req.json();
 
-    console.log("Creating Stitch payment:", {
+    console.log("Creating Stitch Express payment:", {
       customWigItemCount: customWigItems?.length || 0,
       regularItemCount: regularItems?.length || 0,
       customerEmail,
+      redirectUrl,
     });
 
     // Calculate total amount in cents (ZAR)
-    let totalAmount = 0;
+    let totalAmountCents = 0;
     
     if (customWigItems && customWigItems.length > 0) {
       for (const item of customWigItems) {
-        totalAmount += item.totalPrice * item.quantity * 100; // Convert to cents
+        totalAmountCents += Math.round(item.totalPrice * item.quantity * 100); // Convert to cents
       }
     }
 
     if (regularItems && regularItems.length > 0) {
       for (const item of regularItems) {
-        totalAmount += item.price * item.quantity * 100; // Convert to cents
+        totalAmountCents += Math.round(item.price * item.quantity * 100); // Convert to cents
       }
     }
 
-    if (totalAmount <= 0) {
+    if (totalAmountCents <= 0) {
       throw new Error("No items provided for payment");
     }
 
     // Generate unique order reference
     const orderReference = generateOrderReference();
-    
-    // Payer reference must be 12 characters or less
-    const payerReference = orderReference.substring(0, 12);
-    // Beneficiary reference must be 20 characters or less
-    const beneficiaryReference = orderReference;
 
-    // Get Stitch access token
-    const accessToken = await getStitchAccessToken();
+    console.log("Payment details:", {
+      orderReference,
+      totalAmountCents,
+      totalAmountRands: totalAmountCents / 100,
+    });
 
-    // Create payment initiation request using Stitch GraphQL API
-    const mutation = `
-      mutation CreatePaymentRequest(
-        $amount: MoneyInput!,
-        $payerReference: String!,
-        $beneficiaryReference: String!,
-        $externalReference: String
-      ) {
-        clientPaymentInitiationRequestCreate(input: {
-          amount: $amount,
-          payerReference: $payerReference,
-          beneficiaryReference: $beneficiaryReference,
-          externalReference: $externalReference
-        }) {
-          paymentInitiationRequest {
-            id
-            url
-          }
-        }
+    // Get Stitch Express access token
+    const accessToken = await getStitchExpressToken();
+
+    // Build description from items
+    const itemDescriptions: string[] = [];
+    if (customWigItems && customWigItems.length > 0) {
+      for (const item of customWigItems) {
+        itemDescriptions.push(`${item.title} (${item.baseBundle})`);
       }
-    `;
+    }
+    if (regularItems && regularItems.length > 0) {
+      for (const item of regularItems) {
+        itemDescriptions.push(item.title);
+      }
+    }
+    const description = itemDescriptions.join(", ").substring(0, 100) || "Luna Lux Hair Order";
 
-    const variables = {
-      amount: {
-        quantity: totalAmount,
-        currency: "ZAR",
-      },
-      payerReference,
-      beneficiaryReference,
+    // Create payment link using Stitch Express REST API
+    // Note: redirectUrl may need to be pre-registered in the Stitch Express dashboard
+    const paymentLinkPayload: Record<string, any> = {
+      amount: totalAmountCents,
+      currency: "ZAR",
       externalReference: orderReference,
+      description: description,
     };
 
-    console.log("Stitch payment request:", JSON.stringify(variables, null, 2));
+    // Only add redirectUrl if provided - it may need to be registered first
+    if (redirectUrl) {
+      paymentLinkPayload.redirectUrl = redirectUrl;
+    }
 
-    const graphqlResponse = await fetch(STITCH_API_URL, {
+    console.log("Creating Stitch Express payment link:", JSON.stringify(paymentLinkPayload, null, 2));
+
+    const paymentResponse = await fetch(`${STITCH_EXPRESS_URL}/api/v1/payment-links`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ query: mutation, variables }),
+      body: JSON.stringify(paymentLinkPayload),
     });
 
-    if (!graphqlResponse.ok) {
-      const errorText = await graphqlResponse.text();
-      console.error("Stitch API error:", errorText);
-      throw new Error(`Stitch API error: ${graphqlResponse.status}`);
+    if (!paymentResponse.ok) {
+      const errorText = await paymentResponse.text();
+      console.error("Stitch Express API error:", errorText);
+      throw new Error(`Stitch Express API error: ${paymentResponse.status} - ${errorText}`);
     }
 
-    const graphqlData = await graphqlResponse.json();
+    const paymentData = await paymentResponse.json();
     
-    if (graphqlData.errors) {
-      console.error("Stitch GraphQL errors:", graphqlData.errors);
-      throw new Error(`Stitch error: ${graphqlData.errors.map((e: any) => e.message).join(", ")}`);
+    console.log("Stitch Express payment link created:", JSON.stringify(paymentData, null, 2));
+
+    // The response should contain the payment link URL
+    const paymentUrl = paymentData.url || paymentData.paymentUrl || paymentData.link;
+    const paymentId = paymentData.id || paymentData.paymentLinkId;
+
+    if (!paymentUrl) {
+      console.error("No payment URL in response:", paymentData);
+      throw new Error("Failed to create payment link - no URL returned");
     }
 
-    const paymentRequest = graphqlData.data?.clientPaymentInitiationRequestCreate?.paymentInitiationRequest;
-    
-    if (!paymentRequest?.url) {
-      console.error("No payment URL returned:", graphqlData);
-      throw new Error("Failed to create payment request - no URL returned");
-    }
-
-    console.log("Stitch payment created:", {
-      id: paymentRequest.id,
-      url: paymentRequest.url,
+    console.log("Payment link created successfully:", {
+      id: paymentId,
+      url: paymentUrl,
       orderReference,
     });
 
@@ -204,19 +201,21 @@ serve(async (req) => {
 
       const orderData = {
         order_reference: orderReference,
-        payment_link_id: paymentRequest.id,
-        customer_email: customerEmail,
+        payment_link_id: paymentId,
+        customer_email: customerEmail || "",
         customer_name: customerName || null,
         base_bundle: customWigItems?.[0]?.baseBundle || "N/A",
         base_price: customWigItems?.[0]?.basePrice || 0,
         addon_cost: customWigItems?.[0]?.addonCost || 0,
-        total_price: totalAmount / 100, // Convert back to rands
+        total_price: totalAmountCents / 100, // Convert back to rands
         configuration: configuration,
         custom_sku: customWigItems?.[0]?.customSku || null,
         status: "pending",
         payment_status: "pending",
-        payment_method: "stitch",
+        payment_method: "stitch_express",
       };
+
+      console.log("Storing order in database:", orderReference);
 
       const dbResponse = await fetch(`${supabaseUrl}/rest/v1/custom_wig_orders`, {
         method: "POST",
@@ -234,17 +233,17 @@ serve(async (req) => {
         console.error("Failed to store order:", dbError);
         // Continue anyway - payment link is created
       } else {
-        console.log("Order stored in database:", orderReference);
+        console.log("Order stored in database successfully:", orderReference);
       }
     }
 
     return new Response(
       JSON.stringify({
         success: true,
-        paymentUrl: paymentRequest.url,
-        paymentId: paymentRequest.id,
+        paymentUrl: paymentUrl,
+        paymentId: paymentId,
         orderReference,
-        totalAmount: totalAmount / 100,
+        totalAmount: totalAmountCents / 100,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -253,7 +252,7 @@ serve(async (req) => {
     );
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Failed to create payment";
-    console.error("Error creating Stitch payment:", error);
+    console.error("Error creating Stitch Express payment:", error);
     return new Response(
       JSON.stringify({
         success: false,
