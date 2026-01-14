@@ -57,6 +57,7 @@ import NavigationEditor from "./pages/admin/NavigationEditor";
 import AdminUsers from "./pages/admin/Users";
 import AdminReferrals from "./pages/admin/Referrals";
 import CustomWigOrders from "./pages/admin/CustomWigOrders";
+import PaymentComplete from "./pages/PaymentComplete";
 
 const queryClient = new QueryClient();
 
@@ -103,6 +104,7 @@ const App = () => (
             <Route path="/bestsellers" element={<Bestsellers />} />
             <Route path="/promotions" element={<Promotions />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/payment-complete" element={<PaymentComplete />} />
             
             {/* Admin Routes - /manage */}
             <Route path="/manage" element={<AdminDashboard />} />
