@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { MainCharacterCollection } from "@/components/MainCharacterCollection";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Collections } from "@/components/Collections";
+import { LuxuryHairExtensionsHighlight } from "@/components/LuxuryHairExtensionsHighlight";
 import { FeaturedStories } from "@/components/FeaturedStories";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
@@ -16,6 +17,7 @@ const Index = () => {
         <main className="pt-36 md:pt-44">
           <Hero />
           <Collections />
+          <LuxuryHairExtensionsHighlight />
           <MainCharacterCollection />
           <ProductGrid limit={8} />
           <FeaturedStories />
