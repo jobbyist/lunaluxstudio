@@ -28,7 +28,8 @@ const collectionCategories: Record<string, CategoryItem[]> = {
     { name: "View All Products", path: "/collections/vietnamese-virgin" },
     { name: "Custom Wigs", path: "/customize" },
     { name: "Bundles", path: "/product/virgin-vietnamese-bundles", productHandle: "virgin-vietnamese-bundles" },
-    { name: "Closures", path: "/product/hd-virgin-closures", productHandle: "hd-virgin-closures" },
+    { name: "Frontals", path: "https://lunaluxhair.com/product/4x4-frontal" },
+    { name: "Closures", path: "https://lunaluxhair.com/product/vietnamese-closures" },
   ],
   "brazilian-virgin": [
     { name: "View All Products", path: "/collections/brazilian-virgin" },
@@ -50,7 +51,8 @@ const collectionCategories: Record<string, CategoryItem[]> = {
     { name: "View All Products", path: "/collections/raw-vietnamese" },
     { name: "Custom Wigs", path: "/customize" },
     { name: "Bundles", path: "/product/raw-vietnamese-bundles", productHandle: "raw-vietnamese-bundles" },
-    { name: "Closures", path: "/product/hd-virgin-closures", productHandle: "hd-virgin-closures" },
+    { name: "Frontals", path: "https://lunaluxhair.com/product/4x4-frontal" },
+    { name: "Closures", path: "https://lunaluxhair.com/product/vietnamese-closures" },
   ],
   "premium-accessories": [
     { name: "View All Products", path: "https://lunaluxhair.com/collections/premium-accessories" },
