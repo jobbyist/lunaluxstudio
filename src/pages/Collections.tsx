@@ -7,9 +7,9 @@ import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
 import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
-import brazilianImage from "@/assets/hero-1.jpg";
-import vietnameseImage from "@/assets/hero-2.jpg";
-import rawVietnameseImage from "@/assets/hero-3.jpg";
+import brazilianImage from "@/assets/collection-brazilian.jpg";
+import vietnameseImage from "@/assets/collection-vietnamese.jpg";
+import rawVietnameseImage from "@/assets/collection-raw-vietnamese.jpg";
 import premiumAccessoriesImage from "@/assets/collection-accessories.jpg";
 
 const Collections = () => {
