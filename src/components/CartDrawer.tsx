@@ -68,14 +68,19 @@ export const CartDrawer = () => {
     }
     
     // For regular items, proceed directly to Shopify checkout
+    const checkoutWindow = window.open('', '_blank');
     try {
-      await createCheckout();
-      const checkoutUrl = useCartStore.getState().checkoutUrl;
+      const checkoutUrl = await createCheckout();
       if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank');
+        if (checkoutWindow) {
+          checkoutWindow.location.href = checkoutUrl;
+        } else {
+          window.location.href = checkoutUrl;
+        }
         setIsOpen(false);
       }
     } catch (error) {
+      checkoutWindow?.close();
       console.error('Checkout failed:', error);
       toast.error("Failed to create checkout. Please try again.");
     }
