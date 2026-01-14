@@ -28,11 +28,21 @@ interface RegularItem {
   price: number;
 }
 
+interface ShippingAddress {
+  street: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+}
+
 interface PaymentRequest {
   customWigItems: CustomWigItem[];
   regularItems: RegularItem[];
   customerEmail: string;
   customerName?: string;
+  customerPhone?: string;
+  shippingAddress?: ShippingAddress | null;
   redirectUrl: string;
 }
 
@@ -102,12 +112,14 @@ serve(async (req) => {
   }
 
   try {
-    const { customWigItems, regularItems, customerEmail, customerName, redirectUrl }: PaymentRequest = await req.json();
+    const { customWigItems, regularItems, customerEmail, customerName, customerPhone, shippingAddress, redirectUrl }: PaymentRequest = await req.json();
 
     console.log("Creating Stitch Express payment:", {
       customWigItemCount: customWigItems?.length || 0,
       regularItemCount: regularItems?.length || 0,
       customerEmail,
+      customerName,
+      hasShippingAddress: !!shippingAddress,
       redirectUrl,
     });
 
@@ -238,7 +250,11 @@ serve(async (req) => {
         base_price: customWigItems?.[0]?.basePrice || 0,
         addon_cost: customWigItems?.[0]?.addonCost || 0,
         total_price: totalAmountCents / 100, // Convert back to rands
-        configuration: configuration,
+        configuration: {
+          ...configuration,
+          phone: customerPhone || null,
+          shipping_address: shippingAddress || null,
+        },
         custom_sku: customWigItems?.[0]?.customSku || null,
         status: "pending",
         payment_status: "pending",

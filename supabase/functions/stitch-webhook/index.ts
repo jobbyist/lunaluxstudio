@@ -44,6 +44,44 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
     };
   }
 
+  // Extract shipping address from configuration if present
+  const shippingAddress = orderData.configuration?.shipping_address;
+  const customerPhone = orderData.configuration?.phone;
+  
+  // Build Shopify shipping address
+  let shopifyShippingAddress = undefined;
+  if (shippingAddress) {
+    const nameParts = (orderData.customer_name || "").split(" ");
+    shopifyShippingAddress = {
+      first_name: nameParts[0] || "",
+      last_name: nameParts.slice(1).join(" ") || "",
+      address1: shippingAddress.street || "",
+      city: shippingAddress.city || "",
+      province: shippingAddress.province || "",
+      zip: shippingAddress.postalCode || "",
+      country: shippingAddress.country || "South Africa",
+      phone: customerPhone || "",
+    };
+  }
+
+  // Build line item properties, excluding internal fields
+  const lineItemProperties = [
+    { name: "Base Bundle", value: orderData.base_bundle },
+    { name: "Base Price", value: `R${orderData.base_price}` },
+    { name: "Add-ons", value: `R${orderData.addon_cost}` },
+    { name: "SKU", value: orderData.custom_sku || "LUNA-CUSTOM" },
+    { name: "Free Shipping", value: "Included" },
+    ...Object.entries(orderData.configuration || {})
+      .filter(([key]) => 
+        key !== "Base Bundle" && 
+        key !== "SKU" && 
+        key !== "Free Shipping" && 
+        key !== "phone" && 
+        key !== "shipping_address"
+      )
+      .map(([key, value]) => ({ name: key, value: String(value) })),
+  ];
+
   const orderPayload: {
     order: {
       email: string;
@@ -57,6 +95,8 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
       shipping_lines: any[];
       transactions: any[];
       customer?: any;
+      shipping_address?: any;
+      phone?: string;
     };
   } = {
     order: {
@@ -74,16 +114,7 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
           price: orderData.total_price.toString(),
           requires_shipping: true,
           taxable: true,
-          properties: [
-            { name: "Base Bundle", value: orderData.base_bundle },
-            { name: "Base Price", value: `R${orderData.base_price}` },
-            { name: "Add-ons", value: `R${orderData.addon_cost}` },
-            { name: "SKU", value: orderData.custom_sku || "LUNA-CUSTOM" },
-            { name: "Free Shipping", value: "Included" },
-            ...Object.entries(orderData.configuration || {})
-              .filter(([key]) => key !== "Base Bundle" && key !== "SKU" && key !== "Free Shipping")
-              .map(([key, value]) => ({ name: key, value: String(value) })),
-          ],
+          properties: lineItemProperties,
         },
       ],
       shipping_lines: [
@@ -106,6 +137,14 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
 
   if (customerData) {
     orderPayload.order.customer = customerData;
+  }
+
+  if (shopifyShippingAddress) {
+    orderPayload.order.shipping_address = shopifyShippingAddress;
+  }
+
+  if (customerPhone) {
+    orderPayload.order.phone = customerPhone;
   }
 
   console.log("Creating Shopify order:", JSON.stringify(orderPayload, null, 2));
