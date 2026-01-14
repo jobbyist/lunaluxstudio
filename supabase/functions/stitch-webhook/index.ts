@@ -9,25 +9,25 @@ const corsHeaders = {
 const SHOPIFY_STORE_DOMAIN = "luna-hair-boutique-9dwzm.myshopify.com";
 const SHOPIFY_API_VERSION = "2025-07";
 
-interface StitchWebhookPayload {
-  data: {
-    client: {
-      paymentInitiationRequests: {
-        node: {
-          id: string;
-          externalReference: string;
-          state: {
-            __typename: string;
-            amount?: { quantity: string; currency: string };
-            date?: string;
-            reason?: string;
-            payer?: {
-              accountNumber?: string;
-              bankId?: string;
-            };
-          };
-        };
-      };
+// Stitch Express webhook payload types
+interface StitchExpressWebhookPayload {
+  id?: string;
+  paymentLinkId?: string;
+  externalReference?: string;
+  status?: string;
+  amount?: number;
+  currency?: string;
+  createdAt?: string;
+  completedAt?: string;
+  // Nested structure format
+  data?: {
+    id?: string;
+    externalReference?: string;
+    status?: string;
+    payment?: {
+      id?: string;
+      status?: string;
+      externalReference?: string;
     };
   };
 }
@@ -65,8 +65,8 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
       fulfillment_status: null,
       send_receipt: true,
       send_fulfillment_receipt: true,
-      note: `Custom Wig Order - ${orderData.order_reference}\nPayment Method: Stitch Pay By Bank\nConfiguration: ${JSON.stringify(orderData.configuration)}`,
-      tags: "custom-wig,stitch-payment",
+      note: `Custom Wig Order - ${orderData.order_reference}\nPayment Method: Stitch Express Pay By Bank\nConfiguration: ${JSON.stringify(orderData.configuration)}`,
+      tags: "custom-wig,stitch-express-payment",
       line_items: [
         {
           title: `Custom Luna Luxury Wig - ${orderData.base_bundle}`,
@@ -98,7 +98,7 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
           kind: "sale",
           status: "success",
           amount: orderData.total_price.toString(),
-          gateway: "Stitch Pay By Bank",
+          gateway: "Stitch Express Pay By Bank",
         },
       ],
     },
@@ -221,24 +221,21 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const shopifyAccessToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
-    const stitchWebhookSecret = Deno.env.get("STITCH_WEBHOOK_SECRET");
 
-    // Verify webhook signature (optional but recommended)
-    const signature = req.headers.get("x-stitch-signature");
-    if (stitchWebhookSecret && signature) {
-      // TODO: Implement HMAC verification if Stitch provides it
-      console.log("Stitch webhook signature:", signature);
-    }
+    const payload: StitchExpressWebhookPayload = await req.json();
+    console.log("Stitch Express webhook received:", JSON.stringify(payload, null, 2));
 
-    const payload = await req.json();
-    console.log("Stitch webhook received:", JSON.stringify(payload, null, 2));
+    // Extract external reference from various possible locations
+    const externalReference = 
+      payload.externalReference || 
+      payload.data?.externalReference || 
+      payload.data?.payment?.externalReference;
 
-    // Parse the webhook payload
-    // Stitch webhooks can have different formats depending on the event type
-    const paymentNode = payload.data?.client?.paymentInitiationRequests?.node;
-    const externalReference = paymentNode?.externalReference || payload.externalReference;
-    const state = paymentNode?.state || payload.state;
-    const stateType = state?.__typename || state?.status;
+    // Extract status from various possible locations
+    const status = 
+      payload.status || 
+      payload.data?.status || 
+      payload.data?.payment?.status;
 
     if (!externalReference) {
       console.log("No external reference found in webhook, ignoring");
@@ -248,7 +245,7 @@ serve(async (req) => {
       });
     }
 
-    console.log("Processing payment for order:", externalReference, "State:", stateType);
+    console.log("Processing payment for order:", externalReference, "Status:", status);
 
     // Initialize Supabase client
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -268,8 +265,10 @@ serve(async (req) => {
       });
     }
 
-    // Handle different payment states
-    if (stateType === "PaymentInitiationRequestCompleted" || stateType === "completed") {
+    // Handle different payment statuses (Stitch Express uses lowercase statuses)
+    const normalizedStatus = status?.toLowerCase();
+
+    if (normalizedStatus === "complete" || normalizedStatus === "completed" || normalizedStatus === "success" || normalizedStatus === "paid") {
       console.log("Payment completed for order:", externalReference);
 
       // Update order status
@@ -321,7 +320,7 @@ serve(async (req) => {
           status: 200,
         }
       );
-    } else if (stateType === "PaymentInitiationRequestCancelled" || stateType === "cancelled") {
+    } else if (normalizedStatus === "cancelled" || normalizedStatus === "canceled") {
       console.log("Payment cancelled for order:", externalReference);
 
       await supabase
@@ -344,7 +343,7 @@ serve(async (req) => {
           status: 200,
         }
       );
-    } else if (stateType === "PaymentInitiationRequestExpired" || stateType === "expired") {
+    } else if (normalizedStatus === "expired") {
       console.log("Payment expired for order:", externalReference);
 
       await supabase
@@ -367,12 +366,35 @@ serve(async (req) => {
           status: 200,
         }
       );
+    } else if (normalizedStatus === "failed") {
+      console.log("Payment failed for order:", externalReference);
+
+      await supabase
+        .from("custom_wig_orders")
+        .update({
+          payment_status: "failed",
+          status: "cancelled",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("order_reference", externalReference);
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: "Payment failure recorded",
+          orderReference: externalReference,
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
     }
 
     // For pending or unknown states, just acknowledge
-    console.log("Webhook acknowledged, state:", stateType);
+    console.log("Webhook acknowledged, status:", status);
     return new Response(
-      JSON.stringify({ received: true, state: stateType }),
+      JSON.stringify({ received: true, status: status }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
@@ -380,7 +402,7 @@ serve(async (req) => {
     );
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Webhook processing failed";
-    console.error("Stitch webhook error:", error);
+    console.error("Stitch Express webhook error:", error);
     return new Response(
       JSON.stringify({ error: errorMessage }),
       {
