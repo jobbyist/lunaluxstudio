@@ -40,6 +40,7 @@ import BrazilianVirginCollection from "./pages/BrazilianVirginCollection";
 import VietnameseVirginCollection from "./pages/VietnameseVirginCollection";
 import RawVietnameseCollection from "./pages/RawVietnameseCollection";
 import PremiumAccessoriesCollection from "./pages/PremiumAccessoriesCollection";
+import LuxuryHairExtensionsCollection from "./pages/LuxuryHairExtensionsCollection";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminHomepageEditor from "./pages/admin/HomepageEditor";
@@ -88,6 +89,10 @@ const App = () => (
             <Route path="/collections/vietnamese-virgin" element={<VietnameseVirginCollection />} />
             <Route path="/collections/raw-vietnamese" element={<RawVietnameseCollection />} />
             <Route path="/collections/premium-accessories" element={<PremiumAccessoriesCollection />} />
+            <Route
+              path="/collections/luxury-hair-extensions"
+              element={<LuxuryHairExtensionsCollection />}
+            />
             <Route path="/collection/main-character" element={<MainCharacterCollectionPage />} />
             <Route path="/collection/face-card-collection" element={<FaceCardCollection />} />
             <Route path="/collection/pop-out-collection" element={<PopOutCollection />} />
