@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || 'luna-hair-boutique-9dwzm.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '';
+const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '8c36196eb48266f52b9453a8dc85736b';
 
 if (!SHOPIFY_STOREFRONT_TOKEN) {
   console.warn('VITE_SHOPIFY_STOREFRONT_TOKEN is not configured. Shopify API calls will fail.');
@@ -252,8 +252,25 @@ export async function createStorefrontCheckout(items: any[]): Promise<string> {
   }
 }
 
+// Customer details interface for custom wig checkout
+export interface CustomerCheckoutDetails {
+  name: string;
+  email: string;
+  phone: string;
+  address: {
+    street: string;
+    city: string;
+    province: string;
+    postalCode: string;
+    country: string;
+  };
+}
+
 // Create checkout for custom wigs using Stitch Pay By Bank
-async function createCustomWigCheckout(items: any[]): Promise<string> {
+export async function createCustomWigCheckout(
+  items: any[],
+  customerDetails?: CustomerCheckoutDetails
+): Promise<string> {
   const customWigItems: any[] = [];
   const regularItems: any[] = [];
 
@@ -294,6 +311,7 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
   console.log('Creating Stitch payment via edge function:', {
     customWigItems: customWigItems.length,
     regularItems: regularItems.length,
+    hasCustomerDetails: !!customerDetails,
   });
 
   // Get redirect URL for after payment
@@ -304,7 +322,10 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
     body: {
       customWigItems,
       regularItems,
-      customerEmail: '', // Will be collected on payment page
+      customerEmail: customerDetails?.email || '',
+      customerName: customerDetails?.name || '',
+      customerPhone: customerDetails?.phone || '',
+      shippingAddress: customerDetails?.address || null,
       redirectUrl,
     },
   });
@@ -326,4 +347,11 @@ async function createCustomWigCheckout(items: any[]): Promise<string> {
   });
 
   return data.paymentUrl;
+}
+
+// Check if cart has custom wig items
+export function hasCustomWigItems(items: any[]): boolean {
+  return items.some(item => 
+    item.isCustomWig === true || item.product?.node?.handle === 'custom-wig'
+  );
 }

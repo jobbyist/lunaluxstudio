@@ -15,10 +15,13 @@ import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { UpsellPopup } from "./UpsellPopup";
 import { PointsRedemption } from "./PointsRedemption";
+import { CustomerDetailsCheckout, CustomerDetails } from "./CustomerDetailsCheckout";
+import { hasCustomWigItems, createCustomWigCheckout } from "@/lib/shopify";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUpsell, setShowUpsell] = useState(false);
+  const [showCustomerDetails, setShowCustomerDetails] = useState(false);
   const [pointsDiscount, setPointsDiscount] = useState(0);
   const [pointsUsed, setPointsUsed] = useState(0);
   const { 
@@ -26,7 +29,8 @@ export const CartDrawer = () => {
     isLoading, 
     updateQuantity, 
     removeItem, 
-    createCheckout 
+    createCheckout,
+    setLoading,
   } = useCartStore();
   const { formatPrice } = useCurrency();
   
@@ -34,6 +38,9 @@ export const CartDrawer = () => {
   // Calculate total in ZAR (assuming prices from Shopify are in ZAR)
   const totalPriceZAR = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
   const finalTotal = Math.max(0, totalPriceZAR - pointsDiscount);
+
+  // Check if cart has custom wigs
+  const hasCustomWigs = hasCustomWigItems(items);
 
   const handleDiscountApplied = (discount: number, points: number) => {
     setPointsDiscount(discount);
@@ -53,6 +60,14 @@ export const CartDrawer = () => {
   // Proceed with actual checkout after upsell
   const handleProceedToCheckout = async () => {
     setShowUpsell(false);
+    
+    // If cart has custom wigs, show customer details form
+    if (hasCustomWigs) {
+      setShowCustomerDetails(true);
+      return;
+    }
+    
+    // For regular items, proceed directly to Shopify checkout
     try {
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
@@ -63,6 +78,22 @@ export const CartDrawer = () => {
     } catch (error) {
       console.error('Checkout failed:', error);
       toast.error("Failed to create checkout. Please try again.");
+    }
+  };
+
+  // Handle custom wig checkout with customer details
+  const handleCustomWigCheckout = async (details: CustomerDetails) => {
+    setLoading(true);
+    try {
+      const paymentUrl = await createCustomWigCheckout(items, details);
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
+      }
+    } catch (error) {
+      console.error('Custom wig checkout failed:', error);
+      toast.error("Failed to create payment. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -235,6 +266,14 @@ export const CartDrawer = () => {
         isOpen={showUpsell}
         onClose={() => setShowUpsell(false)}
         onProceedToCheckout={handleProceedToCheckout}
+      />
+
+      {/* Customer Details Checkout for Custom Wigs */}
+      <CustomerDetailsCheckout
+        isOpen={showCustomerDetails}
+        onClose={() => setShowCustomerDetails(false)}
+        onSubmit={handleCustomWigCheckout}
+        totalAmount={formatPrice(finalTotal)}
       />
     </Sheet>
   );
