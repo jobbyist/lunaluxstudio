@@ -4,13 +4,13 @@ import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, Heart, PartyPopper, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
 import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
 import brazilianImage from "@/assets/hero-1.jpg";
 import vietnameseImage from "@/assets/hero-2.jpg";
 import rawVietnameseImage from "@/assets/hero-3.jpg";
-import productPlaceholder from "@/assets/product-placeholder.webp";
+import premiumAccessoriesImage from "@/assets/collection-accessories.jpg";
 
 const Collections = () => {
   const [mainCharacterProducts, setMainCharacterProducts] = useState<ShopifyProduct[]>([]);
@@ -49,21 +49,12 @@ const Collections = () => {
       image: rawVietnameseImage,
       slug: "raw-vietnamese",
       description: "Unprocessed raw hair with superior quality and longevity"
-    }
-  ];
-
-  const curatedCollections = [
-    {
-      title: "Face Card Never Declines 💁‍♀️💳",
-      description: "Curated selection of products that complement different facial features and enhance your natural beauty",
-      icon: Heart,
-      slug: "face-card-collection"
     },
     {
-      title: "Sometimes You Gotta Pop Out 🥂💯",
-      description: "Perfect products for special events and occasions like Weddings, Graduations, and celebrations",
-      icon: PartyPopper,
-      slug: "pop-out-collection"
+      title: "Premium Accessories",
+      image: premiumAccessoriesImage,
+      slug: "premium-accessories",
+      description: "Luxury add-ons designed to elevate every install"
     }
   ];
 
@@ -140,44 +131,6 @@ const Collections = () => {
               </Button>
             </div>
           )}
-        </div>
-
-        {/* Curated Collections */}
-        <div>
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-              <Sparkles className="h-8 w-8 text-primary" />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-serif mb-4">
-              Curated Collections
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Specially curated collections to match your vibe, occasion, and personal style
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {curatedCollections.map((collection) => (
-              <Card key={collection.slug} className="hover:border-primary/50 transition-colors">
-                <CardHeader className="text-center">
-                  <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center mb-4">
-                    <collection.icon className="h-8 w-8 text-primary" />
-                  </div>
-                  <CardTitle className="text-xl mb-3">{collection.title}</CardTitle>
-                  <CardDescription className="text-base">
-                    {collection.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="text-center pb-6">
-                  <Button asChild>
-                    <Link to={`/collection/${collection.slug}`}>
-                      Explore Collection
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         </div>
 
         {/* CTA Section */}
