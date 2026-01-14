@@ -113,7 +113,7 @@ const About = () => {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-card rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
-              <div className="text-5xl mb-4">✨</div>
+           
               <h3 className="font-elegant text-2xl font-bold text-foreground mb-4">
                 {t('aboutValue1Title')}
               </h3>
@@ -122,7 +122,7 @@ const About = () => {
               </p>
             </div>
             <div className="bg-card rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
-              <div className="text-5xl mb-4">🤝</div>
+             
               <h3 className="font-elegant text-2xl font-bold text-foreground mb-4">
                 {t('aboutValue2Title')}
               </h3>
@@ -131,7 +131,7 @@ const About = () => {
               </p>
             </div>
             <div className="bg-card rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
-              <div className="text-5xl mb-4">🌿</div>
+             
               <h3 className="font-elegant text-2xl font-bold text-foreground mb-4">
                 {t('aboutValue3Title')}
               </h3>
