@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { fetchCollectionProducts, ShopifyProduct } from '@/lib/shopify';
+import { fetchCollectionByHandle, ShopifyProduct } from '@/lib/shopify';
 import { ProductCardWithQuickView } from '@/components/ProductCardWithQuickView';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Header } from '@/components/Header';
@@ -13,7 +13,7 @@ const PremiumAccessoriesCollection = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const collectionProducts = await fetchCollectionProducts('premium-accessories', 50);
+        const collectionProducts = await fetchCollectionByHandle('premium-accessories', 50);
         setProducts(collectionProducts);
       } catch (error) {
         console.error('Error loading Premium Accessories collection:', error);

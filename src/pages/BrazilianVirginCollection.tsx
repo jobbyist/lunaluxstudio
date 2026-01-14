@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
-import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
+import { fetchCollectionByHandle, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import brazilianImage from "@/assets/collection-brazilian.jpg";
@@ -13,7 +13,7 @@ export default function BrazilianVirginCollection() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchCollectionProducts("brazilian-virgin", 50);
+        const data = await fetchCollectionByHandle("brazilian-virgin", 50);
         setProducts(data);
       } catch (error) {
         console.error("Error fetching Brazilian Virgin products:", error);
