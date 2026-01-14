@@ -53,7 +53,7 @@ const collectionCategories: Record<string, CategoryItem[]> = {
     { name: "Closures", path: "/product/hd-virgin-closures", productHandle: "hd-virgin-closures" },
   ],
   "premium-accessories": [
-    { name: "View All Products", path: "/explore?category=accessories" },
+    { name: "View All Products", path: "https://lunaluxhair.com/collections/premium-accessories" },
     { name: "Hair Storage Bags", path: "/product/luna-hair-storage-bag" },
     { name: "Premium Brushes", path: "/product/luna-premium-brushes" },
   ],
@@ -85,6 +85,9 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
   const getCategoryLink = (category: CategoryItem) => {
     // If path starts with "/", it's a direct link to a page or product
     if (category.path.startsWith("/")) {
+      return category.path;
+    }
+    if (category.path.startsWith("http")) {
       return category.path;
     }
     // Otherwise, it's a relative collection category path
@@ -160,68 +163,85 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
                 {title}
               </h3>
               <nav className="space-y-2">
-                {categories.map((category, index) => (
-                  <motion.div
-                    key={category.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    {category.isSubmenu && category.products ? (
-                      <div>
-                        <button
-                          onClick={(e) => toggleSubmenu(category.name, e)}
-                          className="w-full flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all"
-                        >
-                          <span className="text-white font-medium">
-                            {category.name}
-                          </span>
-                          <ChevronDown 
-                            className={`w-5 h-5 text-white/70 transition-transform ${
-                              expandedSubmenu === category.name ? 'rotate-180' : ''
-                            }`} 
-                          />
-                        </button>
-                        <AnimatePresence>
-                          {expandedSubmenu === category.name && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="ml-4 mt-1 space-y-1 overflow-hidden"
-                            >
-                              {category.products.map((product) => (
-                                <Link
-                                  key={product.path}
-                                  to={product.path}
-                                  className="flex items-center justify-between p-2 bg-white/5 backdrop-blur-sm rounded-lg hover:bg-white/15 transition-all"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <span className="text-white/90 text-sm">
-                                    {product.name}
-                                  </span>
-                                  <ChevronRight className="w-4 h-4 text-white/50" />
-                                </Link>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : (
-                      <Link
-                        to={getCategoryLink(category)}
-                        className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all group/link"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <span className="text-white font-medium">
-                          {category.name}
-                        </span>
-                        <ChevronRight className="w-5 h-5 text-white/70 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
-                      </Link>
-                    )}
-                  </motion.div>
-                ))}
+                {categories.map((category, index) => {
+                  const isExternalLink = category.path.startsWith("http");
+
+                  return (
+                    <motion.div
+                      key={category.name}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      {category.isSubmenu && category.products ? (
+                        <div>
+                          <button
+                            onClick={(e) => toggleSubmenu(category.name, e)}
+                            className="w-full flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all"
+                          >
+                            <span className="text-white font-medium">
+                              {category.name}
+                            </span>
+                            <ChevronDown 
+                              className={`w-5 h-5 text-white/70 transition-transform ${
+                                expandedSubmenu === category.name ? 'rotate-180' : ''
+                              }`} 
+                            />
+                          </button>
+                          <AnimatePresence>
+                            {expandedSubmenu === category.name && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="ml-4 mt-1 space-y-1 overflow-hidden"
+                              >
+                                {category.products.map((product) => (
+                                  <Link
+                                    key={product.path}
+                                    to={product.path}
+                                    className="flex items-center justify-between p-2 bg-white/5 backdrop-blur-sm rounded-lg hover:bg-white/15 transition-all"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <span className="text-white/90 text-sm">
+                                      {product.name}
+                                    </span>
+                                    <ChevronRight className="w-4 h-4 text-white/50" />
+                                  </Link>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      ) : (
+                        isExternalLink ? (
+                          <a
+                            href={getCategoryLink(category)}
+                            className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all group/link"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <span className="text-white font-medium">
+                              {category.name}
+                            </span>
+                            <ChevronRight className="w-5 h-5 text-white/70 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
+                          </a>
+                        ) : (
+                          <Link
+                            to={getCategoryLink(category)}
+                            className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all group/link"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <span className="text-white font-medium">
+                              {category.name}
+                            </span>
+                            <ChevronRight className="w-5 h-5 text-white/70 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
+                          </Link>
+                        )
+                      )}
+                    </motion.div>
+                  );
+                })}
               </nav>
             </motion.div>
           )}
