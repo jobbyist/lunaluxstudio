@@ -81,7 +81,7 @@ const Collections = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {standardCollections.map((collection) => (
               <Card key={collection.slug} className="group overflow-hidden hover:shadow-lg transition-all duration-300">
-                <Link to={`/collection/${collection.slug}`}>
+                <Link to={`/collections/${collection.slug}`}>
                   <div className="aspect-[3/4] overflow-hidden bg-muted">
                     <img
                       src={collection.image}
@@ -192,7 +192,7 @@ const Collections = () => {
                 <Link to="/contact">Get Help</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link to="/shop">Browse All Products</Link>
+                <Link to="/explore">Browse All Products</Link>
               </Button>
             </div>
           </CardContent>
