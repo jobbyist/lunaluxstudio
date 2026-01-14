@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
-import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
+import { fetchCollectionByHandle, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import rawVietnameseImage from "@/assets/collection-raw-vietnamese.jpg";
@@ -13,7 +13,7 @@ export default function RawVietnameseCollection() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchCollectionProducts("raw-vietnamese", 50);
+        const data = await fetchCollectionByHandle("raw-vietnamese", 50);
         setProducts(data);
       } catch (error) {
         console.error("Error fetching Raw Vietnamese products:", error);

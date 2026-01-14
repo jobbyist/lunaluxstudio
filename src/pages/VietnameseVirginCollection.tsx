@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
-import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
+import { fetchCollectionByHandle, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import vietnameseImage from "@/assets/collection-vietnamese.jpg";
@@ -13,7 +13,7 @@ export default function VietnameseVirginCollection() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchCollectionProducts("vietnamese-virgin", 50);
+        const data = await fetchCollectionByHandle("vietnamese-virgin", 50);
         setProducts(data);
       } catch (error) {
         console.error("Error fetching Vietnamese Virgin products:", error);
