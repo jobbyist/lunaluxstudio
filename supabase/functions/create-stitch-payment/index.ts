@@ -1,3 +1,4 @@
+// Stitch Express Payment Integration - v2
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -43,28 +44,49 @@ async function getStitchExpressToken(): Promise<string> {
     throw new Error("Stitch Express credentials not configured");
   }
 
-  console.log("Getting Stitch Express token...");
+  console.log("Getting Stitch Express token with client_id:", clientId?.substring(0, 8) + "...");
+
+  // Try with scope parameter for payment link creation
+  const tokenPayload = {
+    clientId,
+    clientSecret,
+    scope: "client_paymentrequest",
+  };
 
   const response = await fetch(`${STITCH_EXPRESS_URL}/api/v1/token`, {
     method: "POST",
     headers: { 
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      clientId,
-      clientSecret,
-    }),
+    body: JSON.stringify(tokenPayload),
   });
 
+  const responseText = await response.text();
+  
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Stitch Express token error:", errorText);
-    throw new Error(`Failed to get Stitch Express access token: ${response.status} - ${errorText}`);
+    console.error("Stitch Express token error:", responseText);
+    throw new Error(`Failed to get Stitch Express access token: ${response.status} - ${responseText}`);
   }
 
-  const data = await response.json();
-  console.log("Stitch Express token obtained successfully");
-  return data.accessToken || data.access_token;
+  let data;
+  try {
+    data = JSON.parse(responseText);
+  } catch (e) {
+    console.error("Failed to parse token response:", responseText);
+    throw new Error("Invalid token response from Stitch Express");
+  }
+  
+  console.log("Stitch Express token response keys:", Object.keys(data));
+  
+  // Token is nested in data.data.accessToken
+  const token = data.data?.accessToken || data.accessToken || data.access_token || data.token;
+  if (!token) {
+    console.error("No token in response. Full response:", JSON.stringify(data).substring(0, 500));
+    throw new Error("No access token in Stitch Express response");
+  }
+  
+  console.log("Stitch Express token obtained successfully, length:", token.length);
+  return token;
 }
 
 function generateOrderReference(): string {
@@ -135,17 +157,23 @@ serve(async (req) => {
     const description = itemDescriptions.join(", ").substring(0, 100) || "Luna Lux Hair Order";
 
     // Create payment link using Stitch Express REST API
-    // Note: redirectUrl may need to be pre-registered in the Stitch Express dashboard
+    // Required fields: amount, payerName, merchantReference
     const paymentLinkPayload: Record<string, any> = {
       amount: totalAmountCents,
       currency: "ZAR",
-      externalReference: orderReference,
+      payerName: customerName || customerEmail?.split('@')[0] || "Customer",
+      merchantReference: orderReference,
       description: description,
     };
 
     // Only add redirectUrl if provided - it may need to be registered first
     if (redirectUrl) {
       paymentLinkPayload.redirectUrl = redirectUrl;
+    }
+    
+    // Add customer email if provided
+    if (customerEmail) {
+      paymentLinkPayload.payerEmail = customerEmail;
     }
 
     console.log("Creating Stitch Express payment link:", JSON.stringify(paymentLinkPayload, null, 2));
@@ -169,9 +197,11 @@ serve(async (req) => {
     
     console.log("Stitch Express payment link created:", JSON.stringify(paymentData, null, 2));
 
-    // The response should contain the payment link URL
-    const paymentUrl = paymentData.url || paymentData.paymentUrl || paymentData.link;
-    const paymentId = paymentData.id || paymentData.paymentLinkId;
+    // The response is nested: { success: true, data: { payment: { id, link, ... } } }
+    const payment = paymentData.data?.payment || paymentData.payment || paymentData;
+    const paymentUrl = payment.link || payment.url || paymentData.url || paymentData.link;
+    const paymentId = payment.id || paymentData.id;
+    const merchantRef = payment.merchantReference || orderReference;
 
     if (!paymentUrl) {
       console.error("No payment URL in response:", paymentData);
