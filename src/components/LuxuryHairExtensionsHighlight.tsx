@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import luxuryImage from "@/assets/collection-wigs.jpg";
+import luxuryImage from "@/assets/clip-in-hair-extension.png";
 
 export const LuxuryHairExtensionsHighlight = () => {
   return (
