@@ -6,7 +6,7 @@ const corsHeaders = {
 };
 
 const SHOPIFY_STORE_DOMAIN = "luna-hair-boutique-9dwzm.myshopify.com";
-const SHOPIFY_API_VERSION = "2025-07";
+const SHOPIFY_API_VERSION = "2024-10";
 
 interface CustomWigItem {
   quantity: number;
