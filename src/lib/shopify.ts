@@ -53,49 +53,67 @@ export interface ShopifyProduct {
   };
 }
 
+const PRODUCT_FIELDS = `
+  id
+  title
+  description
+  handle
+  priceRange {
+    minVariantPrice {
+      amount
+      currencyCode
+    }
+  }
+  images(first: 5) {
+    edges {
+      node {
+        url
+        altText
+      }
+    }
+  }
+  variants(first: 10) {
+    edges {
+      node {
+        id
+        title
+        price {
+          amount
+          currencyCode
+        }
+        availableForSale
+        selectedOptions {
+          name
+          value
+        }
+      }
+    }
+  }
+  options {
+    name
+    values
+  }
+`;
+
 const STOREFRONT_QUERY = `
   query GetProducts($first: Int!, $query: String) {
     products(first: $first, query: $query) {
       edges {
         node {
-          id
-          title
-          description
-          handle
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          images(first: 5) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
-          variants(first: 10) {
-            edges {
-              node {
-                id
-                title
-                price {
-                  amount
-                  currencyCode
-                }
-                availableForSale
-                selectedOptions {
-                  name
-                  value
-                }
-              }
-            }
-          }
-          options {
-            name
-            values
+          ${PRODUCT_FIELDS}
+        }
+      }
+    }
+  }
+`;
+
+const COLLECTION_BY_HANDLE_QUERY = `
+  query GetCollectionByHandle($handle: String!, $first: Int!) {
+    collectionByHandle(handle: $handle) {
+      products(first: $first) {
+        edges {
+          node {
+            ${PRODUCT_FIELDS}
           }
         }
       }
@@ -141,6 +159,15 @@ export async function fetchProducts(limit: number = 20, searchQuery?: string) {
 export async function fetchCollectionProducts(collectionHandle: string, limit: number = 20) {
   const query = `collection:"${collectionHandle}"`;
   return fetchProducts(limit, query);
+}
+
+export async function fetchCollectionByHandle(collectionHandle: string, limit: number = 20) {
+  const data = await storefrontApiRequest(COLLECTION_BY_HANDLE_QUERY, {
+    handle: collectionHandle,
+    first: limit,
+  });
+
+  return (data.data.collectionByHandle?.products?.edges ?? []) as ShopifyProduct[];
 }
 
 // Fetch bestseller products directly from Shopify
