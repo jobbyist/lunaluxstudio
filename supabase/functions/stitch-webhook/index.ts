@@ -147,6 +147,17 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
     orderPayload.order.phone = customerPhone;
   }
 
+  const customerId = await findOrCreateShopifyCustomer(
+    orderData,
+    shopifyAccessToken,
+    shopifyShippingAddress,
+    customerPhone
+  );
+
+  if (customerId) {
+    orderPayload.order.customer = { id: customerId };
+  }
+
   console.log("Creating Shopify order:", JSON.stringify(orderPayload, null, 2));
 
   const response = await fetch(
@@ -170,6 +181,82 @@ async function createShopifyOrder(orderData: any, shopifyAccessToken: string): P
   const data = await response.json();
   console.log("Shopify order created:", data.order?.id, data.order?.name);
   return data.order;
+}
+
+async function findOrCreateShopifyCustomer(
+  orderData: any,
+  shopifyAccessToken: string,
+  shopifyShippingAddress?: {
+    first_name: string;
+    last_name: string;
+    address1: string;
+    city: string;
+    province: string;
+    zip: string;
+    country: string;
+    phone: string;
+  },
+  customerPhone?: string
+): Promise<number | null> {
+  const customerEmail = orderData.customer_email;
+  if (!customerEmail) {
+    return null;
+  }
+
+  const searchQuery = encodeURIComponent(`email:${customerEmail}`);
+  const searchResponse = await fetch(
+    `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${SHOPIFY_API_VERSION}/customers/search.json?query=${searchQuery}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": shopifyAccessToken,
+      },
+    }
+  );
+
+  if (!searchResponse.ok) {
+    const errorText = await searchResponse.text();
+    console.error("Shopify customer search failed:", errorText);
+    throw new Error(`Failed to search Shopify customer: ${searchResponse.status} - ${errorText}`);
+  }
+
+  const searchData = await searchResponse.json();
+  const existingCustomer = searchData.customers?.[0];
+  if (existingCustomer?.id) {
+    return existingCustomer.id;
+  }
+
+  const nameParts = (orderData.customer_name || "").split(" ");
+  const customerPayload = {
+    customer: {
+      first_name: nameParts[0] || "",
+      last_name: nameParts.slice(1).join(" ") || "",
+      email: customerEmail,
+      phone: customerPhone || "",
+      addresses: shopifyShippingAddress ? [shopifyShippingAddress] : [],
+    },
+  };
+
+  const createResponse = await fetch(
+    `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${SHOPIFY_API_VERSION}/customers.json`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": shopifyAccessToken,
+      },
+      body: JSON.stringify(customerPayload),
+    }
+  );
+
+  if (!createResponse.ok) {
+    const errorText = await createResponse.text();
+    console.error("Shopify customer creation failed:", errorText);
+    throw new Error(`Failed to create Shopify customer: ${createResponse.status} - ${errorText}`);
+  }
+
+  const createData = await createResponse.json();
+  return createData.customer?.id ?? null;
 }
 
 async function sendPaymentConfirmationEmail(orderData: any): Promise<void> {
