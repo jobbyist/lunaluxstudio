@@ -28,7 +28,7 @@ const articles: Record<string, ArticleData> = {
     title: "Introducing the New LunaLuxHair: A Fresh Look, Same Luxurious Quality",
     description: "We're thrilled to announce the official launch of our rebranded platform, designed to elevate your hair shopping experience.",
     topic: "Announcement",
-    coverImage: "/lunahero.gif",
+    coverImage: "/lunaluxhair-rebrand-launch.jpg",
     publishDate: "January 6, 2025",
     readTime: "3 min read",
     externalLink: "https://www.tiktok.com/@cindykhan_/video/7568901914721570068",
