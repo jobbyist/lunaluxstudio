@@ -39,7 +39,6 @@ const About = () => {
               <div className="space-y-4 text-muted-foreground">
                 <p>{t('aboutStoryPara1')}</p>
                 <p>{t('aboutStoryPara2')}</p>
-                <p>{t('aboutStoryPara3')}</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
