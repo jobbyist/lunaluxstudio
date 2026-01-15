@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Button } from "@/components/ui/button";
-import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
+import { fetchProductByHandle, ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShoppingCart } from "lucide-react";
@@ -29,9 +29,13 @@ const ProductDetail = () => {
     const loadProduct = async () => {
       try {
         setLoading(true);
-        const products = await fetchProducts(50);
-        const found = products.find(p => p.node.handle === handle);
-        setProduct(found || null);
+        if (!handle) {
+          setProduct(null);
+          return;
+        }
+
+        const found = await fetchProductByHandle(handle);
+        setProduct(found);
         
         // Track recently viewed
         if (found) {
@@ -58,7 +62,7 @@ const ProductDetail = () => {
     };
 
     loadProduct();
-  }, [handle]);
+  }, [handle, addProduct]);
 
   const handleOptionChange = (optionName: string, value: string) => {
     const newOptions = { ...selectedOptions, [optionName]: value };
