@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { fetchCollectionByHandle, ShopifyProduct } from '@/lib/shopify';
-import { ProductCardWithQuickView } from '@/components/ProductCardWithQuickView';
+import { ProductCard } from '@/components/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -108,7 +108,7 @@ const PremiumAccessoriesCollection = () => {
           >
             {products.map((product) => (
               <motion.div key={product.node.id} variants={itemVariants}>
-                <ProductCardWithQuickView product={product} />
+                <ProductCard product={product} />
               </motion.div>
             ))}
           </motion.div>

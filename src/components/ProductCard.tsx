@@ -187,9 +187,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const displayPrice = formatPrice(priceInZAR);
 
   return (
-    <Link to={`/product/${node.handle}`} className="group">
-      <div className="bg-card rounded-xl overflow-hidden transition-all duration-300 hover-lift shine border border-border/50">
-        <div className="aspect-[3/4] overflow-hidden relative">
+    <Link
+      to={`/product/${node.handle}`}
+      className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
+      <div className="border-gradient rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover-lift shine animate-in fade-in-0 zoom-in-95">
+        <div className="aspect-[3/4] overflow-hidden relative bg-muted">
           <OptimizedImage
             src={imageUrl}
             alt={node.title}
@@ -205,7 +208,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           {isAuthenticated && (
             <button
               onClick={toggleWishlist}
-              className="absolute top-3 right-3 p-2.5 glass rounded-full hover:scale-110 transition-all duration-300 z-10"
+              className="absolute top-3 right-3 p-2.5 glass rounded-full hover:scale-110 transition-all duration-300 z-10 shadow-sm"
             >
               <Heart
                 className={`h-5 w-5 transition-colors duration-300 ${isInWishlist ? "fill-primary text-primary" : "text-foreground"}`}
@@ -214,8 +217,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           )}
         </div>
         
-        <div className="p-5 space-y-3">
-          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
+        <div className="p-5 space-y-3 border-t border-border/40 bg-card/80 backdrop-blur-sm">
+          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
             {node.title}
           </h3>
           
@@ -252,7 +255,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
           <Button
             onClick={handleAddToCart}
-            className="w-full btn-glow bg-primary hover:bg-primary/90 transition-all duration-300"
+            className="w-full btn-glow bg-primary hover:bg-primary/90 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20"
             size="sm"
           >
             <ShoppingCart className="h-4 w-4 mr-2" />
