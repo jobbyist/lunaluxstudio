@@ -1,29 +1,31 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
-import { ShoppingCart, Heart, Star } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { ShoppingCart, Heart, Star, Eye } from "lucide-react";
+import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { QuickViewModal } from "./QuickViewModal";
 import { OptimizedImage } from "@/components/OptimizedImage";
 
-interface ProductCardProps {
+interface ProductCardWithQuickViewProps {
   product: ShopifyProduct;
 }
 
-const REVIEW_BONUS_POINTS = 10; // Points awarded for each review
+const REVIEW_BONUS_POINTS = 10;
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCardWithQuickView = ({ product }: ProductCardWithQuickViewProps) => {
   const addItem = useCartStore(state => state.addItem);
   const { node } = product;
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [userRating, setUserRating] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userId, setUserId] = useState<string | null>(null);
-  const { formatPrice, currency } = useCurrency();
+  const [showQuickView, setShowQuickView] = useState(false);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     checkAuthAndLoadData();
@@ -32,10 +34,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const checkAuthAndLoadData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     setIsAuthenticated(!!user);
-    setUserId(user?.id || null);
 
     if (user) {
-      // Check wishlist
       const { data: wishlistData } = await supabase
         .from("wishlists")
         .select("id")
@@ -45,7 +45,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       
       setIsInWishlist(!!wishlistData);
 
-      // Get user rating
       const { data: ratingData } = await supabase
         .from("product_ratings")
         .select("rating")
@@ -56,7 +55,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       if (ratingData) setUserRating(ratingData.rating);
     }
 
-    // Get average rating
     const { data: ratingsData } = await supabase
       .from("product_ratings")
       .select("rating")
@@ -70,6 +68,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const toggleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -103,6 +102,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -111,7 +111,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     }
 
     try {
-      // Check if user already rated this product
       const { data: existingRating } = await supabase
         .from("product_ratings")
         .select("id, points_awarded")
@@ -145,7 +144,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         toast.success(`Rating updated to ${rating} stars`);
       }
       
-      checkAuthAndLoadData(); // Refresh average rating
+      checkAuthAndLoadData();
     } catch (error: any) {
       console.error("Rating error:", error);
       // Check if this is a rate limit error
@@ -159,6 +158,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     
     const defaultVariant = node.variants.edges[0]?.node;
     if (!defaultVariant) return;
@@ -179,87 +179,109 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     });
   };
 
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowQuickView(true);
+  };
+
   const imageUrl = node.images.edges[0]?.node.url || "/placeholder.svg";
   const price = node.priceRange.minVariantPrice;
-  
-  // Convert Shopify price (in ZAR) to selected currency
   const priceInZAR = parseFloat(price.amount);
   const displayPrice = formatPrice(priceInZAR);
 
   return (
-    <Link to={`/product/${node.handle}`} className="group">
-      <div className="bg-card rounded-xl overflow-hidden transition-all duration-300 hover-lift shine border border-border/50">
-        <div className="aspect-[3/4] overflow-hidden relative">
-          <OptimizedImage
-            src={imageUrl}
-            alt={node.title}
-            containerClassName="w-full h-full"
-            className="group-hover:scale-110 transition-transform duration-700 ease-out"
-            loading="lazy"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          />
-          
-          {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-          
-          {isAuthenticated && (
-            <button
-              onClick={toggleWishlist}
-              className="absolute top-3 right-3 p-2.5 glass rounded-full hover:scale-110 transition-all duration-300 z-10"
-            >
-              <Heart
-                className={`h-5 w-5 transition-colors duration-300 ${isInWishlist ? "fill-primary text-primary" : "text-foreground"}`}
-              />
-            </button>
-          )}
-        </div>
-        
-        <div className="p-5 space-y-3">
-          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
-            {node.title}
-          </h3>
-          
-          {isAuthenticated && (
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  onClick={(e) => handleRating(star, e)}
-                  className="p-0.5 hover:scale-125 transition-transform duration-200"
-                >
-                  <Star
-                    className={`h-4 w-4 transition-all duration-200 ${
-                      star <= userRating
-                        ? "fill-gold text-gold"
-                        : "text-muted-foreground hover:text-gold/50"
-                    }`}
-                  />
-                </button>
-              ))}
-              {averageRating > 0 && (
-                <span className="text-xs text-muted-foreground ml-2">
-                  ({averageRating.toFixed(1)})
-                </span>
-              )}
+    <>
+      <Link to={`/product/${node.handle}`} className="group">
+        <div className="bg-background rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+          <div className="aspect-[3/4] bg-muted overflow-hidden relative">
+            <OptimizedImage
+              src={imageUrl}
+              alt={node.title}
+              containerClassName="w-full h-full"
+              className="group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            />
+            
+            {/* Overlay on hover */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <Button
+                onClick={handleQuickView}
+                variant="secondary"
+                size="sm"
+                className="gap-2"
+              >
+                <Eye className="h-4 w-4" />
+                Quick View
+              </Button>
             </div>
-          )}
-          
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold gradient-text">
-              {displayPrice}
-            </span>
+            
+            {isAuthenticated && (
+              <button
+                onClick={toggleWishlist}
+                className="absolute top-3 right-3 p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors z-10"
+              >
+                <Heart
+                  className={`h-5 w-5 ${isInWishlist ? "fill-primary text-primary" : "text-foreground"}`}
+                />
+              </button>
+            )}
           </div>
+          
+          <div className="p-4 space-y-3">
+            <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2">
+              {node.title}
+            </h3>
+            
+            {isAuthenticated && (
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={(e) => handleRating(star, e)}
+                    className="p-0.5 hover:scale-110 transition-transform"
+                  >
+                    <Star
+                      className={`h-4 w-4 ${
+                        star <= userRating
+                          ? "fill-primary text-primary"
+                          : "text-muted-foreground"
+                      }`}
+                    />
+                  </button>
+                ))}
+                {averageRating > 0 && (
+                  <span className="text-xs text-muted-foreground ml-2">
+                    ({averageRating.toFixed(1)})
+                  </span>
+                )}
+              </div>
+            )}
+            
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-semibold text-primary">
+                {displayPrice}
+              </span>
+            </div>
 
-          <Button
-            onClick={handleAddToCart}
-            className="w-full btn-glow bg-primary hover:bg-primary/90 transition-all duration-300"
-            size="sm"
-          >
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            Add to Cart
-          </Button>
+            <Button
+              onClick={handleAddToCart}
+              className="w-full bg-primary hover:bg-primary/90"
+              size="sm"
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Add to Cart
+            </Button>
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+
+      <QuickViewModal
+        product={product}
+        open={showQuickView}
+        onOpenChange={setShowQuickView}
+      />
+    </>
   );
 };
