@@ -126,6 +126,13 @@ const ProductDetail = () => {
   const { node } = product;
   const imageUrl = node.images.edges[0]?.node.url || "/placeholder.svg";
   const price = selectedVariant?.price || node.priceRange.minVariantPrice;
+  const displayOptions = node.options.filter((option) => {
+    if (option.values.length === 1 && option.values[0] === "Default Title") {
+      return false;
+    }
+
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -183,8 +190,9 @@ const ProductDetail = () => {
               ) : null}
 
               {/* Product Options */}
+              {displayOptions.length > 0 && (
               <div className="space-y-6">
-                {node.options.map((option) => (
+                {displayOptions.map((option) => (
                   <div key={option.name} className="space-y-3">
                     <Label className="text-base font-semibold">
                       {option.name}: {selectedOptions[option.name]}
@@ -213,6 +221,7 @@ const ProductDetail = () => {
                   </div>
                 ))}
               </div>
+              )}
 
               <Button
                 onClick={handleAddToCart}
