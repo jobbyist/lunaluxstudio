@@ -30,13 +30,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useCurrency, type Currency, type Language } from "@/contexts/CurrencyContext";
 import { NotificationBar } from "./NotificationBar";
 import lunaLogo from "@/assets/luna-logo.png";
@@ -58,8 +51,8 @@ export const Header = () => {
   const { currency, language, setCurrency, setLanguage, t } = useCurrency();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [trackOrderOpen, setTrackOrderOpen] = useState(false);
   const { getHeaderNav, loading } = useNavigation();
+  const trackOrderUrl = "https://account.lunaluxhair.com/";
 
   const currencies: Currency[] = ["ZAR", "USD", "EUR", "GBP"];
   const languages: Language[] = ["EN", "ES", "FR", "DE", "AF"];
@@ -145,18 +138,17 @@ export const Header = () => {
           <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
             {displayMainNav.map((item, index) => (
               isTrackOrderLink(item.label) ? (
-                <button
+                <a
                   key={index}
-                  type="button"
-                  onClick={() => setTrackOrderOpen(true)}
+                  href={trackOrderUrl}
                   className="text-foreground hover:text-primary transition-colors"
                 >
                   {item.label}
-                </button>
+                </a>
               ) : (
-                <Link 
+                <Link
                   key={index}
-                  to={item.path} 
+                  to={item.path}
                   className="text-foreground hover:text-primary transition-colors"
                 >
                   {item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}
@@ -176,13 +168,9 @@ export const Header = () => {
                 {displayMoreNav.map((item, index) => (
                   <DropdownMenuItem key={index} asChild>
                     {isTrackOrderLink(item.label) ? (
-                      <button
-                        type="button"
-                        onClick={() => setTrackOrderOpen(true)}
-                        className="cursor-pointer"
-                      >
+                      <a href={trackOrderUrl} className="cursor-pointer">
                         {item.label}
-                      </button>
+                      </a>
                     ) : (item as { external?: boolean }).external ? (
                       <a href={item.path} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
                         {item.label}
@@ -270,18 +258,15 @@ export const Header = () => {
                 const IconComponent = iconMap[mobileIcons[index] || 'home'] || Home;
                 return (
                   isTrackOrderLink(item.label) ? (
-                    <button
+                    <a
                       key={index}
-                      type="button"
+                      href={trackOrderUrl}
                       className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        setTrackOrderOpen(true);
-                      }}
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
                       <span>{item.label}</span>
-                    </button>
+                    </a>
                   ) : (
                     <Link
                       key={index}
@@ -306,23 +291,20 @@ export const Header = () => {
                   const IconComponent = moreIcons[index] || Award;
                   return (
                     isTrackOrderLink(item.label) ? (
-                      <button
+                      <a
                         key={index}
-                        type="button"
+                        href={trackOrderUrl}
                         className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          setTrackOrderOpen(true);
-                        }}
+                        onClick={() => setMobileMenuOpen(false)}
                       >
                         <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
                         <span>{item.label}</span>
-                      </button>
+                      </a>
                     ) : (
-                      <Link 
+                      <Link
                         key={index}
-                        to={item.path} 
-                        className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group" 
+                        to={item.path}
+                        className="flex items-center gap-3 px-3 py-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors group"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <IconComponent className="h-5 w-5 text-muted-foreground group-hover:text-accent-foreground" />
@@ -336,46 +318,6 @@ export const Header = () => {
           </SheetContent>
         </Sheet>
       </div>
-      <Dialog open={trackOrderOpen} onOpenChange={setTrackOrderOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-serif">Track My Order</DialogTitle>
-            <DialogDescription>
-              Use the waybill number from your order confirmation email to track your delivery.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 text-sm text-muted-foreground">
-            <p>
-              Track your order with The Courier Guy using your waybill number.
-            </p>
-            <a
-              href="https://thecourierguy.co.za/tracking/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-primary underline-offset-4 hover:underline"
-            >
-              Open The Courier Guy tracking
-            </a>
-            <p>
-              Need help? Email us at{" "}
-              <a
-                href="mailto:info@lunaluxhair.com"
-                className="text-primary underline-offset-4 hover:underline"
-              >
-                info@lunaluxhair.com
-              </a>{" "}
-              or WhatsApp{" "}
-              <a
-                href="https://wa.me/27662869181"
-                className="text-primary underline-offset-4 hover:underline"
-              >
-                +27 66 286 9181
-              </a>
-              .
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
     </motion.header>
   );
 };
