@@ -43,16 +43,22 @@ const ProductDetail = () => {
         }
         
         if (found) {
-          // Initialize with first variant
           const firstVariant = found.node.variants.edges[0]?.node;
+          const initialOptions: Record<string, string> = {};
+
           if (firstVariant) {
-            setSelectedVariant(firstVariant);
-            const initialOptions: Record<string, string> = {};
             firstVariant.selectedOptions.forEach(opt => {
               initialOptions[opt.name] = opt.value;
             });
-            setSelectedOptions(initialOptions);
           }
+
+          found.node.options.forEach(option => {
+            if (!initialOptions[option.name]) {
+              initialOptions[option.name] = option.values[0] ?? "";
+            }
+          });
+
+          setSelectedOptions(initialOptions);
         }
       } catch (error) {
         console.error("Error loading product:", error);
@@ -64,18 +70,22 @@ const ProductDetail = () => {
     loadProduct();
   }, [handle, addProduct]);
 
+  useEffect(() => {
+    if (!product) {
+      setSelectedVariant(null);
+      return;
+    }
+
+    const variant = product.node.variants.edges.find(({ node }) =>
+      node.selectedOptions.every(opt => selectedOptions[opt.name] === opt.value)
+    )?.node;
+
+    setSelectedVariant(variant || null);
+  }, [product, selectedOptions]);
+
   const handleOptionChange = (optionName: string, value: string) => {
     const newOptions = { ...selectedOptions, [optionName]: value };
     setSelectedOptions(newOptions);
-
-    // Find matching variant
-    const variant = product?.node.variants.edges.find(({ node }) =>
-      node.selectedOptions.every(opt => newOptions[opt.name] === opt.value)
-    )?.node;
-
-    if (variant) {
-      setSelectedVariant(variant);
-    }
   };
 
   const handleAddToCart = () => {
