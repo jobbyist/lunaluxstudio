@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { PageLayout } from "@/components/PageLayout";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { ProductCard } from "@/components/ProductCard";
-import { RecentlyViewed } from "@/components/RecentlyViewed";
 import { fetchBestsellers, ShopifyProduct } from "@/lib/shopify";
 import { Filter, ArrowUpDown, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -189,8 +188,6 @@ const Bestsellers = () => {
         </div>
       </section>
 
-      {/* Recently Viewed */}
-      <RecentlyViewed />
     </PageLayout>
   );
 };
