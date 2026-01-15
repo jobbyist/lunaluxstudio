@@ -17,16 +17,18 @@ export const PageLayout = ({ children, title, subtitle }: PageLayoutProps) => {
         <main className="pt-36 md:pt-40 pb-20">
           {(title || subtitle) && (
             <div className="container mx-auto px-4 mb-12">
-              {title && (
-                <h1 className="text-4xl md:text-5xl font-serif text-center mb-4 tracking-wider">
-                  {title}
-                </h1>
-              )}
-              {subtitle && (
-                <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-                  {subtitle}
-                </p>
-              )}
+              <div className="rounded-3xl border border-border/60 bg-card/70 px-6 py-8 md:px-10 md:py-12 text-center shadow-sm">
+                {title && (
+                  <h1 className="text-4xl md:text-5xl font-serif mb-4 tracking-tight">
+                    {title}
+                  </h1>
+                )}
+                {subtitle && (
+                  <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+                    {subtitle}
+                  </p>
+                )}
+              </div>
             </div>
           )}
           <div className="container mx-auto px-4">

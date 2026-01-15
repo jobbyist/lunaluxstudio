@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
-import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
+import { ProductCard } from "@/components/ProductCard";
 import { fetchCollectionByHandle, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
@@ -89,7 +89,7 @@ export default function VietnameseVirginCollection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
-                <ProductCardWithQuickView product={product} />
+                <ProductCard product={product} />
               </motion.div>
             ))}
           </motion.div>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PageLayout } from "@/components/PageLayout";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
-import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
+import { ProductCard } from "@/components/ProductCard";
 import { RecentlyViewed } from "@/components/RecentlyViewed";
 import { fetchBestsellers, ShopifyProduct } from "@/lib/shopify";
 import { Filter, ArrowUpDown, Star } from "lucide-react";
@@ -180,7 +180,7 @@ const Bestsellers = () => {
                       visible: { opacity: 1, y: 0 },
                     }}
                   >
-                    <ProductCardWithQuickView product={product} />
+                    <ProductCard product={product} />
                   </motion.div>
                 ))}
               </motion.div>
