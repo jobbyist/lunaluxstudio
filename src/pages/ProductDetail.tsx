@@ -12,8 +12,6 @@ import { ShoppingCart } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
-import { RecentlyViewed } from "@/components/RecentlyViewed";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -23,7 +21,6 @@ const ProductDetail = () => {
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const addItem = useCartStore(state => state.addItem);
   const { formatPrice } = useCurrency();
-  const { addProduct } = useRecentlyViewed();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -36,11 +33,6 @@ const ProductDetail = () => {
 
         const found = await fetchProductByHandle(handle);
         setProduct(found);
-        
-        // Track recently viewed
-        if (found) {
-          addProduct(found);
-        }
         
         if (found) {
           const firstVariant = found.node.variants.edges[0]?.node;
@@ -68,7 +60,7 @@ const ProductDetail = () => {
     };
 
     loadProduct();
-  }, [handle, addProduct]);
+  }, [handle]);
 
   useEffect(() => {
     if (!product) {
@@ -239,9 +231,6 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-        
-        {/* Recently Viewed Section */}
-        <RecentlyViewed />
       </main>
       </PageTransition>
       <Footer />
