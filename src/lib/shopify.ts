@@ -14,6 +14,7 @@ export interface ShopifyProduct {
     id: string;
     title: string;
     description: string;
+    descriptionHtml?: string;
     handle: string;
     priceRange: {
       minVariantPrice: {
@@ -57,6 +58,7 @@ const PRODUCT_FIELDS = `
   id
   title
   description
+  descriptionHtml
   handle
   priceRange {
     minVariantPrice {
@@ -73,6 +75,49 @@ const PRODUCT_FIELDS = `
     }
   }
   variants(first: 10) {
+    edges {
+      node {
+        id
+        title
+        price {
+          amount
+          currencyCode
+        }
+        availableForSale
+        selectedOptions {
+          name
+          value
+        }
+      }
+    }
+  }
+  options {
+    name
+    values
+  }
+`;
+
+const PRODUCT_DETAIL_FIELDS = `
+  id
+  title
+  description
+  descriptionHtml
+  handle
+  priceRange {
+    minVariantPrice {
+      amount
+      currencyCode
+    }
+  }
+  images(first: 10) {
+    edges {
+      node {
+        url
+        altText
+      }
+    }
+  }
+  variants(first: 100) {
     edges {
       node {
         id
@@ -117,6 +162,14 @@ const COLLECTION_BY_HANDLE_QUERY = `
           }
         }
       }
+    }
+  }
+`;
+
+const PRODUCT_BY_HANDLE_QUERY = `
+  query GetProductByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
+      ${PRODUCT_DETAIL_FIELDS}
     }
   }
 `;
@@ -168,6 +221,12 @@ export async function fetchCollectionByHandle(collectionHandle: string, limit: n
   });
 
   return (data.data.collectionByHandle?.products?.edges ?? []) as ShopifyProduct[];
+}
+
+export async function fetchProductByHandle(handle: string) {
+  const data = await storefrontApiRequest(PRODUCT_BY_HANDLE_QUERY, { handle });
+  const product = data.data.productByHandle as ShopifyProduct['node'] | null;
+  return product ? ({ node: product } as ShopifyProduct) : null;
 }
 
 // Fetch bestseller products directly from Shopify
