@@ -90,18 +90,6 @@ export const Hero = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.div className="space-y-4" variants={itemVariants}>
-            <p className="text-xs md:text-sm uppercase tracking-[0.35em] text-muted-foreground">
-              {t("heroTagline")}
-            </p>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif tracking-tight text-foreground">
-              <span className="block">{t("heroTitle")}</span>
-              <span className="block gradient-text">{t("heroTitleHighlight")}</span>
-            </h1>
-            <p className="text-sm md:text-base font-medium text-primary/80 tracking-[0.4em] uppercase">
-              {t("heroSubtitle")}
-            </p>
-          </motion.div>
 
           {/* CTA Buttons */}
           <motion.div 
