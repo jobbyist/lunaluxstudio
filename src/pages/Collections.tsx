@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import { fetchCollectionProducts, ShopifyProduct } from "@/lib/shopify";
-import { ProductCardWithQuickView } from "@/components/ProductCardWithQuickView";
+import { ProductCard } from "@/components/ProductCard";
 import brazilianImage from "@/assets/collection-brazilian.jpg";
 import vietnameseImage from "@/assets/collection-vietnamese.jpg";
 import rawVietnameseImage from "@/assets/collection-raw-vietnamese.jpg";
@@ -114,7 +114,7 @@ const Collections = () => {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {mainCharacterProducts.map((product) => (
-                  <ProductCardWithQuickView key={product.node.id} product={product} />
+                  <ProductCard key={product.node.id} product={product} />
                 ))}
               </div>
               <div className="text-center">

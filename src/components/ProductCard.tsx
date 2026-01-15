@@ -4,7 +4,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShoppingCart, Heart, Star } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { OptimizedImage } from "@/components/OptimizedImage";
@@ -23,7 +23,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const [averageRating, setAverageRating] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const { formatPrice, currency } = useCurrency();
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     checkAuthAndLoadData();
@@ -186,9 +186,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const priceInZAR = parseFloat(price.amount);
   const displayPrice = formatPrice(priceInZAR);
 
+  const hasRatings = averageRating > 0;
+
   return (
-    <Link to={`/product/${node.handle}`} className="group">
-      <div className="bg-card rounded-xl overflow-hidden transition-all duration-300 hover-lift shine border border-border/50">
+    <Link to={`/product/${node.handle}`} className="group focus:outline-none">
+      <div className="bg-card/95 rounded-2xl overflow-hidden transition-all duration-300 hover-lift border border-border/60 shadow-sm hover:shadow-lg hover:shadow-primary/20">
         <div className="aspect-[3/4] overflow-hidden relative">
           <OptimizedImage
             src={imageUrl}
@@ -215,34 +217,39 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         </div>
         
         <div className="p-5 space-y-3">
-          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
+          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
             {node.title}
           </h3>
           
-          {isAuthenticated && (
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((star) => (
+          <div className="flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map((star) => {
+              const isActive = isAuthenticated ? star <= userRating : star <= Math.round(averageRating);
+              const baseClass = isActive ? "fill-gold text-gold" : "text-muted-foreground/70";
+
+              return isAuthenticated ? (
                 <button
                   key={star}
                   onClick={(e) => handleRating(star, e)}
                   className="p-0.5 hover:scale-125 transition-transform duration-200"
+                  aria-label={`Rate ${star} star${star === 1 ? "" : "s"}`}
                 >
-                  <Star
-                    className={`h-4 w-4 transition-all duration-200 ${
-                      star <= userRating
-                        ? "fill-gold text-gold"
-                        : "text-muted-foreground hover:text-gold/50"
-                    }`}
-                  />
+                  <Star className={`h-4 w-4 transition-all duration-200 ${baseClass}`} />
                 </button>
-              ))}
-              {averageRating > 0 && (
-                <span className="text-xs text-muted-foreground ml-2">
-                  ({averageRating.toFixed(1)})
-                </span>
-              )}
-            </div>
-          )}
+              ) : (
+                <Star key={star} className={`h-4 w-4 ${baseClass}`} />
+              );
+            })}
+            {hasRatings && (
+              <span className="text-xs text-muted-foreground ml-2">
+                ({averageRating.toFixed(1)})
+              </span>
+            )}
+            {!hasRatings && (
+              <span className="text-xs text-muted-foreground ml-2">
+                New arrival
+              </span>
+            )}
+          </div>
           
           <div className="flex items-center justify-between">
             <span className="text-lg font-semibold gradient-text">
