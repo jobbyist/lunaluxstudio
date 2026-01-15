@@ -56,8 +56,8 @@ const collectionCategories: Record<string, CategoryItem[]> = {
   ],
   "premium-accessories": [
     { name: "View All Products", path: "https://lunaluxhair.com/collections/premium-accessories" },
-    { name: "Hair Storage Bags", path: "/product/luna-hair-storage-bag" },
-    { name: "Premium Brushes", path: "/product/luna-premium-brushes" },
+    { name: "Hair Storage Bags", path: "https://lunaluxhair.com/product/luna-premium-brushes-copy" },
+    { name: "Premium Brushes", path: "https://lunaluxhair.com/product/premium-paddle-hair-brush" },
   ],
 };
 
