@@ -31,13 +31,13 @@ interface BaseBundle {
 
 // Base Length Options
 const baseBundles: BaseBundle[] = [
-  { id: "length-16", name: '16"', description: "Base length for your custom wig", price: 2000, skuCode: "L16" },
-  { id: "length-18", name: '18"', description: "Base length for your custom wig", price: 2200, skuCode: "L18" },
-  { id: "length-20", name: '20"', description: "Base length for your custom wig", price: 2600, skuCode: "L20" },
-  { id: "length-22", name: '22"', description: "Base length for your custom wig", price: 3000, skuCode: "L22" },
-  { id: "length-24", name: '24"', description: "Base length for your custom wig", price: 3800, skuCode: "L24" },
-  { id: "length-26", name: '26"', description: "Base length for your custom wig", price: 4000, skuCode: "L26" },
-  { id: "length-28", name: '28"', description: "Base length for your custom wig", price: 4200, skuCode: "L28" },
+  { id: "length-16", name: '16"', description: "Base length for your custom wig", price: 2200, skuCode: "L16" },
+  { id: "length-18", name: '18"', description: "Base length for your custom wig", price: 2400, skuCode: "L18" },
+  { id: "length-20", name: '20"', description: "Base length for your custom wig", price: 2800, skuCode: "L20" },
+  { id: "length-22", name: '22"', description: "Base length for your custom wig", price: 3200, skuCode: "L22" },
+  { id: "length-24", name: '24"', description: "Base length for your custom wig", price: 4000, skuCode: "L24" },
+  { id: "length-26", name: '26"', description: "Base length for your custom wig", price: 4200, skuCode: "L26" },
+  { id: "length-28", name: '28"', description: "Base length for your custom wig", price: 4400, skuCode: "L28" },
 ];
 
 // Cap Size Options (Free)
