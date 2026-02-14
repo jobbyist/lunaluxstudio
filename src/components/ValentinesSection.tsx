@@ -1,0 +1,61 @@
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { Heart } from "lucide-react";
+import valentinesBanner from "@/assets/valentines-cafe-de-luna.jpg";
+
+export const ValentinesSection = () => {
+  return (
+    <section className="py-16 bg-background overflow-hidden">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="relative rounded-2xl overflow-hidden max-w-6xl mx-auto"
+        >
+          <Link to="/collection/cafe-de-luna" className="block group">
+            <div className="relative aspect-[16/7] md:aspect-[16/6]">
+              <img
+                src={valentinesBanner}
+                alt="Cafe De Luna Valentine's Collection"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+
+              <div className="absolute inset-0 flex flex-col items-start justify-center px-8 md:px-16">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <Heart className="h-4 w-4 text-red-400 fill-red-400" />
+                    <span className="text-xs uppercase tracking-[0.3em] text-red-300 font-medium">
+                      Valentine's Day Special
+                    </span>
+                    <Heart className="h-4 w-4 text-red-400 fill-red-400" />
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-serif text-white mb-3 tracking-wide">
+                    Café De Luna
+                  </h2>
+                  <p className="text-white/80 text-sm md:text-base max-w-md mb-6">
+                    Warm-toned highlights inspired by your favourite café flavours. The perfect gift for someone special — or yourself.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="border-white/40 text-white hover:bg-white/10 hover:border-white/60 rounded-full px-8"
+                  >
+                    Shop the Collection
+                  </Button>
+                </motion.div>
+              </div>
+            </div>
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  );
+};

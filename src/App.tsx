@@ -25,6 +25,7 @@ import Collections from "./pages/Collections";
 import MainCharacterCollectionPage from "./pages/MainCharacterCollection";
 import FaceCardCollection from "./pages/FaceCardCollection";
 import PopOutCollection from "./pages/PopOutCollection";
+import CafeDeLunaCollection from "./pages/CafeDeLunaCollection";
 import Loyalty from "./pages/Loyalty";
 import GiftVouchers from "./pages/GiftVouchers";
 import SpecialOffers from "./pages/SpecialOffers";
@@ -91,6 +92,7 @@ const App = () => (
             <Route path="/collection/main-character" element={<MainCharacterCollectionPage />} />
             <Route path="/collection/face-card-collection" element={<FaceCardCollection />} />
             <Route path="/collection/pop-out-collection" element={<PopOutCollection />} />
+            <Route path="/collection/cafe-de-luna" element={<CafeDeLunaCollection />} />
             <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
             <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
             <Route path="/loyalty" element={<Loyalty />} />
