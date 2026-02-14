@@ -66,9 +66,18 @@ export const ValentinesPopup = () => {
                   Café De Luna
                 </h2>
 
-                <p className="text-muted-foreground text-sm md:text-base max-w-sm mx-auto mb-6">
+                <p className="text-muted-foreground text-sm md:text-base max-w-sm mx-auto mb-4">
                   Love is in the hair… Warm-toned highlights crafted for the one who deserves something special.
                 </p>
+
+                {/* Promo offers */}
+                <div className="space-y-1.5 text-xs text-muted-foreground mb-5 max-w-sm mx-auto">
+                  <p>💝 <span className="text-foreground font-medium">14% OFF</span> Brazilian, Vietnamese & Raw Vietnamese collections</p>
+                  <p>💝 <span className="text-foreground font-medium">10% OFF</span> Custom Wigs</p>
+                  <p>💝 <span className="text-foreground font-medium">10% OFF</span> Café De Luna + FREE storage bag/brush</p>
+                  <p>💝 Lux Club members get a <span className="text-foreground font-medium">FREE item</span> with every purchase</p>
+                  <p className="text-[11px] italic text-muted-foreground/70">All discounts automatically applied at checkout</p>
+                </div>
 
                 <div className="flex flex-col gap-2">
                   <Button asChild size="lg" className="w-full btn-glow">

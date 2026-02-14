@@ -10,16 +10,24 @@ import {
 
 const notifications = [
   {
-    text: "Buy now and pay for your order later with your next two paychecks with Happy Pay. Interest-free, no upfront payment needed.",
-    action: "happyPay"
+    text: "💝 Valentine's Special: 14% OFF Brazilian Virgin, Vietnamese Virgin & Raw Vietnamese collections — applied at checkout!",
+    link: "/explore"
   },
   {
-    text: "Get 10% OFF your first order using the discount code \"LUNANEW10\" during checkout",
-    link: null
+    text: "💝 10% OFF Custom Wigs this Valentine's Day — automatically applied at checkout!",
+    link: "/customize"
   },
   {
-    text: "Join The Lux Club to earn loyalty rewards and unlock exclusive members-only perks.",
+    text: "💝 10% OFF Café De Luna collection + FREE hair storage bag/brush — applied at checkout!",
+    link: "/collection/cafe-de-luna"
+  },
+  {
+    text: "💝 Lux Club members get a FREE item with every purchase this Valentine's Day!",
     link: "/loyalty"
+  },
+  {
+    text: "Buy now, pay later with Happy Pay — interest-free, no upfront payment needed.",
+    action: "happyPay"
   }
 ];
 
