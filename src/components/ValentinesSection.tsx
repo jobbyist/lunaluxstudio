@@ -16,7 +16,7 @@ export const ValentinesSection = () => {
           className="relative rounded-2xl overflow-hidden max-w-6xl mx-auto"
         >
           <Link to="/collection/cafe-de-luna" className="block group">
-            <div className="relative aspect-[16/7] md:aspect-[16/6]">
+            <div className="relative aspect-[16/9] md:aspect-[16/7]">
               <img
                 src={valentinesBanner}
                 alt="Cafe De Luna Valentine's Collection"
