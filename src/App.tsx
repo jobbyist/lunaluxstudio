@@ -9,7 +9,7 @@ import { ChatBot } from "@/components/ChatBot";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { VisitorTracker } from "@/components/VisitorTracker";
-import { ValentinesPopup } from "@/components/ValentinesPopup";
+
 import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import CustomizeProduct from "./pages/CustomizeProduct";
@@ -130,7 +130,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatBot />
-          <ValentinesPopup />
+          
         </BrowserRouter>
       </TooltipProvider>
     </CurrencyProvider>

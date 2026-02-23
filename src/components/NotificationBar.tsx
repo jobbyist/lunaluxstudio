@@ -10,19 +10,15 @@ import {
 
 const notifications = [
   {
-    text: "💝 Valentine's Special: 14% OFF Brazilian Virgin, Vietnamese Virgin & Raw Vietnamese collections — applied at checkout!",
-    link: "/explore"
-  },
-  {
-    text: "💝 10% OFF Custom Wigs this Valentine's Day — automatically applied at checkout!",
-    link: "/customize"
-  },
-  {
-    text: "💝 10% OFF Café De Luna collection + FREE hair storage bag/brush — applied at checkout!",
+    text: "NEW: Café De Luna Collection — Warm-toned highlights inspired by your favourite café flavours.",
     link: "/collection/cafe-de-luna"
   },
   {
-    text: "💝 Lux Club members get a FREE item with every purchase this Valentine's Day!",
+    text: "Get 10% OFF your first order using the discount code \"LUNANEW10\" during checkout.",
+    link: null
+  },
+  {
+    text: "Join The Lux Club to earn loyalty rewards and unlock exclusive members-only perks.",
     link: "/loyalty"
   },
   {
