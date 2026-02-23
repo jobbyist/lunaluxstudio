@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { ValentinesSection } from "@/components/ValentinesSection";
+import { CafeDeLunaSection } from "@/components/CafeDeLunaSection";
 import { MainCharacterCollection } from "@/components/MainCharacterCollection";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Collections } from "@/components/Collections";
@@ -17,7 +17,7 @@ const Index = () => {
         <Header />
         <main className="pt-36 md:pt-44">
           <Hero />
-          <ValentinesSection />
+          <CafeDeLunaSection />
           <Collections />
           <LuxuryHairExtensionsHighlight />
           <MainCharacterCollection />
