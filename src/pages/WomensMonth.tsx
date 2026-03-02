@@ -85,7 +85,7 @@ export default function WomensMonth() {
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <Gift className="h-6 w-6 text-pink-500" />
                   <h2 className="text-2xl md:text-3xl font-serif text-foreground">
-                    Exclusive Offer
+                    Exclusive Offers
                   </h2>
                   <Gift className="h-6 w-6 text-pink-500" />
                 </div>
@@ -93,9 +93,18 @@ export default function WomensMonth() {
                 <p className="text-lg md:text-xl font-medium mb-2">
                   Get a <span className="text-pink-600 dark:text-pink-400 font-bold">FREE 10" 2x6 inch bob</span>
                 </p>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground mb-4">
                   when you purchase any item from our Café De Luna or Raw Vietnamese Bundles collections
                 </p>
+                
+                <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/20 dark:to-purple-950/20 rounded-xl p-4 mb-4 border border-pink-200 dark:border-pink-800">
+                  <p className="text-base font-semibold text-foreground mb-1">
+                    🎁 BONUS OFFER
+                  </p>
+                  <p className="text-sm text-foreground">
+                    New and existing members of The Lux Club will earn <span className="font-bold text-pink-600 dark:text-pink-400">DOUBLE</span> the loyalty rewards points for all purchases made throughout International Women's Month.
+                  </p>
+                </div>
                 
                 <div className="mt-4 text-sm text-muted-foreground italic">
                   *Free bob automatically added to qualifying orders at checkout
@@ -145,16 +154,21 @@ export default function WomensMonth() {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto"
           >
-            <div className="aspect-video bg-muted rounded-2xl flex items-center justify-center border-2 border-dashed border-border">
-              <div className="text-center p-8">
-                <Sparkles className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-lg text-muted-foreground mb-2">
-                  Promotional Video Coming Soon
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Our special International Women's Month video will be featured here
-                </p>
-              </div>
+            <div className="aspect-video bg-muted rounded-2xl overflow-hidden border-2 border-border">
+              <video 
+                className="w-full h-full object-cover"
+                autoPlay 
+                loop 
+                muted
+                playsInline
+                controls={false}
+                controlsList="nodownload nofullscreen noremoteplayback"
+                disablePictureInPicture
+                onContextMenu={(e) => e.preventDefault()}
+              >
+                <source src="/womensmonth.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </motion.div>
         </div>
@@ -257,7 +271,7 @@ export default function WomensMonth() {
             <Badge className="bg-pink-500/20 text-pink-600 dark:text-pink-400 border-pink-500/30 mb-4">
               Your Free Gift
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-serif mb-4">
+            <h2 className="text-3xl md:text-4xl font-serif mb-4 text-foreground">
               Free 10" 2x6 Inch Bob
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
@@ -316,6 +330,9 @@ export default function WomensMonth() {
               <li>• Valid for purchases made during International Women's Month (March 2026)</li>
               <li>• Free 10" 2x6 inch bob automatically added to qualifying orders</li>
               <li>• Qualifying purchase: Any item from Café De Luna or Raw Vietnamese Bundles collections</li>
+              <li>• BONUS: New and existing members of The Lux Club will earn DOUBLE the loyalty rewards points for all purchases made throughout International Women's Month</li>
+              <li>• Terms and conditions apply. Offer valid while stocks last</li>
+              <li>• Items purchased through a sale/promotion are not eligible for a refund/exchange unless otherwise specified by management</li>
               <li>• Promotion cannot be combined with other offers unless specified</li>
               <li>• Luna Luxury Hair reserves the right to modify or cancel this promotion at any time</li>
             </ul>

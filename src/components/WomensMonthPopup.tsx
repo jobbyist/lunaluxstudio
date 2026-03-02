@@ -70,18 +70,27 @@ export const WomensMonthPopup = () => {
                 <div className="bg-card/80 backdrop-blur rounded-xl p-5 mb-6 border-2 border-pink-200 dark:border-pink-800">
                   <div className="flex items-center justify-center gap-2 mb-3">
                     <Gift className="h-5 w-5 text-pink-500" />
-                    <span className="font-semibold text-lg">Exclusive Offer</span>
+                    <span className="font-semibold text-lg">Exclusive Offers</span>
                   </div>
                   
                   <p className="text-base font-medium mb-1">
                     Get a <span className="text-pink-600 dark:text-pink-400 font-bold">FREE 10" 2x6 inch bob</span>
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground mb-3">
                     with any purchase from Café De Luna or Raw Vietnamese Bundles
                   </p>
                   
+                  <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 rounded-lg p-3 mb-3 border border-pink-200 dark:border-pink-800">
+                    <p className="text-xs font-semibold text-foreground mb-1">
+                      🎁 BONUS OFFER
+                    </p>
+                    <p className="text-xs text-foreground">
+                      Lux Club members earn <span className="font-bold text-pink-600 dark:text-pink-400">DOUBLE</span> loyalty points all month!
+                    </p>
+                  </div>
+                  
                   <div className="mt-3 text-xs text-muted-foreground italic">
-                    *Automatically added to qualifying orders
+                    *Automatically added to qualifying orders. Terms and conditions apply. Offer valid while stocks last.
                   </div>
                 </div>
 
