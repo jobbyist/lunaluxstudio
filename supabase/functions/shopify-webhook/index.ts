@@ -9,6 +9,32 @@ const corsHeaders = {
 // Points earning rate: 1 point per R25 spent (excluding shipping)
 const POINTS_PER_RAND = 0.04; // 1/25 = 0.04
 
+/**
+ * Women's Month Double Loyalty Points Bonus
+ * Check if we're in March 2026 (SAST - UTC+2)
+ */
+function isWomensMonthBonusActive(): boolean {
+  const now = new Date();
+  const sastOffset = 2 * 60; // SAST is UTC+2 (120 minutes)
+  const localOffset = now.getTimezoneOffset();
+  const sastTime = new Date(now.getTime() + (sastOffset + localOffset) * 60 * 1000);
+  
+  const year = sastTime.getFullYear();
+  const month = sastTime.getMonth(); // 0-indexed: March = 2
+  
+  return year === 2026 && month === 2; // March 2026
+}
+
+/**
+ * Apply Women's Month bonus if active (doubles points during March 2026)
+ */
+function applyWomensMonthBonus(basePoints: number): { points: number, bonusApplied: boolean } {
+  if (isWomensMonthBonusActive()) {
+    return { points: basePoints * 2, bonusApplied: true };
+  }
+  return { points: basePoints, bonusApplied: false };
+}
+
 // Tier thresholds
 const TIER_THRESHOLDS = {
   bronze: { min: 0, max: 2499 },
@@ -653,9 +679,10 @@ Deno.serve(async (req) => {
           .update({ email: email.toLowerCase() })
           .eq('user_id', authUser.id);
 
-        // Calculate points (1 point per R10)
+        // Calculate points (1 point per R25)
         const amount = parseFloat(total_price);
-        const pointsEarned = Math.floor(amount * POINTS_PER_RAND);
+        const basePointsEarned = Math.floor(amount * POINTS_PER_RAND);
+        const { points: pointsEarned, bonusApplied } = applyWomensMonthBonus(basePointsEarned);
 
         if (pointsEarned > 0) {
           // Check if this order already awarded points
@@ -674,6 +701,7 @@ Deno.serve(async (req) => {
           }
 
           // Award points
+          const bonusNote = bonusApplied ? ` (2x Women's Month Bonus: ${basePointsEarned} × 2 = ${pointsEarned})` : '';
           const { error: transactionError } = await supabase
             .from('loyalty_transactions')
             .insert({
@@ -681,7 +709,7 @@ Deno.serve(async (req) => {
               points: pointsEarned,
               transaction_type: 'purchase',
               order_id: orderId.toString(),
-              description: `Earned ${pointsEarned} points from order #${orderId} (${currency} ${total_price})`,
+              description: `Earned ${pointsEarned} points from order #${orderId} (${currency} ${total_price})${bonusNote}`,
             });
 
           if (transactionError) {
@@ -738,7 +766,8 @@ Deno.serve(async (req) => {
 
       // User found in profiles
       const amount = parseFloat(total_price);
-      const pointsEarned = Math.floor(amount * POINTS_PER_RAND);
+      const basePointsEarned = Math.floor(amount * POINTS_PER_RAND);
+      const { points: pointsEarned, bonusApplied } = applyWomensMonthBonus(basePointsEarned);
       const oldTier = profile.loyalty_tier || 'bronze';
       const oldPoints = profile.loyalty_points || 0;
 
@@ -759,6 +788,7 @@ Deno.serve(async (req) => {
         }
 
         // Award points
+        const bonusNote = bonusApplied ? ` (2x Women's Month Bonus: ${basePointsEarned} × 2 = ${pointsEarned})` : '';
         const { error: transactionError } = await supabase
           .from('loyalty_transactions')
           .insert({
@@ -766,7 +796,7 @@ Deno.serve(async (req) => {
             points: pointsEarned,
             transaction_type: 'purchase',
             order_id: orderId.toString(),
-            description: `Earned ${pointsEarned} points from order #${orderId} (${currency} ${total_price})`,
+            description: `Earned ${pointsEarned} points from order #${orderId} (${currency} ${total_price})${bonusNote}`,
           });
 
         if (transactionError) {
