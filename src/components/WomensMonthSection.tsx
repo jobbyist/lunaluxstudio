@@ -68,11 +68,19 @@ export const WomensMonthSection = () => {
             >
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Gift className="h-5 w-5 text-pink-500" />
-                <span className="font-semibold text-lg">Special Offer</span>
+                <span className="font-semibold text-lg">Special Offers</span>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground mb-3">
                 Free premium bob automatically added to qualifying orders
               </p>
+              <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 rounded-lg p-3 border border-pink-200 dark:border-pink-800">
+                <p className="text-xs font-semibold text-foreground mb-1">
+                  🎁 BONUS OFFER
+                </p>
+                <p className="text-xs text-foreground">
+                  Lux Club members earn <span className="font-bold text-pink-600 dark:text-pink-400">DOUBLE</span> loyalty points throughout International Women's Month!
+                </p>
+              </div>
             </motion.div>
 
             {/* CTA Button */}

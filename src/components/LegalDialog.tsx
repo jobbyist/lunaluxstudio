@@ -111,12 +111,12 @@ export const ShippingContent = () => (
     <p>Shipping rates will be calculated at checkout based on your location and the estimated weight of your package.</p>
     
     <h4 className="font-semibold mt-4">International Shipping</h4>
-    <p className="bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+    <p className="bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800 text-foreground">
       <strong>🌍 NEW!</strong> We now offer international shipping via <strong>FedEx for $35</strong>! 
       Get your Luna Luxury Hair products delivered worldwide with reliable, trackable shipping.
     </p>
     
-    <p>We currently use UPS and FedEx for international shipping. DHL will be added as a shipping option soon.</p>
+    <p>We currently use FedEx for international shipping. DHL, UPS and other international shipping options will be available soon.</p>
     
     <p>International orders have a turnaround time of 5-12 days. Shipping rates will be calculated at checkout.</p>
     
