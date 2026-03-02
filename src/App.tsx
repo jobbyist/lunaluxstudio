@@ -26,6 +26,7 @@ import MainCharacterCollectionPage from "./pages/MainCharacterCollection";
 import FaceCardCollection from "./pages/FaceCardCollection";
 import PopOutCollection from "./pages/PopOutCollection";
 import CafeDeLunaCollection from "./pages/CafeDeLunaCollection";
+import WomensMonth from "./pages/WomensMonth";
 import Loyalty from "./pages/Loyalty";
 import GiftVouchers from "./pages/GiftVouchers";
 import SpecialOffers from "./pages/SpecialOffers";
@@ -59,6 +60,8 @@ import AdminUsers from "./pages/admin/Users";
 import AdminReferrals from "./pages/admin/Referrals";
 import CustomWigOrders from "./pages/admin/CustomWigOrders";
 import PaymentComplete from "./pages/PaymentComplete";
+import { WomensMonthPopup } from "@/components/WomensMonthPopup";
+import { InternationalShippingBanner } from "@/components/InternationalShippingBanner";
 
 const queryClient = new QueryClient();
 
@@ -93,6 +96,7 @@ const App = () => (
             <Route path="/collection/face-card-collection" element={<FaceCardCollection />} />
             <Route path="/collection/pop-out-collection" element={<PopOutCollection />} />
             <Route path="/collection/cafe-de-luna" element={<CafeDeLunaCollection />} />
+            <Route path="/womens-month" element={<WomensMonth />} />
             <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
             <Route path="/collection/:collection/:category" element={<CollectionCategory />} />
             <Route path="/loyalty" element={<Loyalty />} />
@@ -130,6 +134,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatBot />
+          <WomensMonthPopup />
+          <InternationalShippingBanner />
           
         </BrowserRouter>
       </TooltipProvider>
