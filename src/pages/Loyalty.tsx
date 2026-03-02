@@ -126,7 +126,7 @@ const Loyalty = () => {
               </h3>
               <p className="text-base text-muted-foreground mb-4 max-w-2xl mx-auto">
                 Throughout March 2026, all Lux Club members earn <span className="font-bold text-pink-600 dark:text-pink-400">2x loyalty points</span> on every purchase. 
-                This bonus automatically applies to all orders and expires at midnight on March 31st, 2026 (South African Time).
+                This bonus automatically applies to all orders and is valid through March 31st, 2026 (South African Time).
               </p>
               <Button asChild size="lg" className="bg-pink-500 hover:bg-pink-600 text-white">
                 <Link to="/womens-month">View Women's Month Promotion</Link>

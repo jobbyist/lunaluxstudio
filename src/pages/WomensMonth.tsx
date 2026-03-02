@@ -161,10 +161,7 @@ export default function WomensMonth() {
                 loop 
                 muted
                 playsInline
-                controls={false}
-                controlsList="nodownload nofullscreen noremoteplayback"
-                disablePictureInPicture
-                onContextMenu={(e) => e.preventDefault()}
+                controls
               >
                 <source src="/womensmonth.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
