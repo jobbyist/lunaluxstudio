@@ -68,7 +68,7 @@ export default function WomensMonth() {
               </div>
 
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif mb-6 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                LunaLux Hair Celebrates Women
+                Luna Luxury Hair Celebrates Women
               </h1>
 
               <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">

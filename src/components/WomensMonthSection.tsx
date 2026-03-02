@@ -42,7 +42,7 @@ export const WomensMonthSection = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-3xl md:text-4xl lg:text-5xl font-serif mb-6 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
             >
-              LunaLuxHair celebrates women all over the world this International Women's Month
+              Luna Luxury Hair celebrates women all over the world this International Women's Month
             </motion.h2>
 
             {/* Description */}
