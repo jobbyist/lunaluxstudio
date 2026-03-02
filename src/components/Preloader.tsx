@@ -32,7 +32,9 @@ export const Preloader = () => {
   });
   const [duration] = useState(() => {
     // Random duration between 5-8 seconds (5000-8000ms)
-    return Math.floor(Math.random() * 3000) + 5000;
+    const MIN_DURATION = 5000;
+    const MAX_DURATION = 8000;
+    return Math.floor(Math.random() * (MAX_DURATION - MIN_DURATION)) + MIN_DURATION;
   });
 
   useEffect(() => {
@@ -49,7 +51,9 @@ export const Preloader = () => {
     sessionStorage.setItem(PRELOADER_SESSION_KEY, "true");
 
     // Animate progress from 0 to 100 over the random duration
-    const progressDuration = duration - 500; // End progress slightly before closing
+    // Progress completes 500ms before preloader closes for a smooth finish
+    const PROGRESS_END_BUFFER = 500;
+    const progressDuration = duration - PROGRESS_END_BUFFER;
     const interval = 50;
     const steps = progressDuration / interval;
     const increment = 100 / steps;
