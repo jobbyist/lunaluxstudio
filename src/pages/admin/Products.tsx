@@ -29,34 +29,17 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Link } from 'react-router-dom';
-import { Plus, Search, MoreHorizontal, Pencil, Trash2, Loader2, Package, RefreshCw } from 'lucide-react';
+import { Plus, Search, MoreHorizontal, Pencil, Trash2, ExternalLink, Loader2, Package, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
-
-interface CMSProduct {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  price: number;
-  compare_at_price?: number;
-  currency: string;
-  sku?: string;
-  inventory_quantity?: number;
-  featured_image?: string;
-  status: string;
-  snipcart_id?: string;
-  created_at: string;
-  updated_at: string;
-}
+import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 const AdminProducts = () => {
-  const [products, setProducts] = useState<CMSProduct[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<CMSProduct[]>([]);
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [productToDelete, setProductToDelete] = useState<CMSProduct | null>(null);
+  const [productToDelete, setProductToDelete] = useState<ShopifyProduct | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -69,9 +52,8 @@ const AdminProducts = () => {
       setFilteredProducts(
         products.filter(
           (p) =>
-            p.title.toLowerCase().includes(query) ||
-            p.slug?.toLowerCase().includes(query) ||
-            p.sku?.toLowerCase().includes(query)
+            p.node.title.toLowerCase().includes(query) ||
+            p.node.handle?.toLowerCase().includes(query)
         )
       );
     } else {
@@ -82,15 +64,9 @@ const AdminProducts = () => {
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('cms_products')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setProducts(data || []);
-      setFilteredProducts(data || []);
-      toast.success(`Loaded ${data?.length || 0} products`);
+      const data = await fetchProducts(100);
+      setProducts(data);
+      setFilteredProducts(data);
     } catch (error) {
       console.error('Failed to load products:', error);
       toast.error('Failed to load products');
@@ -99,7 +75,7 @@ const AdminProducts = () => {
     }
   };
 
-  const handleDeleteClick = (product: CMSProduct) => {
+  const handleDeleteClick = (product: ShopifyProduct) => {
     setProductToDelete(product);
     setDeleteDialogOpen(true);
   };
@@ -109,18 +85,9 @@ const AdminProducts = () => {
     
     setDeleting(true);
     try {
-      const { error } = await supabase
-        .from('cms_products')
-        .delete()
-        .eq('id', productToDelete.id);
-
-      if (error) throw error;
-
-      toast.success('Product deleted successfully');
+      toast.info('Product deletion requires Shopify Admin access. Please delete from Shopify dashboard.');
       setDeleteDialogOpen(false);
-      loadProducts();
     } catch (error) {
-      console.error('Failed to delete product:', error);
       toast.error('Failed to delete product');
     } finally {
       setDeleting(false);
@@ -128,20 +95,15 @@ const AdminProducts = () => {
     }
   };
 
-  const formatPrice = (amount: number, currency: string = 'ZAR') => {
-    return new Intl.NumberFormat('en-ZA', {
+  const formatPrice = (amount: string) => {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency,
-    }).format(amount);
+      currency: 'USD',
+    }).format(parseFloat(amount));
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'draft': return 'bg-yellow-500';
-      case 'archived': return 'bg-gray-500';
-      default: return 'bg-gray-500';
-    }
+  const getShopifyProductId = (product: ShopifyProduct) => {
+    return product.node.id.split('/').pop() || product.node.id;
   };
 
   return (
@@ -151,7 +113,7 @@ const AdminProducts = () => {
           <div>
             <h1 className="text-3xl font-bold">Products</h1>
             <p className="text-muted-foreground mt-2">
-              Manage your CMS product catalog ({products.length} products)
+              Manage your Shopify product catalog ({products.length} products)
             </p>
           </div>
           <div className="flex gap-2">
@@ -160,10 +122,14 @@ const AdminProducts = () => {
               Refresh
             </Button>
             <Button asChild>
-              <Link to="/manage/products/new">
+              <a 
+                href="https://admin.shopify.com/store/lunasstudio/products/new" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
                 <Plus className="h-4 w-4 mr-2" />
-                Add Product
-              </Link>
+                Add in Shopify
+              </a>
             </Button>
           </div>
         </div>
@@ -174,7 +140,7 @@ const AdminProducts = () => {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
-                placeholder="Search products by name, slug, or SKU..."
+                placeholder="Search products by name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -208,19 +174,18 @@ const AdminProducts = () => {
                       <TableHead className="w-[80px]">Image</TableHead>
                       <TableHead>Product</TableHead>
                       <TableHead>Price</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Stock</TableHead>
+                      <TableHead>Variants</TableHead>
                       <TableHead className="w-[100px]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredProducts.map((product) => (
-                      <TableRow key={product.id}>
+                      <TableRow key={product.node.id}>
                         <TableCell>
-                          {product.featured_image ? (
+                          {product.node.images.edges[0] ? (
                             <img
-                              src={product.featured_image}
-                              alt={product.title}
+                              src={product.node.images.edges[0].node.url}
+                              alt={product.node.title}
                               className="w-12 h-12 object-cover rounded"
                             />
                           ) : (
@@ -231,32 +196,15 @@ const AdminProducts = () => {
                         </TableCell>
                         <TableCell>
                           <div>
-                            <p className="font-medium">{product.title}</p>
-                            <p className="text-sm text-muted-foreground">{product.slug}</p>
-                            {product.sku && (
-                              <p className="text-xs text-muted-foreground">SKU: {product.sku}</p>
-                            )}
+                            <p className="font-medium">{product.node.title}</p>
+                            <p className="text-sm text-muted-foreground">{product.node.handle}</p>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div>
-                            <p className="font-medium">{formatPrice(product.price, product.currency)}</p>
-                            {product.compare_at_price && product.compare_at_price > product.price && (
-                              <p className="text-sm text-muted-foreground line-through">
-                                {formatPrice(product.compare_at_price, product.currency)}
-                              </p>
-                            )}
-                          </div>
+                          {formatPrice(product.node.priceRange.minVariantPrice.amount)}
                         </TableCell>
                         <TableCell>
-                          <Badge className={getStatusColor(product.status)}>
-                            {product.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">
-                            {product.inventory_quantity !== null ? product.inventory_quantity : '∞'}
-                          </Badge>
+                          <Badge variant="secondary">{product.node.variants.edges.length}</Badge>
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
@@ -267,10 +215,20 @@ const AdminProducts = () => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem asChild>
-                                <Link to={`/manage/products/${product.id}`}>
+                                <Link to={`/manage/products/${encodeURIComponent(product.node.id)}`}>
                                   <Pencil className="h-4 w-4 mr-2" />
-                                  Edit
+                                  View Details
                                 </Link>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem asChild>
+                                <a 
+                                  href={`https://admin.shopify.com/store/lunasstudio/products/${getShopifyProductId(product)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <ExternalLink className="h-4 w-4 mr-2" />
+                                  Edit in Shopify
+                                </a>
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleDeleteClick(product)}

@@ -10,30 +10,26 @@ import { FeaturedStories } from "@/components/FeaturedStories";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
-import { Preloader } from "@/components/Preloader";
 
 const Index = () => {
   return (
-    <>
-      <Preloader />
-      <PageTransition>
-        <div className="min-h-screen bg-background">
-          <Header />
-          <main className="pt-36 md:pt-44">
-            <Hero />
-            <WomensMonthSection />
-            <CafeDeLunaSection />
-            <Collections />
-            <LuxuryHairExtensionsHighlight />
-            <MainCharacterCollection />
-            <ProductGrid limit={8} />
-            <FeaturedStories />
-            <Newsletter />
-          </main>
-          <Footer />
-        </div>
-      </PageTransition>
-    </>
+    <PageTransition>
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="pt-36 md:pt-44">
+          <Hero />
+          <WomensMonthSection />
+          <CafeDeLunaSection />
+          <Collections />
+          <LuxuryHairExtensionsHighlight />
+          <MainCharacterCollection />
+          <ProductGrid limit={8} />
+          <FeaturedStories />
+          <Newsletter />
+        </main>
+        <Footer />
+      </div>
+    </PageTransition>
   );
 };
 
