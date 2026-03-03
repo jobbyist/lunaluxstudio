@@ -74,10 +74,10 @@ export const WomensMonthSection = () => {
                 Free premium bob automatically added to qualifying orders
               </p>
               <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 rounded-lg p-3 border border-pink-200 dark:border-pink-800">
-                <p className="text-xs font-semibold text-foreground mb-1">
+                <p className="text-xs font-semibold text-black dark:text-white mb-1">
                   🎁 BONUS OFFER
                 </p>
-                <p className="text-xs text-foreground">
+                <p className="text-xs text-black dark:text-white">
                   Lux Club members earn <span className="font-bold text-pink-600 dark:text-pink-400">DOUBLE</span> loyalty points throughout International Women's Month!
                 </p>
               </div>
