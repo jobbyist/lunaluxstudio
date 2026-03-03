@@ -167,7 +167,11 @@ CREATE INDEX IF NOT EXISTS idx_shipping_rates_is_active ON public.shipping_rates
 CREATE INDEX IF NOT EXISTS idx_cms_products_snipcart_id ON public.cms_products(snipcart_id);
 
 -- Insert sample shipping rates
-INSERT INTO public.shipping_rates (carrier, service_name, service_code, description, base_rate, per_kg_rate, min_weight_kg, max_weight_kg, delivery_days_min, delivery_days_max, is_active) VALUES
+INSERT INTO public.shipping_rates (
+  carrier, service_name, service_code, description, 
+  base_rate, per_kg_rate, min_weight_kg, max_weight_kg, 
+  delivery_days_min, delivery_days_max, is_active
+) VALUES
   ('courier_guy', 'Standard Delivery', 'CG_STANDARD', 'Standard courier delivery within South Africa', 80.00, 15.00, 0, 30, 3, 5, true),
   ('courier_guy', 'Express Delivery', 'CG_EXPRESS', 'Express courier delivery within South Africa', 120.00, 20.00, 0, 30, 1, 2, true),
   ('fedex', 'FedEx International Priority', 'FEDEX_INTL_PRIORITY', 'Fast international shipping', 450.00, 50.00, 0, 50, 2, 4, true),

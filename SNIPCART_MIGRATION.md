@@ -96,11 +96,13 @@ The Snipcart SDK is already integrated in `index.html`:
 ```html
 <script>
   window.SnipcartSettings = {
-    publicApiKey: "NzFlZDA2NDAtNjdmOS00NTEwLWJjOWQtNjYzYzdmODk0NWMzNjM5MDI2MzAwNjI4NzIzODAx",
+    publicApiKey: "YOUR_SNIPCART_PUBLIC_API_KEY_HERE",
     loadStrategy: "on-user-interaction",
   };
 </script>
 ```
+
+**Note:** Replace `YOUR_SNIPCART_PUBLIC_API_KEY_HERE` with your actual Snipcart public API key from the environment variable.
 
 ### Using Snipcart Buy Buttons
 

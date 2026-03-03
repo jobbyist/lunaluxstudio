@@ -10,6 +10,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-snipcart-requesttoken',
 };
 
+interface SnipcartDiscount {
+  amount: number;
+  code?: string;
+  name?: string;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -20,11 +26,11 @@ serve(async (req) => {
     // Verify Snipcart signature
     const signature = req.headers.get('x-snipcart-requesttoken');
     
-    // TODO: Implement proper signature verification
-    // For now, we'll just check if the header exists
+    // TODO: Implement proper signature verification in production
+    // The signature should be verified against the request body and SNIPCART_SECRET_KEY
+    // Reference: https://docs.snipcart.com/v3/webhooks/security
     if (!signature) {
-      console.warn('Missing Snipcart signature header');
-      // In production, you should verify the signature properly
+      console.warn('Missing Snipcart signature header - webhook may not be from Snipcart');
     }
 
     const event = await req.json();
@@ -36,9 +42,17 @@ serve(async (req) => {
       const order = event.content;
       console.log('Processing completed order:', order.token);
 
-      // Find user by email
-      const { data: authUser } = await supabase.auth.admin.listUsers();
-      const user = authUser?.users?.find(u => u.email === order.email);
+      // Find user by email using a more efficient query
+      let userId: string | null = null;
+      if (order.email) {
+        const { data: userProfile } = await supabase
+          .from('user_profiles')
+          .select('user_id')
+          .eq('email', order.email)
+          .single();
+        
+        userId = userProfile?.user_id || null;
+      }
 
       // Insert order into database
       const { data: insertedOrder, error: orderError } = await supabase
@@ -46,7 +60,7 @@ serve(async (req) => {
         .insert({
           snipcart_order_id: order.token,
           snipcart_invoice_number: order.invoiceNumber,
-          user_id: user?.id || null,
+          user_id: userId,
           customer_email: order.email,
           customer_name: order.billingAddress 
             ? `${order.billingAddress.fullName}` 
@@ -58,7 +72,7 @@ serve(async (req) => {
           subtotal: order.subtotal || 0,
           shipping_cost: order.shippingInformation?.cost || 0,
           tax_amount: order.taxesTotal || 0,
-          discount_amount: order.discounts?.reduce((sum: number, d: any) => sum + (d.amount || 0), 0) || 0,
+          discount_amount: (order.discounts as SnipcartDiscount[])?.reduce((sum, d) => sum + (d.amount || 0), 0) || 0,
           total_amount: order.total || 0,
           currency: order.currency || 'ZAR',
           payment_status: order.paymentStatus || 'paid',
@@ -142,19 +156,19 @@ serve(async (req) => {
       }
 
       // Award loyalty points (if user exists)
-      if (user?.id) {
+      if (userId) {
         const pointsEarned = Math.floor(order.total / 10); // 1 point per R10
         
         const { data: userProfile } = await supabase
           .from('user_profiles')
           .select('loyalty_points')
-          .eq('user_id', user.id)
+          .eq('user_id', userId)
           .single();
 
         if (userProfile) {
           // Insert loyalty transaction
           await supabase.from('loyalty_transactions').insert({
-            user_id: user.id,
+            user_id: userId,
             points: pointsEarned,
             transaction_type: 'earn',
             description: `Purchase - Order ${order.invoiceNumber}`,
@@ -166,9 +180,9 @@ serve(async (req) => {
           await supabase
             .from('user_profiles')
             .update({ loyalty_points: newPoints })
-            .eq('user_id', user.id);
+            .eq('user_id', userId);
 
-          console.log(`Awarded ${pointsEarned} loyalty points to user ${user.id}`);
+          console.log(`Awarded ${pointsEarned} loyalty points to user ${userId}`);
         }
       }
 

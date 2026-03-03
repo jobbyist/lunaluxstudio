@@ -19,7 +19,6 @@ export const SnipcartBuyButton: React.FC<SnipcartBuyButtonProps> = ({
   children
 }) => {
   const snipcartProduct = productToSnipcartFormat(product);
-  const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
 
   return (
     <Button
@@ -27,7 +26,7 @@ export const SnipcartBuyButton: React.FC<SnipcartBuyButtonProps> = ({
       variant={variant}
       size={size}
       data-item-id={snipcartProduct.id}
-      data-item-price={price}
+      data-item-price={snipcartProduct.price}
       data-item-url={snipcartProduct.url}
       data-item-description={snipcartProduct.description}
       data-item-image={snipcartProduct.image}

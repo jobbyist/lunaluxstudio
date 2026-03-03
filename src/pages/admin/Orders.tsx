@@ -334,15 +334,15 @@ export default function Orders() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>{selectedOrder.currency} {selectedOrder.subtotal?.toFixed(2)}</span>
+                    <span>{selectedOrder.currency} {(selectedOrder.subtotal || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
-                    <span>{selectedOrder.currency} {selectedOrder.shipping_cost?.toFixed(2) || '0.00'}</span>
+                    <span>{selectedOrder.currency} {(selectedOrder.shipping_cost || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Tax</span>
-                    <span>{selectedOrder.currency} {selectedOrder.tax_amount?.toFixed(2) || '0.00'}</span>
+                    <span>{selectedOrder.currency} {(selectedOrder.tax_amount || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between font-bold text-lg border-t pt-2">
                     <span>Total</span>

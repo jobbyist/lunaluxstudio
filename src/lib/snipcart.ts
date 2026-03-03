@@ -1,6 +1,11 @@
 // Snipcart configuration and helper functions
-export const SNIPCART_API_KEY = import.meta.env.VITE_SNIPCART_PUBLIC_API_KEY || 'NzFlZDA2NDAtNjdmOS00NTEwLWJjOWQtNjYzYzdmODk0NWMzNjM5MDI2MzAwNjI4NzIzODAx';
+export const SNIPCART_API_KEY = import.meta.env.VITE_SNIPCART_PUBLIC_API_KEY;
 export const SNIPCART_SECRET_KEY = import.meta.env.VITE_SNIPCART_SECRET_KEY; // Server-side only
+
+// Validate required configuration
+if (!SNIPCART_API_KEY && typeof window !== 'undefined') {
+  console.error('VITE_SNIPCART_PUBLIC_API_KEY is not configured. Snipcart will not work.');
+}
 
 export interface SnipcartProduct {
   id: string;
