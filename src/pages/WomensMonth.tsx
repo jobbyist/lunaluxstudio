@@ -98,10 +98,10 @@ export default function WomensMonth() {
                 </p>
                 
                 <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/20 dark:to-purple-950/20 rounded-xl p-4 mb-4 border border-pink-200 dark:border-pink-800">
-                  <p className="text-base font-semibold text-foreground mb-1">
+                  <p className="text-base font-semibold text-black dark:text-white mb-1">
                     🎁 BONUS OFFER
                   </p>
-                  <p className="text-sm text-foreground">
+                  <p className="text-sm text-black dark:text-white">
                     New and existing members of The Lux Club will earn <span className="font-bold text-pink-600 dark:text-pink-400">DOUBLE</span> the loyalty rewards points for all purchases made throughout International Women's Month.
                   </p>
                 </div>
