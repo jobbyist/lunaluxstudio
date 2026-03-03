@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Award, Gift, Star, TrendingUp, Crown, Calculator, Sparkles, Check, Users, Zap, ShoppingBag, HeadphonesIcon, Cake, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +8,6 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { isWomensMonthBonusActive } from "@/lib/womensMonthBonus";
 
 // Tier configurations - Updated: 1 point per R25, new thresholds
 const TIERS = {
@@ -73,15 +71,9 @@ const Loyalty = () => {
   const [spendAmount, setSpendAmount] = useState("");
   const [currentPoints, setCurrentPoints] = useState("");
   const [selectedTier, setSelectedTier] = useState<keyof typeof TIERS>("Bronze");
-  const womensMonthActive = isWomensMonthBonusActive();
 
   // Calculate points from spend (1 point per R25)
-  let calculatedPoints = spendAmount ? Math.floor((parseFloat(spendAmount) || 0) / 25) * TIERS[selectedTier].multiplier : 0;
-  
-  // Apply Women's Month bonus if active
-  if (womensMonthActive) {
-    calculatedPoints = calculatedPoints * 2;
-  }
+  const calculatedPoints = spendAmount ? Math.floor((parseFloat(spendAmount) || 0) / 25) * TIERS[selectedTier].multiplier : 0;
 
   // Calculate what you can redeem with current points
   const pointsValue = currentPoints ? parseInt(currentPoints) || 0 : 0;
@@ -109,32 +101,6 @@ const Loyalty = () => {
 
   return <PageLayout title="The Lux Club" subtitle="Your exclusive gateway to premium rewards, VIP benefits, and unforgettable luxury experiences">
       <div className="max-w-6xl mx-auto space-y-12">
-        {/* Women's Month Bonus Banner */}
-        {womensMonthActive && (
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-pink-100 via-purple-100 to-pink-100 dark:from-pink-950/40 dark:via-purple-950/40 dark:to-pink-950/40 p-6 md:p-8 border-2 border-pink-300 dark:border-pink-700">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgwLDAsMCwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-40" />
-            <div className="relative z-10 text-center">
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <Gift className="h-6 w-6 text-pink-500 animate-pulse" />
-                <Badge className="bg-pink-500 text-white border-0 text-sm">
-                  🎁 International Women's Month Special
-                </Badge>
-                <Gift className="h-6 w-6 text-pink-500 animate-pulse" />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-serif mb-2 text-foreground">
-                Earn DOUBLE Loyalty Points All Month!
-              </h3>
-              <p className="text-base text-muted-foreground mb-4 max-w-2xl mx-auto">
-                Throughout March 2026, all Lux Club members earn <span className="font-bold text-pink-600 dark:text-pink-400">2x loyalty points</span> on every purchase. 
-                This bonus automatically applies to all orders and is valid through March 31st, 2026 (South African Time).
-              </p>
-              <Button asChild size="lg" className="bg-pink-500 hover:bg-pink-600 text-white">
-                <Link to="/womens-month">View Women's Month Promotion</Link>
-              </Button>
-            </div>
-          </div>
-        )}
-        
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/90 to-primary p-8 md:p-12 text-white">
           <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-10" />
@@ -285,13 +251,8 @@ const Loyalty = () => {
                     <p className="text-5xl font-bold text-primary">{calculatedPoints.toFixed(0)}</p>
                     <p className="text-muted-foreground">points</p>
                     <p className="text-xs text-muted-foreground mt-2">
-                      ({TIERS[selectedTier].multiplier}x {selectedTier} multiplier{womensMonthActive ? ' + 2x Women\'s Month bonus' : ''})
+                      ({TIERS[selectedTier].multiplier}x {selectedTier} multiplier)
                     </p>
-                    {womensMonthActive && (
-                      <Badge className="mt-2 bg-pink-500 text-white">
-                        🎁 2x Women's Month Bonus Applied!
-                      </Badge>
-                    )}
                   </div>
                 </div>
               </TabsContent>

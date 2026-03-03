@@ -97,15 +97,6 @@ export default function WomensMonth() {
                   when you purchase any item from our Café De Luna or Raw Vietnamese Bundles collections
                 </p>
                 
-                <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/20 dark:to-purple-950/20 rounded-xl p-4 mb-4 border border-pink-200 dark:border-pink-800">
-                  <p className="text-base font-semibold text-black dark:text-white mb-1">
-                    🎁 BONUS OFFER
-                  </p>
-                  <p className="text-sm text-black dark:text-white">
-                    New and existing members of The Lux Club will earn <span className="font-bold text-pink-600 dark:text-pink-400">DOUBLE</span> the loyalty rewards points for all purchases made throughout International Women's Month.
-                  </p>
-                </div>
-                
                 <div className="mt-4 text-sm text-muted-foreground italic">
                   *Free bob automatically added to qualifying orders at checkout
                 </div>
@@ -327,7 +318,6 @@ export default function WomensMonth() {
               <li>• Valid for purchases made during International Women's Month (March 2026)</li>
               <li>• Free 10" 2x6 inch bob automatically added to qualifying orders</li>
               <li>• Qualifying purchase: Any item from Café De Luna or Raw Vietnamese Bundles collections</li>
-              <li>• BONUS: New and existing members of The Lux Club will earn DOUBLE the loyalty rewards points for all purchases made throughout International Women's Month</li>
               <li>• Terms and conditions apply. Offer valid while stocks last</li>
               <li>• Items purchased through a sale/promotion are not eligible for a refund/exchange unless otherwise specified by management</li>
               <li>• Promotion cannot be combined with other offers unless specified</li>
