@@ -14,6 +14,10 @@ const notifications = [
     link: "/womens-month"
   },
   {
+    text: "🎁 BONUS OFFER: Lux Club members earn DOUBLE loyalty points throughout International Women's Month!",
+    link: "/loyalty"
+  },
+  {
     text: "🌍 Now shipping internationally via FedEx for $35 — Luna Luxury Hair worldwide!",
     link: "/policies#shipping"
   },
