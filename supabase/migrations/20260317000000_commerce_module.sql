@@ -1,11 +1,6 @@
 -- Commerce Module: Commerce Orders table
 -- The cms_products table already exists from the admin_cms_schema migration
 
--- Add missing columns to cms_products if not present (idempotent)
-ALTER TABLE public.cms_products
-  ADD COLUMN IF NOT EXISTS compare_at_price DECIMAL(10, 2),
-  ADD COLUMN IF NOT EXISTS stock INTEGER DEFAULT 0;
-
 -- Update the cms_products policy to use has_role (consistent with newer auth pattern)
 DROP POLICY IF EXISTS "Admins can manage products" ON public.cms_products;
 CREATE POLICY "Admins can manage products"
@@ -63,17 +58,12 @@ FOR DELETE
 USING (has_role(auth.uid(), 'admin'::app_role));
 
 -- Service role (edge functions) can insert orders
+-- Note: SUPABASE_SERVICE_ROLE_KEY bypasses RLS entirely for edge functions.
+-- This policy covers direct REST API calls with the anon key via the checkout endpoint.
 CREATE POLICY "Service role can insert commerce orders"
 ON public.commerce_orders
 FOR INSERT
-WITH CHECK (true);
-
--- Service role can update orders (for webhook status updates)
-CREATE POLICY "Service role can update order status"
-ON public.commerce_orders
-FOR UPDATE
-USING (true)
-WITH CHECK (true);
+WITH CHECK (auth.role() = 'service_role' OR auth.uid() IS NOT NULL);
 
 -- Indexes for faster lookups
 CREATE INDEX IF NOT EXISTS idx_commerce_orders_reference ON public.commerce_orders(order_reference);

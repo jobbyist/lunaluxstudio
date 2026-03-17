@@ -269,9 +269,9 @@ const AdminProducts = () => {
                     {products.map((product) => (
                       <TableRow key={product.id}>
                         <TableCell>
-                          {product.featured_image || (product.images && product.images[0]) ? (
+                          {product.featured_image || (product.images && product.images.length > 0) ? (
                             <img
-                              src={product.featured_image || product.images![0]}
+                              src={product.featured_image || (product.images && product.images[0]) || ""}
                               alt={product.title}
                               className="w-12 h-12 object-cover rounded"
                             />

@@ -399,17 +399,12 @@ serve(async (req) => {
           .eq("order_reference", externalReference);
 
         console.log("Commerce order marked as paid:", externalReference);
-      } else if (normalizedStatus === "cancelled" || normalizedStatus === "canceled" || normalizedStatus === "expired") {
-        await supabase
-          .from("commerce_orders")
-          .update({
-            status: "failed",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("order_reference", externalReference);
-
-        console.log("Commerce order marked as failed:", externalReference);
-      } else if (normalizedStatus === "failed") {
+      } else if (
+        normalizedStatus === "cancelled" ||
+        normalizedStatus === "canceled" ||
+        normalizedStatus === "expired" ||
+        normalizedStatus === "failed"
+      ) {
         await supabase
           .from("commerce_orders")
           .update({

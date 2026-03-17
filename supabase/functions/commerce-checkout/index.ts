@@ -102,7 +102,11 @@ serve(async (req) => {
       const product = productMap.get(item.product_id);
       if (!product) {
         missingProducts.push(item.product_id);
-      } else if (product.inventory_quantity !== null && product.inventory_quantity < item.quantity) {
+      } else if (
+        product.inventory_quantity !== null &&
+        product.inventory_quantity < item.quantity
+      ) {
+        // Covers both zero stock (0 < quantity) and insufficient stock (n < quantity)
         outOfStockProducts.push(product.title);
       }
     }

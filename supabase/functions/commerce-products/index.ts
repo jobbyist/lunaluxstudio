@@ -27,7 +27,7 @@ serve(async (req) => {
     if (req.method === "GET") {
       // Public read - use anon key so RLS policies apply (active products only for public)
       const authHeader = req.headers.get("authorization");
-      const supabase = createClient(supabaseUrl, authHeader ? supabaseAnonKey : supabaseAnonKey, {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey, {
         global: { headers: authHeader ? { Authorization: authHeader } : {} },
       });
 
