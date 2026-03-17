@@ -10,14 +10,6 @@ import {
 
 const notifications = [
   {
-    text: "🌸 International Women's Month: Get a FREE 10\" 2x6 inch bob with Café De Luna or Raw Vietnamese purchases!",
-    link: "/womens-month"
-  },
-  {
-    text: "🌍 Now shipping internationally via FedEx for $35 — Luna Luxury Hair worldwide!",
-    link: "/policies#shipping"
-  },
-  {
     text: "NEW: Café De Luna Collection — Warm-toned highlights inspired by your favourite café flavours.",
     link: "/collection/cafe-de-luna"
   },

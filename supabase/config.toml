@@ -11,11 +11,3 @@ verify_jwt = false
 
 [functions.send-welcome-email]
 verify_jwt = false
-[functions.commerce-products]
-verify_jwt = false
-
-[functions.commerce-checkout]
-verify_jwt = false
-
-[functions.stitch-webhook]
-verify_jwt = false

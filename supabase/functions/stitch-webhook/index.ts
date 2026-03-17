@@ -376,60 +376,7 @@ serve(async (req) => {
     // Initialize Supabase client
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Check commerce_orders first (new flow), then fallback to custom_wig_orders (legacy)
-    const { data: commerceOrder } = await supabase
-      .from("commerce_orders")
-      .select("*")
-      .eq("order_reference", externalReference)
-      .single();
-
-    if (commerceOrder) {
-      // Handle commerce order webhook
-      console.log("Found commerce order:", commerceOrder.id);
-      const normalizedStatus = status?.toLowerCase();
-
-      if (normalizedStatus === "complete" || normalizedStatus === "completed" || normalizedStatus === "success" || normalizedStatus === "paid") {
-        await supabase
-          .from("commerce_orders")
-          .update({
-            status: "paid",
-            paid_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          })
-          .eq("order_reference", externalReference);
-
-        console.log("Commerce order marked as paid:", externalReference);
-      } else if (
-        normalizedStatus === "cancelled" ||
-        normalizedStatus === "canceled" ||
-        normalizedStatus === "expired" ||
-        normalizedStatus === "failed"
-      ) {
-        await supabase
-          .from("commerce_orders")
-          .update({
-            status: "failed",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("order_reference", externalReference);
-
-        console.log("Commerce order marked as failed:", externalReference);
-      }
-
-      return new Response(
-        JSON.stringify({
-          success: true,
-          message: "Commerce order status updated",
-          orderReference: externalReference,
-        }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 200,
-        }
-      );
-    }
-
-    // Legacy: Get the custom wig order from database
+    // Get the order from database
     const { data: orderData, error: orderError } = await supabase
       .from("custom_wig_orders")
       .select("*")

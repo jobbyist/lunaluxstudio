@@ -37,15 +37,8 @@ interface ShippingAddress {
 }
 
 interface PaymentRequest {
-  // Legacy custom wig order fields
-  customWigItems?: CustomWigItem[];
-  regularItems?: RegularItem[];
-  // New commerce order fields
-  commerceOrderId?: string;
-  commerceOrderReference?: string;
-  commerceItems?: Array<{ title: string; quantity: number; unit_price: number; line_total: number }>;
-  commerceTotal?: number;
-  // Shared fields
+  customWigItems: CustomWigItem[];
+  regularItems: RegularItem[];
   customerEmail: string;
   customerName?: string;
   customerPhone?: string;
@@ -119,25 +112,9 @@ serve(async (req) => {
   }
 
   try {
-    const {
-      customWigItems,
-      regularItems,
-      commerceOrderId,
-      commerceOrderReference,
-      commerceItems,
-      commerceTotal,
-      customerEmail,
-      customerName,
-      customerPhone,
-      shippingAddress,
-      redirectUrl,
-    }: PaymentRequest = await req.json();
-
-    const isCommerceOrder = !!(commerceOrderId || commerceOrderReference);
+    const { customWigItems, regularItems, customerEmail, customerName, customerPhone, shippingAddress, redirectUrl }: PaymentRequest = await req.json();
 
     console.log("Creating Stitch Express payment:", {
-      isCommerceOrder,
-      commerceOrderId,
       customWigItemCount: customWigItems?.length || 0,
       regularItemCount: regularItems?.length || 0,
       customerEmail,
@@ -148,21 +125,16 @@ serve(async (req) => {
 
     // Calculate total amount in cents (ZAR)
     let totalAmountCents = 0;
-
-    // Commerce order: use the pre-validated total from checkout endpoint
-    if (isCommerceOrder && commerceTotal) {
-      totalAmountCents = Math.round(commerceTotal * 100);
-    } else {
-      if (customWigItems && customWigItems.length > 0) {
-        for (const item of customWigItems) {
-          totalAmountCents += Math.round(item.totalPrice * item.quantity * 100); // Convert to cents
-        }
+    
+    if (customWigItems && customWigItems.length > 0) {
+      for (const item of customWigItems) {
+        totalAmountCents += Math.round(item.totalPrice * item.quantity * 100); // Convert to cents
       }
+    }
 
-      if (regularItems && regularItems.length > 0) {
-        for (const item of regularItems) {
-          totalAmountCents += Math.round(item.price * item.quantity * 100); // Convert to cents
-        }
+    if (regularItems && regularItems.length > 0) {
+      for (const item of regularItems) {
+        totalAmountCents += Math.round(item.price * item.quantity * 100); // Convert to cents
       }
     }
 
@@ -170,8 +142,8 @@ serve(async (req) => {
       throw new Error("No items provided for payment");
     }
 
-    // Use provided commerce order reference or generate a new one (for custom wig orders)
-    const orderReference = commerceOrderReference || generateOrderReference();
+    // Generate unique order reference
+    const orderReference = generateOrderReference();
 
     console.log("Payment details:", {
       orderReference,
@@ -184,20 +156,14 @@ serve(async (req) => {
 
     // Build description from items
     const itemDescriptions: string[] = [];
-    if (isCommerceOrder && commerceItems && commerceItems.length > 0) {
-      for (const item of commerceItems) {
-        itemDescriptions.push(`${item.title} x${item.quantity}`);
+    if (customWigItems && customWigItems.length > 0) {
+      for (const item of customWigItems) {
+        itemDescriptions.push(`${item.title} (${item.baseBundle})`);
       }
-    } else {
-      if (customWigItems && customWigItems.length > 0) {
-        for (const item of customWigItems) {
-          itemDescriptions.push(`${item.title} (${item.baseBundle})`);
-        }
-      }
-      if (regularItems && regularItems.length > 0) {
-        for (const item of regularItems) {
-          itemDescriptions.push(item.title);
-        }
+    }
+    if (regularItems && regularItems.length > 0) {
+      for (const item of regularItems) {
+        itemDescriptions.push(item.title);
       }
     }
     const description = itemDescriptions.join(", ").substring(0, 100) || "Luna Lux Hair Order";
@@ -265,83 +231,55 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     if (supabaseUrl && supabaseKey) {
-      if (isCommerceOrder && commerceOrderId) {
-        // Update existing commerce order with payment reference
-        const updateResponse = await fetch(
-          `${supabaseUrl}/rest/v1/commerce_orders?id=eq.${commerceOrderId}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              "apikey": supabaseKey,
-              "Authorization": `Bearer ${supabaseKey}`,
-              "Prefer": "return=minimal",
-            },
-            body: JSON.stringify({
-              payment_method: "stitch_express",
-              payment_reference: paymentId || null,
-            }),
-          }
-        );
-
-        if (!updateResponse.ok) {
-          const dbError = await updateResponse.text();
-          console.error("Failed to update commerce order:", dbError);
-          // Continue anyway - payment link is created
-        } else {
-          console.log("Commerce order updated with payment reference:", commerceOrderId);
-        }
-      } else {
-        // Legacy: create custom wig order record
-        const configuration: Record<string, any> = {};
-
-        if (customWigItems && customWigItems.length > 0) {
-          const wigItem = customWigItems[0];
-          wigItem.selectedOptions.forEach(opt => {
-            configuration[opt.name] = opt.value;
-          });
-        }
-
-        const orderData = {
-          order_reference: orderReference,
-          payment_link_id: paymentId,
-          customer_email: customerEmail || "",
-          customer_name: customerName || null,
-          base_bundle: customWigItems?.[0]?.baseBundle || "N/A",
-          base_price: customWigItems?.[0]?.basePrice || 0,
-          addon_cost: customWigItems?.[0]?.addonCost || 0,
-          total_price: totalAmountCents / 100,
-          configuration: {
-            ...configuration,
-            phone: customerPhone || null,
-            shipping_address: shippingAddress || null,
-          },
-          custom_sku: customWigItems?.[0]?.customSku || null,
-          status: "pending",
-          payment_status: "pending",
-          payment_method: "stitch_express",
-        };
-
-        console.log("Storing order in database:", orderReference);
-
-        const dbResponse = await fetch(`${supabaseUrl}/rest/v1/custom_wig_orders`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": supabaseKey,
-            "Authorization": `Bearer ${supabaseKey}`,
-            "Prefer": "return=minimal",
-          },
-          body: JSON.stringify(orderData),
+      // Build configuration object
+      const configuration: Record<string, any> = {};
+      
+      if (customWigItems && customWigItems.length > 0) {
+        const wigItem = customWigItems[0];
+        wigItem.selectedOptions.forEach(opt => {
+          configuration[opt.name] = opt.value;
         });
+      }
 
-        if (!dbResponse.ok) {
-          const dbError = await dbResponse.text();
-          console.error("Failed to store order:", dbError);
-          // Continue anyway - payment link is created
-        } else {
-          console.log("Order stored in database successfully:", orderReference);
-        }
+      const orderData = {
+        order_reference: orderReference,
+        payment_link_id: paymentId,
+        customer_email: customerEmail || "",
+        customer_name: customerName || null,
+        base_bundle: customWigItems?.[0]?.baseBundle || "N/A",
+        base_price: customWigItems?.[0]?.basePrice || 0,
+        addon_cost: customWigItems?.[0]?.addonCost || 0,
+        total_price: totalAmountCents / 100, // Convert back to rands
+        configuration: {
+          ...configuration,
+          phone: customerPhone || null,
+          shipping_address: shippingAddress || null,
+        },
+        custom_sku: customWigItems?.[0]?.customSku || null,
+        status: "pending",
+        payment_status: "pending",
+        payment_method: "stitch_express",
+      };
+
+      console.log("Storing order in database:", orderReference);
+
+      const dbResponse = await fetch(`${supabaseUrl}/rest/v1/custom_wig_orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": supabaseKey,
+          "Authorization": `Bearer ${supabaseKey}`,
+          "Prefer": "return=minimal",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!dbResponse.ok) {
+        const dbError = await dbResponse.text();
+        console.error("Failed to store order:", dbError);
+        // Continue anyway - payment link is created
+      } else {
+        console.log("Order stored in database successfully:", orderReference);
       }
     }
 
