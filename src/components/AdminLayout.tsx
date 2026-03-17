@@ -15,6 +15,8 @@ import {
   X,
   Sparkles,
   Scissors,
+  ShoppingBag,
+  UserCheck,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
