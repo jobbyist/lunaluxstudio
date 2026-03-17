@@ -11,47 +11,22 @@ import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { useHomepageSections } from "@/hooks/useHomepageSections";
 
-const sectionComponents: Record<string, React.FC<{ content?: Record<string, string> }>> = {
-  hero: Hero,
-  cafe_de_luna: CafeDeLunaSection,
-  collections: Collections,
-  luxury_highlight: LuxuryHairExtensionsHighlight,
-  main_character: MainCharacterCollection,
-  product_grid: ProductGrid,
-  featured_stories: FeaturedStories,
-  newsletter: Newsletter,
-};
-
 const Index = () => {
-  const { sections, loading } = useHomepageSections();
-
-  // Sort visible sections by display_order, render in that order
-  const visibleSections = sections
-    .filter(s => s.is_visible && sectionComponents[s.section_key])
-    .sort((a, b) => a.display_order - b.display_order);
+  const { sections, loading, isVisible, getContent } = useHomepageSections();
 
   return (
     <PageTransition>
       <div className="min-h-screen bg-background">
         <Header />
         <main className="pt-36 md:pt-44">
-          {visibleSections.map(section => {
-            const Component = sectionComponents[section.section_key];
-            return <Component key={section.id} content={section.content} />;
-          })}
-          {/* Fallback while loading */}
-          {loading && (
-            <>
-              <Hero />
-              <CafeDeLunaSection />
-              <Collections />
-              <LuxuryHairExtensionsHighlight />
-              <MainCharacterCollection />
-              <ProductGrid limit={8} />
-              <FeaturedStories />
-              <Newsletter />
-            </>
-          )}
+          {isVisible('hero') && <Hero content={getContent('hero')} />}
+          {isVisible('cafe_de_luna') && <CafeDeLunaSection content={getContent('cafe_de_luna')} />}
+          {isVisible('collections') && <Collections content={getContent('collections')} />}
+          {isVisible('luxury_highlight') && <LuxuryHairExtensionsHighlight content={getContent('luxury_highlight')} />}
+          {isVisible('main_character') && <MainCharacterCollection content={getContent('main_character')} />}
+          {isVisible('product_grid') && <ProductGrid limit={8} content={getContent('product_grid')} />}
+          {isVisible('featured_stories') && <FeaturedStories content={getContent('featured_stories')} />}
+          {isVisible('newsletter') && <Newsletter content={getContent('newsletter')} />}
         </main>
         <Footer />
       </div>
