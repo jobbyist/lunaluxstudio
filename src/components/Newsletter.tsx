@@ -11,7 +11,11 @@ import { z } from "zod";
 // Email validation schema
 const emailSchema = z.string().trim().email("Please enter a valid email address").max(255, "Email is too long");
 
-export const Newsletter = () => {
+interface NewsletterProps {
+  content?: Record<string, string>;
+}
+
+export const Newsletter = ({ content }: NewsletterProps) => {
   const { t } = useCurrency();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);

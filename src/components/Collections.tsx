@@ -5,7 +5,11 @@ import vietnameseImage from "@/assets/collection-vietnamese.jpg";
 import rawVietnameseImage from "@/assets/collection-raw-vietnamese.jpg";
 import accessoriesImage from "@/assets/collection-accessories.jpg";
 
-export const Collections = () => {
+interface CollectionsProps {
+  content?: Record<string, string>;
+}
+
+export const Collections = ({ content }: CollectionsProps) => {
 
   const collections = [
     {

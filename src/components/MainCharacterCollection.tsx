@@ -8,7 +8,11 @@ import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ALLOWED_MAIN_CHARACTER_PRODUCTS } from "@/lib/constants";
 
-export const MainCharacterCollection = () => {
+interface MainCharacterCollectionProps {
+  content?: Record<string, string>;
+}
+
+export const MainCharacterCollection = ({ content }: MainCharacterCollectionProps) => {
   const { formatPrice } = useCurrency();
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);

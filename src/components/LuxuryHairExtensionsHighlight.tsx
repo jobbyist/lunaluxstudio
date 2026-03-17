@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import luxuryImage from "@/assets/clip-in-hair-extension.png";
 
-export const LuxuryHairExtensionsHighlight = () => {
+interface LuxuryHairExtensionsHighlightProps {
+  content?: Record<string, string>;
+}
+
+export const LuxuryHairExtensionsHighlight = ({ content }: LuxuryHairExtensionsHighlightProps) => {
   return (
     <section className="py-20 bg-card">
       <div className="container mx-auto px-4">

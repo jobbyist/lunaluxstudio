@@ -4,7 +4,16 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import cafeDeLunaImage from "@/assets/valentines-cafe-de-luna.jpg";
 
-export const CafeDeLunaSection = () => {
+interface CafeDeLunaSectionProps {
+  content?: Record<string, string>;
+}
+
+export const CafeDeLunaSection = ({ content }: CafeDeLunaSectionProps) => {
+  const title = content?.title || "Café De Luna";
+  const subtitle = content?.subtitle || "Featured Collection";
+  const description = content?.description || "Warm-toned highlights inspired by your favourite café flavours. Rich, luxurious, and effortlessly beautiful.";
+  const ctaText = content?.cta_text || "Shop the Collection";
+  const ctaLink = content?.cta_link || "/collection/cafe-de-luna";
   return (
     <section className="py-16 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
