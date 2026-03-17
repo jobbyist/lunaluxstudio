@@ -58,6 +58,8 @@ import NavigationEditor from "./pages/admin/NavigationEditor";
 import AdminUsers from "./pages/admin/Users";
 import AdminReferrals from "./pages/admin/Referrals";
 import CustomWigOrders from "./pages/admin/CustomWigOrders";
+import AdminOrders from "./pages/admin/Orders";
+import AdminCustomers from "./pages/admin/Customers";
 import PaymentComplete from "./pages/PaymentComplete";
 
 const queryClient = new QueryClient();
@@ -126,6 +128,8 @@ const App = () => (
             <Route path="/manage/users" element={<AdminUsers />} />
             <Route path="/manage/referrals" element={<AdminReferrals />} />
             <Route path="/manage/custom-wigs" element={<CustomWigOrders />} />
+            <Route path="/manage/orders" element={<AdminOrders />} />
+            <Route path="/manage/customers" element={<AdminCustomers />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -4,7 +4,16 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import cafeDeLunaImage from "@/assets/valentines-cafe-de-luna.jpg";
 
-export const CafeDeLunaSection = () => {
+interface CafeDeLunaSectionProps {
+  content?: Record<string, string>;
+}
+
+export const CafeDeLunaSection = ({ content }: CafeDeLunaSectionProps) => {
+  const title = content?.title || "Café De Luna";
+  const subtitle = content?.subtitle || "Featured Collection";
+  const description = content?.description || "Warm-toned highlights inspired by your favourite café flavours. Rich, luxurious, and effortlessly beautiful.";
+  const ctaText = content?.cta_text || "Shop the Collection";
+  const ctaLink = content?.cta_link || "/collection/cafe-de-luna";
   return (
     <section className="py-16 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
@@ -15,7 +24,7 @@ export const CafeDeLunaSection = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="relative rounded-2xl overflow-hidden max-w-6xl mx-auto"
         >
-          <Link to="/collection/cafe-de-luna" className="block group">
+          <Link to={ctaLink} className="block group">
             <div className="relative aspect-[16/9] md:aspect-[16/7]">
               <img
                 src={cafeDeLunaImage}
@@ -34,20 +43,20 @@ export const CafeDeLunaSection = () => {
                   <div className="flex items-center gap-2 mb-3">
                     <Sparkles className="h-4 w-4 text-amber-300" />
                     <span className="text-xs uppercase tracking-[0.3em] text-amber-200 font-medium">
-                      Featured Collection
+                      {subtitle}
                     </span>
                   </div>
                   <h2 className="text-3xl md:text-5xl font-serif text-white mb-3 tracking-wide">
-                    Café De Luna
+                    {title}
                   </h2>
                   <p className="text-white/80 text-sm md:text-base max-w-md mb-6">
-                    Warm-toned highlights inspired by your favourite café flavours. Rich, luxurious, and effortlessly beautiful.
+                    {description}
                   </p>
                   <Button
                     variant="outline"
                     className="border-white/40 text-white hover:bg-white/10 hover:border-white/60 rounded-full px-8"
                   >
-                    Shop the Collection
+                    {ctaText}
                   </Button>
                 </motion.div>
               </div>

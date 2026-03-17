@@ -8,7 +8,11 @@ import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ALLOWED_MAIN_CHARACTER_PRODUCTS } from "@/lib/constants";
 
-export const MainCharacterCollection = () => {
+interface MainCharacterCollectionProps {
+  content?: Record<string, string>;
+}
+
+export const MainCharacterCollection = ({ content }: MainCharacterCollectionProps) => {
   const { formatPrice } = useCurrency();
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,7 +85,7 @@ export const MainCharacterCollection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            THE MAIN CHARACTER
+            {content?.title || 'THE MAIN CHARACTER'}
           </motion.h2>
           <motion.p 
             className="text-muted-foreground max-w-2xl mx-auto mb-6"
@@ -90,7 +94,7 @@ export const MainCharacterCollection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            Non-custom, readily available wigs for immediate purchase. Look and feel like the main character in your story.
+            {content?.description || 'Non-custom, readily available wigs for immediate purchase. Look and feel like the main character in your story.'}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -101,7 +105,7 @@ export const MainCharacterCollection = () => {
             whileTap={{ scale: 0.98 }}
           >
             <Button asChild variant="outline">
-              <Link to="/collection/main-character">View Full Collection</Link>
+              <Link to={content?.cta_link || '/collection/main-character'}>{content?.cta_text || 'View Full Collection'}</Link>
             </Button>
           </motion.div>
         </motion.div>
