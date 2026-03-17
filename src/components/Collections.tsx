@@ -73,10 +73,10 @@ export const Collections = ({ content }: CollectionsProps) => {
           viewport={{ once: true, margin: "-100px" }}
         >
           <h2 className="text-3xl md:text-4xl font-serif mb-4 tracking-wider">
-            SHOP BY COLLECTION
+            {content?.title || 'SHOP BY COLLECTION'}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover our premium hair collections, each crafted with the finest quality materials
+            {content?.description || 'Discover our premium hair collections, each crafted with the finest quality materials'}
           </p>
         </motion.div>
 

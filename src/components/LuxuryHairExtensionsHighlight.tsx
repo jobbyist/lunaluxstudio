@@ -33,21 +33,18 @@ export const LuxuryHairExtensionsHighlight = ({ content }: LuxuryHairExtensionsH
             viewport={{ once: true, margin: "-100px" }}
           >
             <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-3">
-              Featured Product
+              {content?.subtitle || 'Featured Product'}
             </p>
             <h2 className="text-3xl md:text-4xl font-serif tracking-wider mb-4">
-              Virgin Hair Clip-In Extensions
+              {content?.title || 'Virgin Hair Clip-In Extensions'}
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Experience the transformative power of premium virgin Remy Brazilian hair with our clip-in extensions.
-              Crafted with ultra-thin, seamless wefts that sit flat against your scalp, these extensions deliver unparalleled comfort and a naturally blended finish. 
-              Treat them like your own hair—cut, color, wash, and style with complete freedom. 
-              One set provides full coverage for naturally dense hair, while two sets create the voluminous, luxurious look most clients desire. 
-              Each set is a versatile investment in your hair's potential.
-
+              {content?.description || 'Experience the transformative power of premium virgin Remy Brazilian hair with our clip-in extensions. Crafted with ultra-thin, seamless wefts that sit flat against your scalp, these extensions deliver unparalleled comfort and a naturally blended finish. Treat them like your own hair—cut, color, wash, and style with complete freedom. One set provides full coverage for naturally dense hair, while two sets create the voluminous, luxurious look most clients desire. Each set is a versatile investment in your hair\'s potential.'}
             </p>
             <Button asChild size="lg">
-              <Link to="/product/virgin-hair-clip-in-extensions">Order This Product</Link>
+              <Link to={content?.cta_link || '/product/virgin-hair-clip-in-extensions'}>
+                {content?.cta_text || 'Order This Product'}
+              </Link>
             </Button>
           </motion.div>
         </div>
