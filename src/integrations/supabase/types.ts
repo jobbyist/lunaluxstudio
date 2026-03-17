@@ -110,6 +110,240 @@ export type Database = {
         }
         Relationships: []
       }
+      cms_customers: {
+        Row: {
+          address: Json | null
+          created_at: string
+          email: string
+          id: string
+          name: string | null
+          notes: string | null
+          phone: string | null
+          tags: string[] | null
+          total_orders: number
+          total_spent: number
+          updated_at: string
+        }
+        Insert: {
+          address?: Json | null
+          created_at?: string
+          email: string
+          id?: string
+          name?: string | null
+          notes?: string | null
+          phone?: string | null
+          tags?: string[] | null
+          total_orders?: number
+          total_spent?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: Json | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string | null
+          notes?: string | null
+          phone?: string | null
+          tags?: string[] | null
+          total_orders?: number
+          total_spent?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cms_discounts: {
+        Row: {
+          applies_to: string
+          applies_to_ids: string[] | null
+          code: string | null
+          created_at: string
+          discount_type: string
+          discount_value: number
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          max_uses: number | null
+          min_order_amount: number | null
+          starts_at: string | null
+          title: string
+          updated_at: string
+          uses_count: number
+        }
+        Insert: {
+          applies_to?: string
+          applies_to_ids?: string[] | null
+          code?: string | null
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          min_order_amount?: number | null
+          starts_at?: string | null
+          title: string
+          updated_at?: string
+          uses_count?: number
+        }
+        Update: {
+          applies_to?: string
+          applies_to_ids?: string[] | null
+          code?: string | null
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          min_order_amount?: number | null
+          starts_at?: string | null
+          title?: string
+          updated_at?: string
+          uses_count?: number
+        }
+        Relationships: []
+      }
+      cms_orders: {
+        Row: {
+          created_at: string
+          customer_email: string
+          customer_name: string | null
+          customer_phone: string | null
+          discount_amount: number
+          discount_code: string | null
+          id: string
+          items: Json
+          notes: string | null
+          order_number: string | null
+          payment_method: string | null
+          payment_status: string
+          shipping_address: Json | null
+          shipping_cost: number
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_email: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          discount_amount?: number
+          discount_code?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          shipping_address?: Json | null
+          shipping_cost?: number
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          discount_amount?: number
+          discount_code?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          shipping_address?: Json | null
+          shipping_cost?: number
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cms_products: {
+        Row: {
+          additional_images: string[] | null
+          category: string | null
+          collection: string | null
+          compare_at_price: number | null
+          created_at: string
+          currency_code: string
+          description: string | null
+          description_html: string | null
+          display_order: number | null
+          featured_image_url: string | null
+          handle: string
+          id: string
+          inventory_quantity: number
+          is_featured: boolean | null
+          options: Json | null
+          price: number
+          sku: string | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          variants: Json | null
+        }
+        Insert: {
+          additional_images?: string[] | null
+          category?: string | null
+          collection?: string | null
+          compare_at_price?: number | null
+          created_at?: string
+          currency_code?: string
+          description?: string | null
+          description_html?: string | null
+          display_order?: number | null
+          featured_image_url?: string | null
+          handle: string
+          id?: string
+          inventory_quantity?: number
+          is_featured?: boolean | null
+          options?: Json | null
+          price?: number
+          sku?: string | null
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          variants?: Json | null
+        }
+        Update: {
+          additional_images?: string[] | null
+          category?: string | null
+          collection?: string | null
+          compare_at_price?: number | null
+          created_at?: string
+          currency_code?: string
+          description?: string | null
+          description_html?: string | null
+          display_order?: number | null
+          featured_image_url?: string | null
+          handle?: string
+          id?: string
+          inventory_quantity?: number
+          is_featured?: boolean | null
+          options?: Json | null
+          price?: number
+          sku?: string | null
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          variants?: Json | null
+        }
+        Relationships: []
+      }
       custom_wig_orders: {
         Row: {
           addon_cost: number
