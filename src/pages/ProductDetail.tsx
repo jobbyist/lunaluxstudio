@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Button } from "@/components/ui/button";
-import { fetchProductByHandle, ShopifyProduct } from "@/lib/shopify";
+import { fetchCmsProductByHandle, CmsProduct, CmsVariant, findVariant } from "@/lib/cms-products";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShoppingCart } from "lucide-react";
@@ -15,10 +15,10 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 
 const ProductDetail = () => {
   const { handle } = useParams();
-  const [product, setProduct] = useState<ShopifyProduct | null>(null);
+  const [product, setProduct] = useState<CmsProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
-  const [selectedVariant, setSelectedVariant] = useState<any>(null);
+  const [selectedVariant, setSelectedVariant] = useState<CmsVariant | null>(null);
   const addItem = useCartStore(state => state.addItem);
   const { formatPrice } = useCurrency();
 
@@ -26,30 +26,17 @@ const ProductDetail = () => {
     const loadProduct = async () => {
       try {
         setLoading(true);
-        if (!handle) {
-          setProduct(null);
-          return;
-        }
-
-        const found = await fetchProductByHandle(handle);
+        if (!handle) { setProduct(null); return; }
+        const found = await fetchCmsProductByHandle(handle);
         setProduct(found);
         
-        if (found) {
-          const firstVariant = found.node.variants.edges[0]?.node;
+        if (found?.options && found.options.length > 0) {
           const initialOptions: Record<string, string> = {};
-
-          if (firstVariant) {
-            firstVariant.selectedOptions.forEach(opt => {
-              initialOptions[opt.name] = opt.value;
-            });
-          }
-
-          found.node.options.forEach(option => {
-            if (!initialOptions[option.name]) {
-              initialOptions[option.name] = option.values[0] ?? "";
+          found.options.forEach(option => {
+            if (option.values.length > 0) {
+              initialOptions[option.name] = option.values[0];
             }
           });
-
           setSelectedOptions(initialOptions);
         }
       } catch (error) {
@@ -58,54 +45,47 @@ const ProductDetail = () => {
         setLoading(false);
       }
     };
-
     loadProduct();
   }, [handle]);
 
   useEffect(() => {
-    if (!product) {
-      setSelectedVariant(null);
-      return;
-    }
-
-    const variant = product.node.variants.edges.find(({ node }) =>
-      node.selectedOptions.every(opt => selectedOptions[opt.name] === opt.value)
-    )?.node;
-
-    setSelectedVariant(variant || null);
+    if (!product) { setSelectedVariant(null); return; }
+    const variant = findVariant(product, selectedOptions);
+    setSelectedVariant(variant);
   }, [product, selectedOptions]);
 
   const handleOptionChange = (optionName: string, value: string) => {
-    const newOptions = { ...selectedOptions, [optionName]: value };
-    setSelectedOptions(newOptions);
+    setSelectedOptions(prev => ({ ...prev, [optionName]: value }));
   };
 
   const handleAddToCart = () => {
-    if (!product || !selectedVariant) return;
-
-    const cartItem = {
-      product,
-      variantId: selectedVariant.id,
-      variantTitle: selectedVariant.title,
-      price: selectedVariant.price,
-      quantity: 1,
-      selectedOptions: selectedVariant.selectedOptions || []
-    };
+    if (!product) return;
+    const price = selectedVariant?.price || product.price;
+    const variantId = selectedVariant?.id || product.id;
+    const variantTitle = selectedVariant?.title || "Default";
+    const available = selectedVariant ? selectedVariant.available : product.inventory_quantity > 0;
     
-    addItem(cartItem);
-    toast.success("Added to cart", {
-      description: product.node.title,
-      position: "top-center",
+    if (!available) { toast.error("This product is out of stock"); return; }
+
+    addItem({
+      productId: product.id,
+      title: product.title,
+      handle: product.handle,
+      imageUrl: product.featured_image_url || "/placeholder.svg",
+      variantId,
+      variantTitle,
+      price,
+      quantity: 1,
+      selectedOptions: Object.entries(selectedOptions).map(([name, value]) => ({ name, value })),
     });
+    toast.success("Added to cart", { description: product.title, position: "top-center" });
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <main className="pt-36 md:pt-40 pb-20">
-          <PageLoadingSkeleton variant="product" />
-        </main>
+        <main className="pt-36 md:pt-40 pb-20"><PageLoadingSkeleton variant="product" /></main>
         <Footer />
       </div>
     );
@@ -123,16 +103,11 @@ const ProductDetail = () => {
     );
   }
 
-  const { node } = product;
-  const imageUrl = node.images.edges[0]?.node.url || "/placeholder.svg";
-  const price = selectedVariant?.price || node.priceRange.minVariantPrice;
-  const displayOptions = node.options.filter((option) => {
-    if (option.values.length === 1 && option.values[0] === "Default Title") {
-      return false;
-    }
-
-    return true;
-  });
+  const imageUrl = product.featured_image_url || "/placeholder.svg";
+  const allImages = [imageUrl, ...(product.additional_images || [])];
+  const price = selectedVariant?.price || product.price;
+  const displayOptions = (product.options || []).filter(o => !(o.values.length === 1 && o.values[0] === "Default Title"));
+  const isAvailable = selectedVariant ? selectedVariant.available : product.inventory_quantity > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -141,101 +116,78 @@ const ProductDetail = () => {
       <main className="pt-36 md:pt-40 pb-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Image Gallery */}
             <div className="space-y-4">
               <div className="aspect-[3/4] bg-muted rounded-lg overflow-hidden">
-                <img
-                  src={imageUrl}
-                  alt={node.title}
-                  className="w-full h-full object-cover"
-                />
+                <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" />
               </div>
-              {node.images.edges.length > 1 && (
+              {allImages.length > 1 && (
                 <div className="grid grid-cols-4 gap-4">
-                  {node.images.edges.slice(0, 4).map((img, idx) => (
+                  {allImages.slice(0, 4).map((img, idx) => (
                     <div key={idx} className="aspect-square bg-muted rounded-lg overflow-hidden">
-                      <img
-                        src={img.node.url}
-                        alt={`${node.title} ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
+                      <img src={img} alt={`${product.title} ${idx + 1}`} className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Product Info */}
             <div className="space-y-6">
               <div>
-                <h1 className="text-3xl md:text-4xl font-serif mb-2">{node.title}</h1>
-                <p className="text-2xl font-semibold text-primary">
-                  {formatPrice(parseFloat(price.amount))}
-                </p>
+                <h1 className="text-3xl md:text-4xl font-serif mb-2">{product.title}</h1>
+                <p className="text-2xl font-semibold text-primary">{formatPrice(price)}</p>
+                {product.compare_at_price && product.compare_at_price > price && (
+                  <p className="text-lg text-muted-foreground line-through">{formatPrice(product.compare_at_price)}</p>
+                )}
               </div>
 
-              {node.descriptionHtml ? (
+              {product.description_html ? (
                 <div>
                   <h3 className="font-semibold mb-2">Description</h3>
-                  <div
-                    className="prose max-w-none text-sm text-foreground dark:prose-invert"
-                    dangerouslySetInnerHTML={{ __html: node.descriptionHtml }}
-                  />
+                  <div className="prose max-w-none text-sm text-foreground dark:prose-invert" dangerouslySetInnerHTML={{ __html: product.description_html }} />
                 </div>
-              ) : node.description ? (
+              ) : product.description ? (
                 <div>
                   <h3 className="font-semibold mb-2">Description</h3>
-                  <p className="text-muted-foreground leading-relaxed">{node.description}</p>
+                  <p className="text-muted-foreground leading-relaxed">{product.description}</p>
                 </div>
               ) : null}
 
-              {/* Product Options */}
               {displayOptions.length > 0 && (
-              <div className="space-y-6">
-                {displayOptions.map((option) => (
-                  <div key={option.name} className="space-y-3">
-                    <Label className="text-base font-semibold">
-                      {option.name}: {selectedOptions[option.name]}
-                    </Label>
-                    <RadioGroup
-                      value={selectedOptions[option.name]}
-                      onValueChange={(value) => handleOptionChange(option.name, value)}
-                      className="flex flex-wrap gap-2"
-                    >
-                      {option.values.map((value) => (
-                        <div key={value}>
-                          <RadioGroupItem
-                            value={value}
-                            id={`${option.name}-${value}`}
-                            className="peer sr-only"
-                          />
-                          <Label
-                            htmlFor={`${option.name}-${value}`}
-                            className="flex items-center justify-center px-4 py-2 border border-border rounded-lg cursor-pointer hover:border-primary transition-colors peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10"
-                          >
-                            {value}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
-                ))}
-              </div>
+                <div className="space-y-6">
+                  {displayOptions.map((option) => (
+                    <div key={option.name} className="space-y-3">
+                      <Label className="text-base font-semibold">{option.name}: {selectedOptions[option.name]}</Label>
+                      <RadioGroup
+                        value={selectedOptions[option.name]}
+                        onValueChange={(value) => handleOptionChange(option.name, value)}
+                        className="flex flex-wrap gap-2"
+                      >
+                        {option.values.map((value) => (
+                          <div key={value}>
+                            <RadioGroupItem value={value} id={`${option.name}-${value}`} className="peer sr-only" />
+                            <Label
+                              htmlFor={`${option.name}-${value}`}
+                              className="flex items-center justify-center px-4 py-2 border border-border rounded-lg cursor-pointer hover:border-primary transition-colors peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10"
+                            >
+                              {value}
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </div>
+                  ))}
+                </div>
               )}
 
-              <Button
-                onClick={handleAddToCart}
-                className="w-full bg-primary hover:bg-primary/90 btn-glow"
-                size="lg"
-                disabled={!selectedVariant?.availableForSale}
-              >
+              <Button onClick={handleAddToCart} className="w-full bg-primary hover:bg-primary/90 btn-glow" size="lg" disabled={!isAvailable}>
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                {selectedVariant?.availableForSale ? "Add to Cart" : "Out of Stock"}
+                {isAvailable ? "Add to Cart" : "Out of Stock"}
               </Button>
 
               <div className="border-t border-border pt-6 space-y-2 text-sm text-muted-foreground">
                 <p>• 7-day return policy</p>
                 <p>• Authentic premium hair</p>
+                <p>• R150 flat-rate shipping via The Courier Guy</p>
               </div>
             </div>
           </div>
