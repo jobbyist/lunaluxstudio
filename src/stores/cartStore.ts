@@ -1,46 +1,35 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { ShopifyProduct, createStorefrontCheckout } from '@/lib/shopify';
 
 export interface CartItem {
-  product: ShopifyProduct;
+  productId: string;
+  title: string;
+  handle: string;
+  imageUrl: string;
   variantId: string;
   variantTitle: string;
-  price: {
-    amount: string;
-    currencyCode: string;
-  };
+  price: number; // price in ZAR
   quantity: number;
-  selectedOptions: Array<{
-    name: string;
-    value: string;
-  }>;
-  isCustomWig?: boolean; // Flag for custom wig products
-  customSku?: string; // Custom SKU for order processing
+  selectedOptions: Array<{ name: string; value: string }>;
+  isCustomWig?: boolean;
+  customSku?: string;
 }
 
 interface CartStore {
   items: CartItem[];
-  cartId: string | null;
-  checkoutUrl: string | null;
   isLoading: boolean;
   
   addItem: (item: CartItem) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
   removeItem: (variantId: string) => void;
   clearCart: () => void;
-  setCartId: (cartId: string) => void;
-  setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
-  createCheckout: () => Promise<string | null>;
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      cartId: null,
-      checkoutUrl: null,
       isLoading: false,
 
       addItem: (item) => {
@@ -65,7 +54,6 @@ export const useCartStore = create<CartStore>()(
           get().removeItem(variantId);
           return;
         }
-        
         set({
           items: get().items.map(item =>
             item.variantId === variantId ? { ...item, quantity } : item
@@ -80,34 +68,13 @@ export const useCartStore = create<CartStore>()(
       },
 
       clearCart: () => {
-        set({ items: [], cartId: null, checkoutUrl: null });
+        set({ items: [] });
       },
 
-      setCartId: (cartId) => set({ cartId }),
-      setCheckoutUrl: (checkoutUrl) => set({ checkoutUrl }),
       setLoading: (isLoading) => set({ isLoading }),
-
-      createCheckout: async () => {
-        const { items, setLoading, setCheckoutUrl } = get();
-        if (items.length === 0) {
-          return null;
-        }
-
-        setLoading(true);
-        try {
-          const checkoutUrl = await createStorefrontCheckout(items);
-          setCheckoutUrl(checkoutUrl);
-          return checkoutUrl;
-        } catch (error) {
-          console.error('Failed to create checkout:', error);
-          throw error;
-        } finally {
-          setLoading(false);
-        }
-      }
     }),
     {
-      name: 'luna-cart',
+      name: 'luna-cart-v2',
       storage: createJSONStorage(() => localStorage),
     }
   )
