@@ -254,10 +254,12 @@ export const CustomerDetailsCheckout = ({
               <span className="text-muted-foreground">Order Total</span>
               <span className="text-xl font-bold text-primary">{totalAmount}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
-              <Truck className="w-4 h-4" />
-              <span>Free shipping included</span>
-            </div>
+            {isCustomWig && (
+              <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                <Truck className="w-4 h-4" />
+                <span>Free shipping included</span>
+              </div>
+            )}
           </div>
 
           {/* Submit Button */}
