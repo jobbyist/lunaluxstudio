@@ -18,6 +18,7 @@ interface CustomerDetailsCheckoutProps {
   onClose: () => void;
   onSubmit: (details: CustomerDetails) => Promise<void>;
   totalAmount: string;
+  isCustomWig?: boolean;
 }
 
 export interface CustomerDetails {
@@ -38,6 +39,7 @@ export const CustomerDetailsCheckout = ({
   onClose,
   onSubmit,
   totalAmount,
+  isCustomWig = false,
 }: CustomerDetailsCheckoutProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<CustomerDetails>({
@@ -122,7 +124,8 @@ export const CustomerDetailsCheckout = ({
             Shipping Details
           </DialogTitle>
           <DialogDescription>
-            Please provide your details for your custom wig order. Shipping is <strong className="text-primary">FREE</strong> for all custom wigs.
+            Please provide your details to complete your order.
+            {isCustomWig && <> Shipping is <strong className="text-primary">FREE</strong> for all custom wigs.</>}
           </DialogDescription>
         </DialogHeader>
 
@@ -251,10 +254,12 @@ export const CustomerDetailsCheckout = ({
               <span className="text-muted-foreground">Order Total</span>
               <span className="text-xl font-bold text-primary">{totalAmount}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
-              <Truck className="w-4 h-4" />
-              <span>Free shipping included</span>
-            </div>
+            {isCustomWig && (
+              <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                <Truck className="w-4 h-4" />
+                <span>Free shipping included</span>
+              </div>
+            )}
           </div>
 
           {/* Submit Button */}
