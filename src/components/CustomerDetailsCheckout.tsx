@@ -124,7 +124,8 @@ export const CustomerDetailsCheckout = ({
             Shipping Details
           </DialogTitle>
           <DialogDescription>
-            Please provide your details for your custom wig order. Shipping is <strong className="text-primary">FREE</strong> for all custom wigs.
+            Please provide your details to complete your order.
+            {isCustomWig && <> Shipping is <strong className="text-primary">FREE</strong> for all custom wigs.</>}
           </DialogDescription>
         </DialogHeader>
 
