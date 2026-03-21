@@ -39,6 +39,7 @@ export const CustomerDetailsCheckout = ({
   onClose,
   onSubmit,
   totalAmount,
+  isCustomWig = false,
 }: CustomerDetailsCheckoutProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<CustomerDetails>({
