@@ -18,6 +18,7 @@ interface CustomerDetailsCheckoutProps {
   onClose: () => void;
   onSubmit: (details: CustomerDetails) => Promise<void>;
   totalAmount: string;
+  isCustomWig?: boolean;
 }
 
 export interface CustomerDetails {
