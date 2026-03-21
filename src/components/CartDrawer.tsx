@@ -221,6 +221,7 @@ export const CartDrawer = () => {
         onClose={() => setShowCustomerDetails(false)}
         onSubmit={handleCheckoutSubmit}
         totalAmount={formatPrice(finalTotal)}
+        isCustomWig={hasCustomWigs}
       />
     </Sheet>
   );
