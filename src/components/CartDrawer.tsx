@@ -198,17 +198,17 @@ export const CartDrawer = () => {
                   <span className="text-xl font-bold text-primary">{formatPrice(finalTotal)}</span>
                 </div>
                 
+                <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-center">
+                  <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                    🔧 Checkout is temporarily unavailable while we update our product catalog. Please check back shortly.
+                  </p>
+                </div>
                 <Button 
-                  onClick={handleCheckoutClick}
-                  className="w-full bg-primary hover:bg-primary/90 btn-glow" 
+                  className="w-full" 
                   size="lg"
-                  disabled={items.length === 0 || isLoading}
+                  disabled
                 >
-                  {isLoading ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>
-                  ) : (
-                    <><ExternalLink className="w-4 h-4 mr-2" />Checkout</>
-                  )}
+                  Checkout Unavailable
                 </Button>
               </div>
             </>
