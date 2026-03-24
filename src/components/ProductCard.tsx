@@ -180,9 +180,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 <Star key={star} className={`h-4 w-4 ${baseClass}`} />
               );
             })}
-            <span className="text-xs text-muted-foreground ml-2">
-              {hasRatings ? `(${averageRating.toFixed(1)})` : "New arrival"}
-            </span>
+            {hasRatings && (
+              <span className="text-xs text-muted-foreground ml-2">
+                ({averageRating.toFixed(1)})
+              </span>
+            )}
           </div>
           
           <div className="flex items-center justify-between">
