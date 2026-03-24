@@ -1,28 +1,12 @@
-import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { ProductCard } from "@/components/ProductCard";
-import { fetchCmsProductsByCollection, CmsProduct } from "@/lib/cms-products";
+import { useCmsProducts } from "@/hooks/useCmsProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import rawVietnameseImage from "@/assets/collection-raw-vietnamese.jpg";
 
 export default function RawVietnameseCollection() {
-  const [products, setProducts] = useState<CmsProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchCmsProductsByCollection("raw-vietnamese", 50);
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching Raw Vietnamese products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useCmsProducts({ collection: "raw-vietnamese", limit: 50 });
 
   return (
     <PageLayout>

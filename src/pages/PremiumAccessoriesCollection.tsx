@@ -1,28 +1,12 @@
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { fetchCmsProductsByCollection, CmsProduct } from '@/lib/cms-products';
+import { useCmsProducts } from '@/hooks/useCmsProducts';
 import { ProductCard } from '@/components/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
 const PremiumAccessoriesCollection = () => {
-  const [products, setProducts] = useState<CmsProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchCmsProductsByCollection('premium-accessories', 50);
-        setProducts(data);
-      } catch (error) {
-        console.error('Error loading Premium Accessories collection:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useCmsProducts({ collection: 'premium-accessories', limit: 50 });
 
   return (
     <div className="min-h-screen bg-background">
