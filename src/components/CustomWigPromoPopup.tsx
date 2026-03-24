@@ -25,7 +25,7 @@ export const CustomWigPromoPopup = () => {
     }
 
     // Set up timer to show popup after 60 seconds of interaction
-    let interactionTimer: ReturnType<typeof setTimeout> | null = null;
+    let interactionTimer: NodeJS.Timeout | null = null;
     let hasInteracted = false;
 
     const startTimer = () => {

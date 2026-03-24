@@ -18,7 +18,7 @@ const getSessionId = (): string => {
 export const useVisitorTracking = () => {
   const location = useLocation();
   const sessionId = useRef(getSessionId());
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const updatePresence = async (pagePath: string) => {
     try {

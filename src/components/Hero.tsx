@@ -6,11 +6,7 @@ import { useRef, useEffect } from "react";
 import heroImage from "@/assets/lunahero.png";
 import { preloadImage } from "@/components/OptimizedImage";
 
-interface HeroProps {
-  content?: Record<string, string>;
-}
-
-export const Hero = ({ content }: HeroProps) => {
+export const Hero = () => {
   const { t } = useCurrency();
   const sectionRef = useRef<HTMLElement>(null);
   

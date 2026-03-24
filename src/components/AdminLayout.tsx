@@ -15,8 +15,6 @@ import {
   X,
   Sparkles,
   Scissors,
-  ShoppingBag,
-  UserCheck,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -28,8 +26,6 @@ interface AdminLayoutProps {
 const adminNavItems = [
   { path: '/manage', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/manage/products', label: 'Products', icon: Package },
-  { path: '/manage/orders', label: 'Orders', icon: ShoppingBag },
-  { path: '/manage/customers', label: 'Customers', icon: UserCheck },
   { path: '/manage/custom-wigs', label: 'Custom Wig Orders', icon: Scissors },
   { path: '/manage/users', label: 'Users & Loyalty', icon: Users },
   { path: '/manage/referrals', label: 'Referrals', icon: Users },

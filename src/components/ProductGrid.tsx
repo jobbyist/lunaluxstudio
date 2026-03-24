@@ -9,7 +9,6 @@ interface ProductGridProps {
   title?: string;
   searchQuery?: string;
   limit?: number;
-  content?: Record<string, string>;
 }
 
 // Constants for product filtering and display

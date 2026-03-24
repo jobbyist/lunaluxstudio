@@ -23,11 +23,7 @@ interface ContentItem {
   isExternal: boolean;
 }
 
-interface FeaturedStoriesProps {
-  content?: Record<string, string>;
-}
-
-export const FeaturedStories = ({ content }: FeaturedStoriesProps) => {
+export const FeaturedStories = () => {
   const { t } = useCurrency();
   
   const { scrollYProgress } = useScroll();

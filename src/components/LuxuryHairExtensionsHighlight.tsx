@@ -3,11 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import luxuryImage from "@/assets/clip-in-hair-extension.png";
 
-interface LuxuryHairExtensionsHighlightProps {
-  content?: Record<string, string>;
-}
-
-export const LuxuryHairExtensionsHighlight = ({ content }: LuxuryHairExtensionsHighlightProps) => {
+export const LuxuryHairExtensionsHighlight = () => {
   return (
     <section className="py-20 bg-card">
       <div className="container mx-auto px-4">
@@ -33,18 +29,21 @@ export const LuxuryHairExtensionsHighlight = ({ content }: LuxuryHairExtensionsH
             viewport={{ once: true, margin: "-100px" }}
           >
             <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-3">
-              {content?.subtitle || 'Featured Product'}
+              Featured Product
             </p>
             <h2 className="text-3xl md:text-4xl font-serif tracking-wider mb-4">
-              {content?.title || 'Virgin Hair Clip-In Extensions'}
+              Virgin Hair Clip-In Extensions
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              {content?.description || 'Experience the transformative power of premium virgin Remy Brazilian hair with our clip-in extensions. Crafted with ultra-thin, seamless wefts that sit flat against your scalp, these extensions deliver unparalleled comfort and a naturally blended finish. Treat them like your own hair—cut, color, wash, and style with complete freedom. One set provides full coverage for naturally dense hair, while two sets create the voluminous, luxurious look most clients desire. Each set is a versatile investment in your hair\'s potential.'}
+              Experience the transformative power of premium virgin Remy Brazilian hair with our clip-in extensions.
+              Crafted with ultra-thin, seamless wefts that sit flat against your scalp, these extensions deliver unparalleled comfort and a naturally blended finish. 
+              Treat them like your own hair—cut, color, wash, and style with complete freedom. 
+              One set provides full coverage for naturally dense hair, while two sets create the voluminous, luxurious look most clients desire. 
+              Each set is a versatile investment in your hair's potential.
+
             </p>
             <Button asChild size="lg">
-              <Link to={content?.cta_link || '/product/virgin-hair-clip-in-extensions'}>
-                {content?.cta_text || 'Order This Product'}
-              </Link>
+              <Link to="/product/virgin-hair-clip-in-extensions">Order This Product</Link>
             </Button>
           </motion.div>
         </div>
