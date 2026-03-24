@@ -13,14 +13,14 @@ import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { UpsellPopup } from "./UpsellPopup";
 import { PointsRedemption } from "./PointsRedemption";
 import { CustomerDetailsCheckout, CustomerDetails } from "./CustomerDetailsCheckout";
-import { supabase } from "@/integrations/supabase/client";
-
-const SHIPPING_RATE = 150;
+import { hasCustomWigItems, createCustomWigCheckout } from "@/lib/shopify";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showUpsell, setShowUpsell] = useState(false);
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
   const [pointsDiscount, setPointsDiscount] = useState(0);
   const [pointsUsed, setPointsUsed] = useState(0);
@@ -29,15 +29,18 @@ export const CartDrawer = () => {
     isLoading, 
     updateQuantity, 
     removeItem, 
+    createCheckout,
     setLoading,
   } = useCartStore();
   const { formatPrice } = useCurrency();
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const hasCustomWigs = items.some(item => item.isCustomWig);
-  const shippingCost = hasCustomWigs ? 0 : SHIPPING_RATE;
-  const finalTotal = Math.max(0, subtotal + shippingCost - pointsDiscount);
+  // Calculate total in ZAR (assuming prices from Shopify are in ZAR)
+  const totalPriceZAR = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
+  const finalTotal = Math.max(0, totalPriceZAR - pointsDiscount);
+
+  // Check if cart has custom wigs
+  const hasCustomWigs = hasCustomWigItems(items);
 
   const handleDiscountApplied = (discount: number, points: number) => {
     setPointsDiscount(discount);
@@ -49,42 +52,51 @@ export const CartDrawer = () => {
     setPointsUsed(0);
   };
 
+  // Show upsell popup when checkout button is clicked
   const handleCheckoutClick = () => {
-    setShowCustomerDetails(true);
+    setShowUpsell(true);
   };
 
-  const handleCheckoutSubmit = async (details: CustomerDetails) => {
+  // Proceed with actual checkout after upsell
+  const handleProceedToCheckout = async () => {
+    setShowUpsell(false);
+    
+    // If cart has custom wigs, show customer details form
+    if (hasCustomWigs) {
+      setShowCustomerDetails(true);
+      return;
+    }
+    
+    // For regular items, proceed directly to Shopify checkout
+    const checkoutWindow = window.open('', '_blank');
+    try {
+      const checkoutUrl = await createCheckout();
+      if (checkoutUrl) {
+        if (checkoutWindow) {
+          checkoutWindow.location.href = checkoutUrl;
+        } else {
+          window.location.href = checkoutUrl;
+        }
+        setIsOpen(false);
+      }
+    } catch (error) {
+      checkoutWindow?.close();
+      console.error('Checkout failed:', error);
+      toast.error("Failed to create checkout. Please try again.");
+    }
+  };
+
+  // Handle custom wig checkout with customer details
+  const handleCustomWigCheckout = async (details: CustomerDetails) => {
     setLoading(true);
     try {
-      const redirectUrl = `${window.location.origin}/payment-complete`;
-
-      const { data, error } = await supabase.functions.invoke('create-stitch-payment', {
-        body: {
-          items: items.map(item => ({
-            productId: item.productId,
-            title: item.title,
-            price: item.price,
-            quantity: item.quantity,
-            variantId: item.variantId,
-            variantTitle: item.variantTitle,
-            isCustomWig: item.isCustomWig || false,
-            customSku: item.customSku || null,
-          })),
-          customerName: details.name,
-          customerEmail: details.email,
-          customerPhone: details.phone,
-          shippingAddress: details.address,
-          redirectUrl,
-        },
-      });
-
-      if (error) throw new Error(error.message || 'Payment creation failed');
-      if (!data?.success || !data?.paymentUrl) throw new Error(data?.error || 'No payment URL');
-
-      window.location.href = data.paymentUrl;
-    } catch (error: any) {
-      console.error('Checkout failed:', error);
-      toast.error(error.message || "Failed to create payment. Please try again.");
+      const paymentUrl = await createCustomWigCheckout(items, details);
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
+      }
+    } catch (error) {
+      console.error('Custom wig checkout failed:', error);
+      toast.error("Failed to create payment. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -123,56 +135,92 @@ export const CartDrawer = () => {
             <>
               <div className="flex-1 overflow-y-auto pr-2 min-h-0">
                 <div className="space-y-4">
-                  {items.map((item) => (
-                    <div key={item.variantId} className="flex gap-4 p-2 bg-card rounded-lg">
-                      <div className="w-16 h-16 bg-muted rounded-md overflow-hidden flex-shrink-0">
-                        {item.imageUrl && (
-                          <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
-                        )}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium truncate">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {item.selectedOptions
-                            .filter(opt => opt.name !== 'SKU' && opt.name !== 'Free Shipping')
-                            .map(option => option.value)
-                            .join(' • ')}
-                        </p>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-semibold text-primary">
-                            {formatPrice(item.price)}
-                          </p>
-                          {item.isCustomWig && (
-                            <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                              Free Shipping
-                            </Badge>
+                  {items.map((item) => {
+                    // Calculate add-on cost for custom wigs
+                    const isCustomWig = item.isCustomWig || item.variantId?.startsWith('LUNA-CUSTOM-');
+                    const totalPrice = parseFloat(item.price.amount);
+                    const bundleOption = item.selectedOptions.find(opt => opt.name === 'Base Bundle');
+                    const basePrice = bundleOption?.value?.toLowerCase().includes('bodywave') ? 3700 : 3000;
+                    const addonCost = isCustomWig ? totalPrice - basePrice : 0;
+                    
+                    return (
+                      <div key={item.variantId} className="flex gap-4 p-2 bg-card rounded-lg">
+                        <div className="w-16 h-16 bg-muted rounded-md overflow-hidden flex-shrink-0">
+                          {item.product.node.images?.edges?.[0]?.node && (
+                            <img
+                              src={item.product.node.images.edges[0].node.url}
+                              alt={item.product.node.title}
+                              className="w-full h-full object-cover"
+                            />
                           )}
                         </div>
-                      </div>
-                      
-                      <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeItem(item.variantId)}>
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                        <div className="flex items-center gap-1">
-                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.variantId, item.quantity - 1)}>
-                            <Minus className="h-3 w-3" />
+                        
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium truncate">{item.product.node.title}</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {item.selectedOptions
+                              .filter(opt => opt.name !== 'SKU' && opt.name !== 'Free Shipping')
+                              .map(option => option.value)
+                              .join(' • ')}
+                          </p>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="font-semibold text-primary">
+                              {formatPrice(totalPrice)}
+                            </p>
+                            {isCustomWig && addonCost > 0 && (
+                              <span className="text-xs text-muted-foreground">
+                                (Base: {formatPrice(basePrice)} + Add-ons: {formatPrice(addonCost)})
+                              </span>
+                            )}
+                            {isCustomWig && (
+                              <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                                Free Shipping
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={() => removeItem(item.variantId)}
+                          >
+                            <Trash2 className="h-3 w-3" />
                           </Button>
-                          <span className="w-8 text-center text-sm">{item.quantity}</span>
-                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.variantId, item.quantity + 1)}>
-                            <Plus className="h-3 w-3" />
-                          </Button>
+                          
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-6 w-6"
+                              onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-8 text-center text-sm">{item.quantity}</span>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-6 w-6"
+                              onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
               
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
+
+                {/* Points Redemption */}
                 <PointsRedemption
-                  cartTotal={subtotal}
+                  cartTotal={totalPriceZAR}
                   onDiscountApplied={handleDiscountApplied}
                   onDiscountRemoved={handleDiscountRemoved}
                   appliedDiscount={pointsDiscount}
@@ -181,34 +229,36 @@ export const CartDrawer = () => {
                 {pointsDiscount > 0 && (
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-muted-foreground">Points Discount</span>
-                    <span className="text-green-600 font-medium">-{formatPrice(pointsDiscount)}</span>
+                    <span className="text-green-600 font-medium">
+                      -{formatPrice(pointsDiscount)}
+                    </span>
                   </div>
                 )}
 
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(subtotal)}</span></div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Shipping {hasCustomWigs ? '' : '(The Courier Guy)'}</span>
-                    <span>{shippingCost === 0 ? <span className="text-green-600">FREE</span> : formatPrice(shippingCost)}</span>
-                  </div>
-                </div>
-
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Total</span>
-                  <span className="text-xl font-bold text-primary">{formatPrice(finalTotal)}</span>
+                  <span className="text-xl font-bold text-primary">
+                    {formatPrice(finalTotal)}
+                  </span>
                 </div>
                 
-                <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-center">
-                  <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
-                    🔧 Checkout is temporarily unavailable while we update our product catalog. Please check back shortly.
-                  </p>
-                </div>
                 <Button 
-                  className="w-full" 
+                  onClick={handleCheckoutClick}
+                  className="w-full bg-primary hover:bg-primary/90 btn-glow" 
                   size="lg"
-                  disabled
+                  disabled={items.length === 0 || isLoading}
                 >
-                  Checkout Unavailable
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Creating Checkout...
+                    </>
+                  ) : (
+                    <>
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Checkout
+                    </>
+                  )}
                 </Button>
               </div>
             </>
@@ -216,12 +266,19 @@ export const CartDrawer = () => {
         </div>
       </SheetContent>
 
+      {/* Upsell Popup */}
+      <UpsellPopup
+        isOpen={showUpsell}
+        onClose={() => setShowUpsell(false)}
+        onProceedToCheckout={handleProceedToCheckout}
+      />
+
+      {/* Customer Details Checkout for Custom Wigs */}
       <CustomerDetailsCheckout
         isOpen={showCustomerDetails}
         onClose={() => setShowCustomerDetails(false)}
-        onSubmit={handleCheckoutSubmit}
+        onSubmit={handleCustomWigCheckout}
         totalAmount={formatPrice(finalTotal)}
-        isCustomWig={hasCustomWigs}
       />
     </Sheet>
   );

@@ -28,17 +28,6 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
-interface CmsVariant {
-  id: string;
-  title: string;
-  price: number;
-  compare_at_price?: number | null;
-  sku?: string;
-  inventory_quantity: number;
-  available: boolean;
-  options: Record<string, string>;
-}
-
 interface CmsProduct {
   id: string;
   title: string;
@@ -56,8 +45,6 @@ interface CmsProduct {
   additional_images: string[] | null;
   collection: string | null;
   is_featured: boolean;
-  variants: CmsVariant[] | null;
-  options: Array<{ name: string; values: string[] }> | null;
   created_at: string;
   updated_at: string;
 }
@@ -83,7 +70,6 @@ const emptyProduct: Partial<CmsProduct> = {
   title: '', handle: '', description: '', price: 0, compare_at_price: null,
   currency_code: 'ZAR', sku: '', inventory_quantity: 0, category: '',
   tags: [], status: 'active', featured_image_url: '', collection: '', is_featured: false,
-  variants: [], options: [],
 };
 
 const emptyDiscount: Partial<CmsDiscount> = {
@@ -208,31 +194,6 @@ const AdminProducts = () => {
 
   const formatPrice = (amount: number) =>
     new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' }).format(amount);
-
-  const addVariant = () => {
-    const newVariant: CmsVariant = {
-      id: crypto.randomUUID(),
-      title: 'Default Title',
-      price: editingProduct.price || 0,
-      compare_at_price: null,
-      sku: '',
-      inventory_quantity: 0,
-      available: true,
-      options: {},
-    };
-    setEditingProduct(p => ({ ...p, variants: [...(p.variants || []), newVariant] }));
-  };
-
-  const removeVariant = (idx: number) => {
-    setEditingProduct(p => ({ ...p, variants: (p.variants || []).filter((_, i) => i !== idx) }));
-  };
-
-  const updateVariant = (idx: number, field: keyof CmsVariant, value: CmsVariant[keyof CmsVariant]) => {
-    setEditingProduct(p => ({
-      ...p,
-      variants: (p.variants || []).map((v, i) => i === idx ? { ...v, [field]: value } : v),
-    }));
-  };
 
   return (
     <AdminLayout>
@@ -467,53 +428,6 @@ const AdminProducts = () => {
             <div className="flex items-center gap-2">
               <Switch checked={editingProduct.is_featured || false} onCheckedChange={v => setEditingProduct(p => ({ ...p, is_featured: v }))} />
               <Label>Featured on homepage</Label>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="text-base font-semibold">Variants / Options</Label>
-                <Button type="button" variant="outline" size="sm" onClick={addVariant}>
-                  <Plus className="h-3 w-3 mr-1" />Add Variant
-                </Button>
-              </div>
-              {(editingProduct.variants || []).length === 0 && (
-                <p className="text-xs text-muted-foreground">No variants — product uses base price above.</p>
-              )}
-              {(editingProduct.variants || []).map((variant, idx) => (
-                <div key={variant.id} className="border rounded-lg p-3 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Variant {idx + 1}</span>
-                    <Button type="button" variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => removeVariant(idx)}>
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <Label className="text-xs">Title</Label>
-                      <Input value={variant.title} onChange={e => updateVariant(idx, 'title', e.target.value)} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">SKU</Label>
-                      <Input value={variant.sku || ''} onChange={e => updateVariant(idx, 'sku', e.target.value)} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Price (ZAR) *</Label>
-                      <Input type="number" value={variant.price} onChange={e => updateVariant(idx, 'price', parseFloat(e.target.value) || 0)} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Compare at Price</Label>
-                      <Input type="number" value={variant.compare_at_price || ''} onChange={e => updateVariant(idx, 'compare_at_price', e.target.value === '' ? null : parseFloat(e.target.value))} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Stock</Label>
-                      <Input type="number" value={variant.inventory_quantity} onChange={e => updateVariant(idx, 'inventory_quantity', parseInt(e.target.value) || 0)} />
-                    </div>
-                    <div className="flex items-center gap-2 pt-4">
-                      <Switch checked={variant.available} onCheckedChange={v => updateVariant(idx, 'available', v)} />
-                      <Label className="text-xs">Available</Label>
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
           <DialogFooter>

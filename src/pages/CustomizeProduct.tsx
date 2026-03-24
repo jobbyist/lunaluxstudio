@@ -227,13 +227,36 @@ export default function CustomizeProduct() {
     const total = calculateTotal();
 
     const cartItem = {
-      productId: sku,
-      title: "Custom Luna Luxury Wig",
-      handle: "custom-wig",
-      imageUrl: productImage,
+      product: {
+        node: {
+          id: sku,
+          title: "Custom Luna Luxury Wig",
+          description: getConfigSummary(),
+          handle: "custom-wig",
+          priceRange: {
+            minVariantPrice: {
+              amount: total.toString(),
+              currencyCode: "ZAR"
+            }
+          },
+          images: {
+            edges: [{
+              node: {
+                url: productImage,
+                altText: "Custom Wig"
+              }
+            }]
+          },
+          variants: { edges: [] },
+          options: []
+        }
+      },
       variantId: sku,
       variantTitle: getConfigSummary(),
-      price: total,
+      price: {
+        amount: total.toString(),
+        currencyCode: "ZAR"
+      },
       quantity: 1,
       selectedOptions: [
         { name: "Length", value: selectedBundle.name },
@@ -247,8 +270,8 @@ export default function CustomizeProduct() {
         { name: "Cut", value: selectedCut.name },
         { name: "Free Shipping", value: "Yes" },
       ],
-      customSku: sku,
-      isCustomWig: true,
+      customSku: sku, // Custom SKU for order processing
+      isCustomWig: true, // Flag for custom wig checkout handling
     };
 
     addItem(cartItem);

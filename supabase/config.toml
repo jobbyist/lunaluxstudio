@@ -11,21 +11,3 @@ verify_jwt = false
 
 [functions.send-welcome-email]
 verify_jwt = false
-
-[functions.import-shopify-products]
-verify_jwt = false
-
-[functions.create-stitch-payment]
-verify_jwt = false
-
-[functions.stitch-webhook]
-verify_jwt = false
-
-[functions.send-order-notification]
-verify_jwt = false
-
-[functions.ai-content-edit]
-verify_jwt = false
-
-[functions.create-custom-checkout]
-verify_jwt = false
