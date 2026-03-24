@@ -1,28 +1,12 @@
-import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { ProductCard } from "@/components/ProductCard";
-import { fetchCmsProductsByCollection, CmsProduct } from "@/lib/cms-products";
+import { useCmsProducts } from "@/hooks/useCmsProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import vietnameseImage from "@/assets/collection-vietnamese.jpg";
 
 export default function VietnameseVirginCollection() {
-  const [products, setProducts] = useState<CmsProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchCmsProductsByCollection("vietnamese-virgin", 50);
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching Vietnamese Virgin products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useCmsProducts({ collection: "vietnamese-virgin", limit: 50 });
 
   return (
     <PageLayout>

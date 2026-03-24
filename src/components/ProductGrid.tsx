@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { fetchCmsProducts, CmsProduct } from "@/lib/cms-products";
+import { useCmsProducts } from "@/hooks/useCmsProducts";
 import { ProductCard } from "./ProductCard";
 import { Loader2 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -15,28 +14,7 @@ interface ProductGridProps {
 export const ProductGrid = ({ title, searchQuery, limit = 50, collection }: ProductGridProps) => {
   const { t } = useCurrency();
   const displayTitle = title || t('bestsellers');
-  const [products, setProducts] = useState<CmsProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchCmsProducts(limit, searchQuery);
-        // Filter by collection if specified
-        const filtered = collection 
-          ? data.filter(p => p.collection === collection)
-          : data;
-        setProducts(filtered.slice(0, limit));
-      } catch (error) {
-        console.error("Error loading products:", error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, [searchQuery, limit, collection]);
+  const { products, loading } = useCmsProducts({ limit, searchQuery, collection });
 
   if (loading) {
     return (

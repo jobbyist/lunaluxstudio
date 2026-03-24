@@ -5,7 +5,8 @@ import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Button } from "@/components/ui/button";
-import { fetchCmsProductByHandle, CmsProduct, CmsVariant, findVariant } from "@/lib/cms-products";
+import { CmsVariant, findVariant } from "@/lib/cms-products";
+import { useCmsProduct } from "@/hooks/useCmsProducts";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShoppingCart } from "lucide-react";
@@ -15,38 +16,23 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 
 const ProductDetail = () => {
   const { handle } = useParams();
-  const [product, setProduct] = useState<CmsProduct | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { product, loading } = useCmsProduct(handle);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [selectedVariant, setSelectedVariant] = useState<CmsVariant | null>(null);
   const addItem = useCartStore(state => state.addItem);
   const { formatPrice } = useCurrency();
 
   useEffect(() => {
-    const loadProduct = async () => {
-      try {
-        setLoading(true);
-        if (!handle) { setProduct(null); return; }
-        const found = await fetchCmsProductByHandle(handle);
-        setProduct(found);
-        
-        if (found?.options && found.options.length > 0) {
-          const initialOptions: Record<string, string> = {};
-          found.options.forEach(option => {
-            if (option.values.length > 0) {
-              initialOptions[option.name] = option.values[0];
-            }
-          });
-          setSelectedOptions(initialOptions);
+    if (product?.options && product.options.length > 0) {
+      const initialOptions: Record<string, string> = {};
+      product.options.forEach(option => {
+        if (option.values.length > 0) {
+          initialOptions[option.name] = option.values[0];
         }
-      } catch (error) {
-        console.error("Error loading product:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProduct();
-  }, [handle]);
+      });
+      setSelectedOptions(initialOptions);
+    }
+  }, [product]);
 
   useEffect(() => {
     if (!product) { setSelectedVariant(null); return; }

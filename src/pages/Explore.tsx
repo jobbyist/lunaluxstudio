@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProductCard } from "@/components/ProductCard";
-import { fetchCmsProducts, CmsProduct } from "@/lib/cms-products";
+import { useCmsProducts } from "@/hooks/useCmsProducts";
 
 const categories = [
   { id: "all", name: "All Products" },
@@ -25,24 +25,7 @@ const ExploreContent = () => {
   const { t, formatPrice } = useCurrency();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
-  const [products, setProducts] = useState<CmsProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchCmsProducts(100);
-        setProducts(data);
-      } catch (error) {
-        console.error("Error loading products:", error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useCmsProducts({ limit: 100 });
 
   const filteredProducts = useMemo(() => {
     let filtered = [...products];

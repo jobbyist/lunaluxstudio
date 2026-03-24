@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { PageLayout } from "@/components/PageLayout";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { ProductCard } from "@/components/ProductCard";
-import { fetchCmsProducts, CmsProduct } from "@/lib/cms-products";
+import { useCmsProducts } from "@/hooks/useCmsProducts";
 import { Filter, ArrowUpDown, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,26 +16,10 @@ import {
 import { useCurrency } from "@/contexts/CurrencyContext";
 
 const Bestsellers = () => {
-  const [products, setProducts] = useState<CmsProduct[]>([]);
-  const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("default");
   const [filterBy, setFilterBy] = useState("all");
   const { t } = useCurrency();
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchCmsProducts(50);
-        setProducts(data);
-      } catch (error) {
-        console.error("Error loading bestsellers:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useCmsProducts({ limit: 50 });
 
   const productTypes = [...new Set(products.map(p => {
     const title = p.title.toLowerCase();

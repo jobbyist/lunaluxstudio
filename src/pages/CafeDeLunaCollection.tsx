@@ -1,29 +1,13 @@
-import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { ProductCard } from "@/components/ProductCard";
-import { fetchCmsProductsByCollection, CmsProduct } from "@/lib/cms-products";
+import { useCmsProducts } from "@/hooks/useCmsProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import valentinesBanner from "@/assets/valentines-cafe-de-luna.jpg";
 
 export default function CafeDeLunaCollection() {
-  const [products, setProducts] = useState<CmsProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchCmsProductsByCollection("cafe-de-luna", 20);
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching Cafe De Luna products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useCmsProducts({ collection: "cafe-de-luna", limit: 20 });
 
   return (
     <PageLayout>
