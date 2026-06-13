@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, Globe, Share2, Palette, Sparkles } from 'lucide-react';
+import { Save, Globe, Share2, Palette } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -26,7 +26,7 @@ interface SiteSettings {
     font_heading: string;
     font_body: string;
   };
-  gemini_api_key?: string;
+  
 }
 
 export default function AdminSettings() {
@@ -49,15 +49,19 @@ export default function AdminSettings() {
       font_heading: 'font-seasons',
       font_body: 'font-sans',
     },
-    gemini_api_key: '',
+    
   });
 
   useEffect(() => {
-    // Settings loading disabled - using localStorage as temporary storage
+    // Load non-sensitive UI/branding settings only. Secrets like API keys must
+    // never be stored in localStorage — they belong in server-side edge function secrets.
     const savedSettings = localStorage.getItem('site_settings');
     if (savedSettings) {
       try {
-        setSettings(JSON.parse(savedSettings));
+        const parsed = JSON.parse(savedSettings);
+        // Strip any sensitive fields that may have been previously stored.
+        delete parsed.gemini_api_key;
+        setSettings(parsed);
       } catch (error) {
         console.error('Error parsing saved settings:', error);
       }
@@ -393,37 +397,6 @@ export default function AdminSettings() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-primary" />
-                AI Integration (Gemini 3 Pro)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="gemini_api_key">Gemini API Key</Label>
-                <Input
-                  id="gemini_api_key"
-                  type="password"
-                  value={settings.gemini_api_key || ''}
-                  onChange={(e) => setSettings({ ...settings, gemini_api_key: e.target.value })}
-                  placeholder="Enter your Gemini API key"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Get your API key from the{' '}
-                  <a 
-                    href="https://ai.google.dev/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline"
-                  >
-                    Google AI Studio
-                  </a>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
 
           <div className="flex justify-end">
             <Button type="submit" disabled={loading} className="flex items-center gap-2">
