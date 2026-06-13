@@ -58,10 +58,10 @@ export const useVisitorTracking = () => {
     const handleBeforeUnload = async () => {
       // Try to remove the session on close (best effort)
       try {
-        await supabase
-          .from('active_visitors')
-          .delete()
-          .eq('session_id', sessionId.current);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).rpc('delete_visitor_session', {
+          p_session_id: sessionId.current,
+        });
       } catch {
         // Ignore errors on cleanup
       }
