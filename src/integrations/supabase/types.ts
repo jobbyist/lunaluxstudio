@@ -801,6 +801,7 @@ export type Database = {
       }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       cleanup_stale_visitors: { Args: never; Returns: undefined }
+      get_public_site_setting: { Args: { key: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
