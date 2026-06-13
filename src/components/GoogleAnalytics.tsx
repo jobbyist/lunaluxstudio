@@ -16,7 +16,8 @@ export const GoogleAnalytics = () => {
         // Use a safe RPC that only returns whitelisted public settings.
         // The site_settings table itself is no longer publicly readable to avoid
         // leaking secrets that may be stored there in the future.
-        const { data, error } = await supabase.rpc('get_public_site_setting', {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase as any).rpc('get_public_site_setting', {
           key: 'google_analytics_id',
         });
 
