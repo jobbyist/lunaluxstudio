@@ -801,6 +801,10 @@ export type Database = {
       }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       cleanup_stale_visitors: { Args: never; Returns: undefined }
+      delete_visitor_session: {
+        Args: { p_session_id: string }
+        Returns: undefined
+      }
       get_public_site_setting: { Args: { key: string }; Returns: string }
       has_role: {
         Args: {
@@ -808,6 +812,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      upsert_visitor_session: {
+        Args: {
+          p_page_path: string
+          p_session_id: string
+          p_user_agent: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
