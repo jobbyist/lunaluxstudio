@@ -30,6 +30,12 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Authenticate caller. Either a logged-in user requesting their own welcome email,
+    // or a trusted server-to-server call using the service role key.
+    const authHeader = req.headers.get("Authorization") || "";
+    const bearer = authHeader.replace(/^Bearer\s+/i, "").trim();
+    const isServiceRole = bearer && bearer === SUPABASE_SERVICE_ROLE_KEY;
+
     const body: WelcomeEmailData = await req.json();
     const { email, name } = body;
 
@@ -38,6 +44,32 @@ const handler = async (req: Request): Promise<Response> => {
         JSON.stringify({ error: "Email is required" }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
+    }
+
+    if (!isServiceRole) {
+      if (!bearer) {
+        return new Response(
+          JSON.stringify({ error: "Unauthorized" }),
+          { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: { headers: { Authorization: `Bearer ${bearer}` } },
+      });
+      const { data, error } = await supabase.auth.getUser(bearer);
+      if (error || !data?.user) {
+        return new Response(
+          JSON.stringify({ error: "Unauthorized" }),
+          { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+      // Only allow sending the welcome email to the authenticated user's own address.
+      if (data.user.email?.toLowerCase() !== email.toLowerCase()) {
+        return new Response(
+          JSON.stringify({ error: "Forbidden" }),
+          { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
     }
 
     const displayName = name || 'Beautiful';
