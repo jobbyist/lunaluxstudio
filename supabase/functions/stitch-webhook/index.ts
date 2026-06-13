@@ -337,6 +337,30 @@ async function sendPaymentConfirmationEmail(orderData: any): Promise<void> {
   }
 }
 
+async function verifyStitchSignature(rawBody: string, signature: string | null, secret: string): Promise<boolean> {
+  if (!signature) return false;
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sigBuf = await crypto.subtle.sign("HMAC", key, enc.encode(rawBody));
+  const expected = Array.from(new Uint8Array(sigBuf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  // Accept either raw hex or "sha256=hex"
+  const provided = signature.replace(/^sha256=/i, "").trim().toLowerCase();
+  if (provided.length !== expected.length) return false;
+  let diff = 0;
+  for (let i = 0; i < expected.length; i++) {
+    diff |= expected.charCodeAt(i) ^ provided.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
@@ -347,9 +371,34 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const shopifyAccessToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
+    const webhookSecret = Deno.env.get("STITCH_WEBHOOK_SECRET");
 
-    const payload: StitchExpressWebhookPayload = await req.json();
-    console.log("Stitch Express webhook received:", JSON.stringify(payload, null, 2));
+    // Read raw body for signature verification
+    const rawBody = await req.text();
+
+    // Verify signature — reject unauthenticated webhook calls
+    if (!webhookSecret) {
+      console.error("STITCH_WEBHOOK_SECRET is not configured; rejecting webhook");
+      return new Response(JSON.stringify({ error: "Webhook not configured" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+    const sigHeader =
+      req.headers.get("x-stitch-signature") ||
+      req.headers.get("stitch-signature") ||
+      req.headers.get("x-signature");
+    const valid = await verifyStitchSignature(rawBody, sigHeader, webhookSecret);
+    if (!valid) {
+      console.warn("Invalid Stitch webhook signature; rejecting");
+      return new Response(JSON.stringify({ error: "Invalid signature" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401,
+      });
+    }
+
+    const payload: StitchExpressWebhookPayload = JSON.parse(rawBody);
+    console.log("Stitch Express webhook received (verified):", JSON.stringify(payload, null, 2));
 
     // Extract external reference from various possible locations
     const externalReference = 

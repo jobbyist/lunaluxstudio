@@ -95,14 +95,15 @@ export const useNavigation = () => {
   };
 
   const updateNavigation = async (id: string, links: NavLink[], socialLinks?: SocialLink[]) => {
-    const updateData: Record<string, unknown> = { links };
+    const updateData: { links: NavLink[]; social_links?: SocialLink[] } = { links };
     if (socialLinks !== undefined) {
       updateData.social_links = socialLinks;
     }
     
     const { error } = await supabase
       .from('navigation_settings')
-      .update(updateData)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .update(updateData as any)
       .eq('id', id);
 
     if (error) throw error;

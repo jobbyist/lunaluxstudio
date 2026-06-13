@@ -18,24 +18,19 @@ const getSessionId = (): string => {
 export const useVisitorTracking = () => {
   const location = useLocation();
   const sessionId = useRef(getSessionId());
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const updatePresence = async (pagePath: string) => {
     try {
-      const { error } = await supabase
-        .from('active_visitors')
-        .upsert(
-          {
-            session_id: sessionId.current,
-            page_path: pagePath,
-            user_agent: navigator.userAgent.substring(0, 200),
-            last_seen_at: new Date().toISOString(),
-          },
-          { onConflict: 'session_id' }
-        );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase as any).rpc('upsert_visitor_session', {
+        p_session_id: sessionId.current,
+        p_page_path: pagePath,
+        p_user_agent: navigator.userAgent.substring(0, 200),
+      });
 
-      if (error && !error.message.includes('duplicate')) {
-        console.error('Error updating visitor presence:', error);
+      if (error) {
+        console.debug('Visitor presence update skipped:', error.message);
       }
     } catch (err) {
       // Silently fail - visitor tracking is non-critical
@@ -63,10 +58,10 @@ export const useVisitorTracking = () => {
     const handleBeforeUnload = async () => {
       // Try to remove the session on close (best effort)
       try {
-        await supabase
-          .from('active_visitors')
-          .delete()
-          .eq('session_id', sessionId.current);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).rpc('delete_visitor_session', {
+          p_session_id: sessionId.current,
+        });
       } catch {
         // Ignore errors on cleanup
       }

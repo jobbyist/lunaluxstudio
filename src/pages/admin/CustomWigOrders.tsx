@@ -77,13 +77,14 @@ export default function CustomWigOrders() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status, notes }: { id: string; status: string; notes?: string }) => {
-      const updates: Record<string, any> = { status };
+      const updates: { status: string; notes?: string; processed_at?: string } = { status };
       if (notes !== undefined) updates.notes = notes;
       if (status === "completed") updates.processed_at = new Date().toISOString();
 
       const { error } = await supabase
         .from("custom_wig_orders")
-        .update(updates)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .update(updates as any)
         .eq("id", id);
 
       if (error) throw error;

@@ -13,14 +13,16 @@ export const GoogleAnalytics = () => {
   useEffect(() => {
     const fetchGAId = async () => {
       try {
-        const { data, error } = await supabase
-          .from('site_settings')
-          .select('setting_value')
-          .eq('setting_key', 'google_analytics_id')
-          .single();
+        // Use a safe RPC that only returns whitelisted public settings.
+        // The site_settings table itself is no longer publicly readable to avoid
+        // leaking secrets that may be stored there in the future.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase as any).rpc('get_public_site_setting', {
+          key: 'google_analytics_id',
+        });
 
-        if (!error && data?.setting_value) {
-          setMeasurementId(data.setting_value);
+        if (!error && typeof data === 'string' && data) {
+          setMeasurementId(data);
         }
       } catch (err) {
         // Silently fail - GA is optional
