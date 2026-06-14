@@ -1,13 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
 
-const SHOPIFY_API_VERSION = import.meta.env.VITE_SHOPIFY_API_VERSION || '2024-10';
-const SHOPIFY_STORE_PERMANENT_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || 'luna-hair-boutique-9dwzm.myshopify.com';
+const SHOPIFY_API_VERSION = '2025-07';
+const SHOPIFY_STORE_PERMANENT_DOMAIN = 'lunaluxstudio-yi8zs.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '8c36196eb48266f52b9453a8dc85736b';
-
-if (!SHOPIFY_STOREFRONT_TOKEN) {
-  console.warn('VITE_SHOPIFY_STOREFRONT_TOKEN is not configured. Shopify API calls will fail.');
-}
+const SHOPIFY_STOREFRONT_TOKEN = '9918a73e7bea32fdbfd9427c38150705';
 
 export interface ShopifyProduct {
   node: {
