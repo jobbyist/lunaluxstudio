@@ -1,5 +1,6 @@
-// Stitch Express Payment Integration - v2
+// Stitch Express Payment Integration - v3 (server-side pricing)
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { computeCustomWigUnitPrice } from "../_shared/wig-pricing.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,6 +9,40 @@ const corsHeaders = {
 
 // Stitch Express API endpoints
 const STITCH_EXPRESS_URL = "https://express.stitch.money";
+
+const SHOPIFY_STORE_DOMAIN = "lunaluxstudio-yi8zs.myshopify.com";
+const SHOPIFY_API_VERSION = "2025-07";
+
+// Fetch the canonical price (ZAR) for a Shopify variant via the Storefront API.
+async function fetchShopifyVariantPrice(variantGid: string): Promise<number> {
+  const token = Deno.env.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN") ||
+    Deno.env.get("VITE_SHOPIFY_STOREFRONT_TOKEN");
+  if (!token) throw new Error("Shopify Storefront token not configured");
+
+  const gid = variantGid.startsWith("gid://")
+    ? variantGid
+    : `gid://shopify/ProductVariant/${variantGid}`;
+
+  const query = `query($id: ID!) { node(id: $id) { ... on ProductVariant { price { amount currencyCode } } } }`;
+
+  const res = await fetch(
+    `https://${SHOPIFY_STORE_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": token,
+      },
+      body: JSON.stringify({ query, variables: { id: gid } }),
+    }
+  );
+  if (!res.ok) throw new Error(`Shopify variant lookup failed: ${res.status}`);
+  const data = await res.json();
+  const amount = data?.data?.node?.price?.amount;
+  if (!amount) throw new Error(`Unknown Shopify variant: ${variantGid}`);
+  return parseFloat(amount);
+}
+
 
 interface CustomWigItem {
   quantity: number;
