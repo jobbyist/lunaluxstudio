@@ -158,24 +158,52 @@ serve(async (req) => {
       redirectUrl,
     });
 
-    // Calculate total amount in cents (ZAR)
+    // Calculate total amount in cents (ZAR) — SERVER-SIDE PRICING ONLY.
+    // Client-supplied prices are NEVER trusted.
     let totalAmountCents = 0;
-    
+
     if (customWigItems && customWigItems.length > 0) {
       for (const item of customWigItems) {
-        totalAmountCents += Math.round(item.totalPrice * item.quantity * 100); // Convert to cents
+        const qty = Math.max(1, Math.min(50, Math.floor(Number(item.quantity) || 1)));
+        let unitPrice: number;
+        try {
+          unitPrice = computeCustomWigUnitPrice(item.selectedOptions || []);
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : "Invalid wig configuration";
+          return new Response(
+            JSON.stringify({ success: false, error: msg }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+          );
+        }
+        // Overwrite client-supplied totalPrice with server value (used later when storing).
+        item.totalPrice = unitPrice;
+        item.quantity = qty;
+        totalAmountCents += Math.round(unitPrice * qty * 100);
       }
     }
 
     if (regularItems && regularItems.length > 0) {
       for (const item of regularItems) {
-        totalAmountCents += Math.round(item.price * item.quantity * 100); // Convert to cents
+        const qty = Math.max(1, Math.min(50, Math.floor(Number(item.quantity) || 1)));
+        try {
+          const unitPrice = await fetchShopifyVariantPrice(item.variantId);
+          item.price = unitPrice;
+          item.quantity = qty;
+          totalAmountCents += Math.round(unitPrice * qty * 100);
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : "Invalid product variant";
+          return new Response(
+            JSON.stringify({ success: false, error: msg }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+          );
+        }
       }
     }
 
     if (totalAmountCents <= 0) {
       throw new Error("No items provided for payment");
     }
+
 
     // Generate unique order reference
     const orderReference = generateOrderReference();
