@@ -1,12 +1,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { computeCustomWigUnitPrice } from "../_shared/wig-pricing.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const SHOPIFY_STORE_DOMAIN = "luna-hair-boutique-9dwzm.myshopify.com";
-const SHOPIFY_API_VERSION = "2024-10";
+const SHOPIFY_STORE_DOMAIN = "lunaluxstudio-yi8zs.myshopify.com";
+const SHOPIFY_API_VERSION = "2025-07";
 
 interface CustomWigItem {
   quantity: number;
@@ -55,49 +56,65 @@ serve(async (req) => {
     // Build line items for the draft order
     const lineItems: any[] = [];
 
-    // Add custom wig items with their full pricing
+    // Add custom wig items — SERVER-SIDE PRICING ONLY. Client-supplied prices are ignored.
     if (customWigItems && customWigItems.length > 0) {
       for (const item of customWigItems) {
-        // Build configuration summary for the title
+        if (!Array.isArray(item.selectedOptions)) {
+          return new Response(
+            JSON.stringify({ success: false, error: "Custom wig item missing selectedOptions" }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+          );
+        }
+
+        let serverUnitPrice: number;
+        try {
+          serverUnitPrice = computeCustomWigUnitPrice(item.selectedOptions);
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : "Invalid wig configuration";
+          return new Response(
+            JSON.stringify({ success: false, error: msg }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+          );
+        }
+
+        const qty = Math.max(1, Math.min(50, Math.floor(Number(item.quantity) || 1)));
+
         const configSummary = item.selectedOptions
-          .filter(opt => opt.name !== 'SKU' && opt.name !== 'Free Shipping')
-          .map(opt => `${opt.name}: ${opt.value}`)
-          .join(' | ');
+          .filter((opt) => opt.name !== "SKU" && opt.name !== "Free Shipping")
+          .map((opt) => `${opt.name}: ${opt.value}`)
+          .join(" | ");
 
         lineItems.push({
-          title: `Custom Luna Luxury Wig - ${item.baseBundle}`,
-          quantity: item.quantity,
-          price: item.totalPrice.toFixed(2), // Full price including add-ons
+          title: `Custom Luna Luxury Wig - ${item.baseBundle ?? "Custom"}`,
+          quantity: qty,
+          price: serverUnitPrice.toFixed(2), // SERVER-computed price
           requires_shipping: true,
           taxable: true,
           properties: [
             { name: "_custom_wig", value: "true" },
-            { name: "_custom_sku", value: item.customSku },
-            { name: "_base_price", value: item.basePrice.toString() },
-            { name: "_addon_cost", value: item.addonCost.toString() },
-            { name: "_configuration", value: item.configuration },
-            { name: "Base Bundle", value: item.baseBundle },
+            { name: "_custom_sku", value: item.customSku ?? "" },
+            { name: "_server_unit_price", value: serverUnitPrice.toFixed(2) },
+            { name: "_configuration", value: configSummary },
             { name: "Free Shipping", value: "Included" },
             ...item.selectedOptions
-              .filter(opt => opt.name !== 'Base Bundle' && opt.name !== 'SKU' && opt.name !== 'Free Shipping')
-              .map(opt => ({ name: opt.name, value: opt.value })),
+              .filter((opt) => opt.name !== "SKU" && opt.name !== "Free Shipping")
+              .map((opt) => ({ name: opt.name, value: opt.value })),
           ],
         });
       }
     }
 
-    // Add regular items using their variant IDs
+    // Add regular items using their variant IDs (Shopify uses its own catalog price)
     if (regularItems && regularItems.length > 0) {
       for (const item of regularItems) {
-        // Extract numeric ID from GraphQL ID
-        const variantId = item.variantId.replace('gid://shopify/ProductVariant/', '');
-        
+        const variantId = item.variantId.replace("gid://shopify/ProductVariant/", "");
         lineItems.push({
           variant_id: parseInt(variantId),
-          quantity: item.quantity,
+          quantity: Math.max(1, Math.min(50, Math.floor(Number(item.quantity) || 1))),
         });
       }
     }
+
 
     if (lineItems.length === 0) {
       throw new Error("No items provided for checkout");
