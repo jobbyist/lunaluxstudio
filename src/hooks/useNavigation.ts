@@ -38,9 +38,9 @@ export const useNavigation = () => {
   useEffect(() => {
     fetchNavigation();
     
-    // Subscribe to realtime updates
-    const channel = supabase
-      .channel('navigation-changes')
+    // Subscribe to realtime updates (unique channel per hook instance)
+    const channel = supabase.channel(`navigation-changes-${Math.random().toString(36).slice(2)}`);
+    channel
       .on(
         'postgres_changes',
         {
