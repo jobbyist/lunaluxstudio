@@ -187,12 +187,12 @@ export const Footer = () => {
           <p className="text-center text-xs text-muted-foreground mt-2">
             Developed and maintained by{" "}
             <a 
-              href="https://gravitas.uno" 
+              href="https://skinlabs.co.za" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
-              Gravitas Industries
+              SkinLabs®
             </a>
           </p>
         </div>

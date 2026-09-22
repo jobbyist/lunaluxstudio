@@ -78,31 +78,109 @@ All colors MUST be HSL.
   }
 
   html {
+    /* Improved smooth scrolling with better easing */
     scroll-behavior: smooth;
-    scroll-padding-top: 8rem;
+    scroll-padding-top: 7rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Ensure consistent smooth scrolling on mobile */
+  @supports (-webkit-overflow-scrolling: touch) {
+    html {
+      -webkit-overflow-scrolling: touch;
+    }
   }
 
   body {
     @apply bg-background text-foreground font-sans;
     font-family: 'Karla', ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
     letter-spacing: 0;
     transition: background-color 400ms ease, color 400ms ease;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  /* Enhanced typography scale */
+  h1 {
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h3, h4, h5, h6 {
+    line-height: 1.3;
     letter-spacing: 0;
+  }
+
+  p {
+    line-height: 1.65;
+  }
+
+  /* Improved focus visibility for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Enhanced link accessibility */
+  a:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Skip to content link for keyboard navigation */
+  .skip-to-content {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem 1.5rem;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    text-decoration: none;
+    border-radius: 0 0 0.25rem 0;
+  }
+
+  .skip-to-content:focus {
+    left: 0;
+    top: 0;
   }
 }
 
 @layer components {
   .section-shell {
-    @apply px-6 py-20 md:px-10 md:py-28;
+    @apply px-6 py-16 md:px-10 md:py-24 lg:py-28;
   }
 
   .eyebrow {
     @apply text-[10px] font-medium uppercase text-muted-foreground;
     letter-spacing: 0.24em;
+    line-height: 1.5;
+  }
+
+  /* Consistent spacing utilities */
+  .content-spacing > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .content-spacing-lg > * + * {
+    margin-top: 2rem;
+  }
+
+  .content-spacing-sm > * + * {
+    margin-top: 1rem;
   }
 
   .editorial-link {
