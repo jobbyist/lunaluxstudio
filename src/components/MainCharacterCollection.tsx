@@ -7,6 +7,14 @@ import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ALLOWED_MAIN_CHARACTER_PRODUCTS } from "@/lib/constants";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 export const MainCharacterCollection = () => {
   const { formatPrice } = useCurrency();
@@ -15,6 +23,26 @@ export const MainCharacterCollection = () => {
   
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.6, 1, 1, 0.6]);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+
+  // Auto-rotate carousel every 5 seconds
+  useEffect(() => {
+    if (!carouselApi) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      if (carouselApi.canScrollNext()) {
+        carouselApi.scrollNext();
+      } else {
+        carouselApi.scrollTo(0);
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [carouselApi]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -26,7 +54,7 @@ export const MainCharacterCollection = () => {
         const filteredProducts = collectionProducts.filter(product => 
           ALLOWED_MAIN_CHARACTER_PRODUCTS.includes(product.node.title)
         );
-        
+
         setProducts(filteredProducts.slice(0, 4));
       } catch (error) {
         console.error('Failed to load Main Character products:', error);
@@ -36,6 +64,37 @@ export const MainCharacterCollection = () => {
     };
     loadProducts();
   }, []);
+
+  // Create 5 placeholder products for the carousel
+  const placeholderProducts = [
+    { id: '1', title: 'Signature Lux Wig', price: '2499.00', image: '/placeholder.svg' },
+    { id: '2', title: 'Royal Elegance Wig', price: '2799.00', image: '/placeholder.svg' },
+    { id: '3', title: 'Diamond Glam Wig', price: '2999.00', image: '/placeholder.svg' },
+    { id: '4', title: 'Velvet Dream Wig', price: '2699.00', image: '/placeholder.svg' },
+    { id: '5', title: 'Classic Beauty Wig', price: '2599.00', image: '/placeholder.svg' },
+  ];
+
+  const renderProductCard = (product: any, isPlaceholder: boolean = false) => (
+    <Card className="group overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <Link to={isPlaceholder ? "/collection/main-character" : `/product/${product.node?.handle || ''}`}>
+        <div className="aspect-square overflow-hidden bg-muted">
+          <motion.img
+            src={isPlaceholder ? product.image : (product.node?.images.edges[0]?.node.url || '/placeholder.svg')}
+            alt={isPlaceholder ? product.title : product.node?.title}
+            className="w-full h-full object-cover"
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 0.4 }}
+          />
+        </div>
+        <CardContent className="p-4">
+          <h3 className="font-medium mb-2 text-center">{isPlaceholder ? product.title : product.node?.title}</h3>
+          <p className="text-primary font-semibold text-center">
+            {isPlaceholder ? formatPrice(parseFloat(product.price)) : formatPrice(parseFloat(product.node?.priceRange.minVariantPrice.amount))}
+          </p>
+        </CardContent>
+      </Link>
+    </Card>
+  );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -118,47 +177,53 @@ export const MainCharacterCollection = () => {
           </div>
         ) : products.length === 0 ? (
           <p className="text-center text-muted-foreground">No products available</p>
-        ) : (
-          <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+        ) : null}
+
+        {/* Carousel with 5 placeholder products */}
+        <motion.div
+          className="max-w-7xl mx-auto px-4 md:px-12"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <Carousel
+            setApi={setCarouselApi}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
           >
-            {products.map((product) => (
-              <motion.div
-                key={product.node.id}
-                variants={cardVariants}
-                whileHover={{ 
-                  y: -10, 
-                  scale: 1.03,
-                  transition: { duration: 0.3 } 
-                }}
-              >
-                <Card className="group overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  <Link to={`/product/${product.node.handle}`}>
-                    <div className="aspect-square overflow-hidden bg-muted">
-                      <motion.img
-                        src={product.node.images.edges[0]?.node.url || '/placeholder.svg'}
-                        alt={product.node.title}
-                        className="w-full h-full object-cover"
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.4 }}
-                      />
-                    </div>
-                    <CardContent className="p-4">
-                      <h3 className="font-medium mb-2 text-center">{product.node.title}</h3>
-                      <p className="text-primary font-semibold text-center">
-                        {formatPrice(parseFloat(product.node.priceRange.minVariantPrice.amount))}
-                      </p>
-                    </CardContent>
-                  </Link>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {placeholderProducts.map((product) => (
+                <CarouselItem key={product.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                  <motion.div
+                    variants={cardVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    whileHover={{ 
+                      y: -10, 
+                      scale: 1.03,
+                      transition: { duration: 0.3 } 
+                    }}
+                  >
+                    {renderProductCard(product, true)}
+                  </motion.div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious 
+              className="hidden md:flex -left-4 lg:-left-12"
+              aria-label="Previous product"
+            />
+            <CarouselNext 
+              className="hidden md:flex -right-4 lg:-right-12"
+              aria-label="Next product"
+            />
+          </Carousel>
+        </motion.div>
       </div>
     </motion.section>
   );

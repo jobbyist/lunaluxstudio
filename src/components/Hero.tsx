@@ -112,7 +112,7 @@ export const Hero = () => {
                   className="h-12 w-full rounded-none bg-foreground px-8 text-xs uppercase tracking-[0.18em] text-background hover:bg-foreground/85 sm:w-auto"
                 >
                   <Link to="/explore">
-                    Shop Collection
+                    SHOP THE COLLECTION
                   </Link>
                 </Button>
               </div>
@@ -124,7 +124,7 @@ export const Hero = () => {
                 size="lg"
                 className="h-12 w-full rounded-none border-foreground/50 bg-background/40 px-8 text-xs uppercase tracking-[0.18em] backdrop-blur-sm sm:w-auto"
               >
-                <Link to="/about">Explore LunaLux</Link>
+                <Link to="/customize">BUILD A CUSTOM WIG</Link>
               </Button>
             </motion.div>
           </motion.div>
