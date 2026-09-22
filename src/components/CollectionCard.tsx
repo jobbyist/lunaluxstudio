@@ -104,14 +104,14 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
 
   return (
     <motion.div
-      className="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer border-gradient"
+      className="relative h-[330px] md:h-[420px] overflow-hidden group cursor-pointer bg-muted"
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => {
         setIsExpanded(false);
         setExpandedSubmenu(null);
       }}
       onClick={handleClick}
-      whileHover={{ scale: 1.02, y: -8 }}
+      whileHover={{ y: -4 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       {/* Background Image with enhanced zoom and blur placeholder */}
@@ -126,15 +126,15 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
       </div>
       
       {/* Enhanced gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:from-black/80 transition-colors duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/20 to-transparent group-hover:from-dark/80 transition-colors duration-500" />
       
       {/* Decorative glow on hover */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-primary/20 blur-3xl" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-primary/20 blur-3xl" />
       </div>
       
       {/* Content */}
-      <div className="relative h-full flex flex-col justify-end p-8">
+      <div className="relative h-full flex flex-col justify-end p-5 md:p-7">
         <AnimatePresence mode="wait">
           {!isExpanded ? (
             <motion.div
@@ -143,12 +143,12 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="text-center"
+              className="text-left"
             >
-              <h3 className="text-3xl md:text-4xl font-serif text-white mb-2 tracking-wide">
+              <h3 className="text-3xl md:text-4xl font-serif text-primary-foreground mb-2 font-normal">
                 {title}
               </h3>
-              <p className="text-white/80 text-sm uppercase tracking-widest">
+              <p className="text-primary-foreground/70 text-[10px] uppercase tracking-[0.18em]">
                 Explore Collection
               </p>
             </motion.div>
@@ -161,7 +161,7 @@ export const CollectionCard = ({ title, image, slug }: CollectionCardProps) => {
               transition={{ duration: 0.3 }}
               className="space-y-4 max-h-[400px] overflow-y-auto"
             >
-              <h3 className="text-2xl font-serif text-white mb-6 text-center">
+              <h3 className="text-2xl font-serif text-primary-foreground mb-6 text-left">
                 {title}
               </h3>
               <nav className="space-y-2">

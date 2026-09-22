@@ -35,6 +35,7 @@ import { NotificationBar } from "./NotificationBar";
 import lunaLogo from "@/assets/luna-logo.png";
 import { motion } from "framer-motion";
 import { useNavigation } from "@/hooks/useNavigation";
+import { ThemeToggle } from "./ThemeToggle";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   home: Home,
@@ -95,19 +96,19 @@ export const Header = () => {
     <motion.header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? "bg-background/70 backdrop-blur-xl shadow-lg border-b border-border/50" 
-          : "bg-background/95 backdrop-blur border-b border-border"
+          ? "bg-background/90 backdrop-blur-xl shadow-sm border-b border-border/60" 
+          : "bg-background/95 backdrop-blur-md border-b border-border/50"
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="container mx-auto px-4">
+      <div className="mx-auto max-w-[1480px] px-4 md:px-8">
         {/* Top Bar - Rotating Notifications */}
         <NotificationBar />
 
         {/* Main Header */}
-        <div className="flex items-center justify-between py-4">
+        <div className="flex h-16 items-center justify-between md:h-[76px]">
           {/* Mobile Menu Button & Logo Container */}
           <div className="flex items-center gap-2 md:gap-0">
             <Button
@@ -124,9 +125,9 @@ export const Header = () => {
               <motion.img 
                 src={lunaLogo} 
                 alt="Luna Luxury Hair" 
-                className="w-auto"
+                className="w-auto object-contain"
                 animate={{
-                  height: scrolled ? "3.5rem" : "5rem",
+                  height: scrolled ? "2.7rem" : "3rem",
                 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 loading="eager"
@@ -135,13 +136,13 @@ export const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8 flex-1 justify-center ml-12">
+          <nav className="hidden md:flex items-center gap-8 flex-1 justify-center ml-10">
             {displayMainNav.map((item, index) => (
               isTrackOrderLink(item.label) ? (
                 <a
                   key={index}
                   href={trackOrderUrl}
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="editorial-link text-xs text-foreground/75 hover:text-foreground transition-colors"
                 >
                   {item.label}
                 </a>
@@ -149,7 +150,7 @@ export const Header = () => {
                 <Link
                   key={index}
                   to={item.path}
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="editorial-link text-xs text-foreground/75 hover:text-foreground transition-colors"
                 >
                   {item.translationKey ? t(item.translationKey as 'shopAll' | 'about' | 'explore' | 'contact') : item.label}
                 </Link>
@@ -159,7 +160,7 @@ export const Header = () => {
             {/* More Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-foreground hover:text-primary transition-colors flex items-center gap-1 px-0">
+                <Button variant="ghost" className="text-xs text-foreground/75 hover:text-foreground flex items-center gap-1 px-0">
                   More
                   <ChevronDown className="h-4 w-4" />
                 </Button>
@@ -187,11 +188,12 @@ export const Header = () => {
           </nav>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-2 md:space-x-4">
+          <div className="flex items-center gap-1 md:gap-2">
+            <ThemeToggle />
             {/* Currency Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-xs">
+                <Button variant="ghost" size="sm" className="hidden text-xs sm:flex">
                   <Globe className="h-4 w-4 mr-1" />
                   {currency}
                 </Button>

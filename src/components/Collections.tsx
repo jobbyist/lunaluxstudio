@@ -55,29 +55,24 @@ export const Collections = () => {
   };
 
   return (
-    <section className="py-20 bg-background overflow-hidden relative">
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
-      </div>
-      
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="section-shell bg-background overflow-hidden">
+      <div className="mx-auto max-w-7xl">
         <motion.div 
-          className="text-center mb-12"
+          className="mb-12 flex items-end justify-between border-b border-border pb-5"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           viewport={{ once: true, margin: "-100px" }}
         >
-          <h2 className="text-3xl md:text-4xl font-serif mb-4 tracking-wider">
-            SHOP BY COLLECTION
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover our premium hair collections, each crafted with the finest quality materials
-          </p>
+          <div>
+            <p className="eyebrow mb-3">Curated for you</p>
+            <h2 className="text-4xl md:text-6xl font-serif font-normal">Shop the collection</h2>
+          </div>
+          <p className="hidden max-w-sm text-right text-sm leading-6 text-muted-foreground md:block">Premium textures, considered details, and timeless movement.</p>
         </motion.div>
 
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"
+          className="grid grid-cols-2 gap-3 md:grid-cols-12 md:gap-5"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -87,11 +82,7 @@ export const Collections = () => {
             <motion.div
               key={collection.slug}
               variants={cardVariants}
-              whileHover={{ 
-                y: -15, 
-                scale: 1.02,
-                transition: { duration: 0.3 } 
-              }}
+              className={index === 0 ? "col-span-2 md:col-span-5 md:row-span-2" : index === 3 ? "col-span-2 md:col-span-4" : "col-span-1 md:col-span-3"}
             >
               <CollectionCard
                 title={collection.title}

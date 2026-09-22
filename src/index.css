@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,80 +8,67 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 8%;
-    --foreground: 340 20% 95%;
+    --background: 345 36% 95%;
+    --foreground: 0 8% 8%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 340 20% 95%;
+    --card: 30 33% 98%;
+    --card-foreground: 0 8% 8%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 340 20% 95%;
+    --popover: 30 33% 98%;
+    --popover-foreground: 0 8% 8%;
 
-    --primary: 347 34% 82%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 348 27% 52%;
+    --primary-foreground: 345 36% 97%;
 
-    --secondary: 0 0% 100%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 349 45% 83%;
+    --secondary-foreground: 0 8% 8%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 340 10% 60%;
+    --muted: 345 21% 90%;
+    --muted-foreground: 348 8% 38%;
 
-    --accent: 340 75% 85%;
-    --accent-foreground: 0 0% 8%;
+    --accent: 349 45% 83%;
+    --accent-foreground: 0 8% 8%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 340 20% 95%;
+    --destructive-foreground: 345 36% 97%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 340 75% 85%;
+    --border: 345 15% 79%;
+    --input: 345 15% 79%;
+    --ring: 348 27% 52%;
 
-    --radius: 1.25rem;
+    --radius: 0.25rem;
 
-    --gold: 45 100% 70%;
-    --rose: 340 75% 85%;
-    --dark: 0 0% 8%;
+    --gold: 40 45% 54%;
+    --rose: 349 45% 83%;
+    --dark: 0 8% 8%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(340, 40%, 15%), hsl(0, 0%, 8%));
-    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 10%), hsl(0, 0%, 8%));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.14), hsl(var(--background)));
+    --gradient-card: linear-gradient(180deg, hsl(var(--card)), hsl(var(--background)));
 
     /* Shadows */
-    --shadow-glow: 0 0 40px hsl(340 75% 85% / 0.3);
-    --shadow-card: 0 10px 30px -10px hsl(0 0% 0% / 0.5);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.18);
+    --shadow-card: 0 20px 55px -35px hsl(var(--foreground) / 0.3);
   }
 
-  .light {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 10%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-
-    --primary: 347 34% 82%;
-    --primary-foreground: 0 0% 0%;
-
-    --secondary: 0 0% 100%;
-    --secondary-foreground: 0 0% 0%;
-
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 340 75% 45%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 85%;
-    --input: 0 0% 85%;
-    --ring: 340 75% 45%;
-  }
   .dark {
-    --radius: 1.25rem;
+    --background: 0 8% 8%;
+    --foreground: 345 36% 95%;
+    --card: 0 7% 11%;
+    --card-foreground: 345 36% 95%;
+    --popover: 0 7% 11%;
+    --popover-foreground: 345 36% 95%;
+    --primary: 349 45% 76%;
+    --primary-foreground: 0 8% 8%;
+    --secondary: 348 19% 23%;
+    --secondary-foreground: 345 36% 95%;
+    --muted: 0 6% 16%;
+    --muted-foreground: 345 12% 68%;
+    --accent: 348 27% 52%;
+    --accent-foreground: 345 36% 97%;
+    --border: 348 10% 24%;
+    --input: 348 10% 24%;
+    --ring: 349 45% 76%;
   }
 }
 
@@ -94,10 +79,59 @@ All colors MUST be HSL.
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 8rem;
   }
 
   body {
     @apply bg-background text-foreground font-sans;
+    font-family: 'Karla', ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0;
+    transition: background-color 400ms ease, color 400ms ease;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0;
+  }
+}
+
+@layer components {
+  .section-shell {
+    @apply px-6 py-20 md:px-10 md:py-28;
+  }
+
+  .eyebrow {
+    @apply text-[10px] font-medium uppercase text-muted-foreground;
+    letter-spacing: 0.24em;
+  }
+
+  .editorial-link {
+    position: relative;
+  }
+
+  .editorial-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: -0.4rem;
+    height: 1px;
+    background: hsl(var(--primary));
+    transition: right 250ms ease;
+  }
+
+  .editorial-link:hover::after {
+    right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

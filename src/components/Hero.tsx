@@ -59,8 +59,8 @@ export const Hero = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0">
+    <section ref={sectionRef} className="relative min-h-[calc(100svh-6.5rem)] overflow-hidden bg-background">
+      <div className="relative h-[64svh] min-h-[430px] md:absolute md:inset-0 md:h-auto">
         <motion.div
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
@@ -75,47 +75,46 @@ export const Hero = () => {
             decoding="async"
             // @ts-ignore - fetchpriority is valid
             fetchpriority="high"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-[58%_center] md:object-center"
           />
         </motion.div>
-        {/* Enhanced overlay for better text visibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background/80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background md:bg-gradient-to-r md:from-background/85 md:via-background/25 md:to-transparent" />
       </div>
 
-      <div className="container mx-auto px-4 py-20 relative z-10 flex items-end justify-center min-h-screen pb-40">
+      <div className="relative z-10 -mt-28 flex min-h-[36svh] items-end px-6 pb-14 md:mx-auto md:mt-0 md:min-h-[calc(100svh-6.5rem)] md:max-w-[1480px] md:items-center md:px-12">
         <motion.div
-          className="text-center space-y-8 max-w-4xl mx-auto"
+          className="max-w-xl space-y-6 text-left"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
 
-          {/* CTA Buttons */}
+          <motion.div variants={itemVariants} className="flex items-center gap-3">
+            <span className="h-px w-9 bg-primary" />
+            <p className="eyebrow">Premium hair, thoughtfully curated</p>
+          </motion.div>
+          <motion.h1 variants={itemVariants} className="font-serif text-6xl font-normal leading-[0.82] md:text-8xl lg:text-[7.5rem]">
+            Hair,<br /><span className="ml-5 italic md:ml-10">Elevated.</span>
+          </motion.h1>
+          <motion.p variants={itemVariants} className="max-w-sm text-sm leading-7 text-muted-foreground md:text-base">
+            Luxury hair designed to become part of your signature. Exceptional quality, effortless beauty.
+          </motion.p>
+
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col gap-3 pt-2 sm:flex-row"
             variants={itemVariants}
           >
             <motion.div variants={buttonVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-              <div className="relative inline-block">
+              <div className="relative block">
                 <Button
                   asChild
                   size="lg"
-                  className="btn-glow bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
+                  className="h-12 w-full rounded-none bg-foreground px-8 text-xs uppercase tracking-[0.18em] text-background hover:bg-foreground/85 sm:w-auto"
                 >
-                  <Link to="/customize">
-                    {t('discoverCatalog')}
+                  <Link to="/explore">
+                    Shop Collection
                   </Link>
                 </Button>
-                <motion.span 
-                  className="absolute -top-3 -right-3 bg-gradient-to-r from-gold to-accent text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full shadow-lg pointer-events-none"
-                  initial={{ scale: 0, rotate: -12 }}
-                  animate={{ scale: 1, rotate: -12 }}
-                  transition={{ delay: 1, type: "spring", stiffness: 300 }}
-                  aria-label="New feature"
-                >
-                  New!
-                </motion.span>
               </div>
             </motion.div>
             <motion.div variants={buttonVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
@@ -123,36 +122,25 @@ export const Hero = () => {
                 asChild
                 variant="outline"
                 size="lg"
-                className="px-8 py-6 text-lg backdrop-blur-sm bg-background/30 border-foreground/20"
+                className="h-12 w-full rounded-none border-foreground/50 bg-background/40 px-8 text-xs uppercase tracking-[0.18em] backdrop-blur-sm sm:w-auto"
               >
-                <Link to="/collections">{t('bookExperience')}</Link>
+                <Link to="/about">Explore LunaLux</Link>
               </Button>
             </motion.div>
           </motion.div>
 
-          {/* Feature Text */}
-          <motion.div className="pt-12" variants={itemVariants}>
-            <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
-              {t('heroDescription')}
-            </p>
-          </motion.div>
         </motion.div>
       </div>
 
       {/* Scroll Indicator */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-5 right-6 hidden md:flex md:flex-col md:items-center md:gap-2"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 0.5 }}
       >
-        <motion.div 
-          className="w-6 h-10 border-2 border-primary rounded-full flex items-start justify-center p-2"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div className="w-1 h-2 bg-primary rounded-full" />
-        </motion.div>
+        <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Scroll</span>
+        <motion.div className="h-10 w-px bg-border" animate={{ scaleY: [0.35, 1, 0.35] }} transition={{ duration: 2, repeat: Infinity }} />
       </motion.div>
     </section>
   );

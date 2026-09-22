@@ -24,7 +24,7 @@ export default {
   				'serif'
   			],
   			sans: [
-  				'Inter',
+				'Karla',
   				'ui-sans-serif',
   				'system-ui',
   				'sans-serif',

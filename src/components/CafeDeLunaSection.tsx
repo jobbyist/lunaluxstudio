@@ -1,28 +1,27 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
 import cafeDeLunaImage from "@/assets/valentines-cafe-de-luna.jpg";
 
 export const CafeDeLunaSection = () => {
   return (
-    <section className="py-16 bg-background overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section className="section-shell bg-card overflow-hidden">
+      <div className="mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           viewport={{ once: true, margin: "-100px" }}
-          className="relative rounded-2xl overflow-hidden max-w-6xl mx-auto"
+          className="relative overflow-hidden"
         >
           <Link to="/collection/cafe-de-luna" className="block group">
-            <div className="relative aspect-[16/9] md:aspect-[16/7]">
+            <div className="relative min-h-[500px] md:aspect-[16/7] md:min-h-0">
               <img
                 src={cafeDeLunaImage}
                 alt="Café De Luna Collection – warm-toned highlight hair"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+               <div className="absolute inset-0 bg-gradient-to-r from-dark/80 via-dark/45 to-transparent" />
 
               <div className="absolute inset-0 flex flex-col items-start justify-center px-8 md:px-16">
                 <motion.div
@@ -31,21 +30,16 @@ export const CafeDeLunaSection = () => {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   viewport={{ once: true }}
                 >
-                  <div className="flex items-center gap-2 mb-3">
-                    <Sparkles className="h-4 w-4 text-amber-300" />
-                    <span className="text-xs uppercase tracking-[0.3em] text-amber-200 font-medium">
-                      Featured Collection
-                    </span>
-                  </div>
-                  <h2 className="text-3xl md:text-5xl font-serif text-white mb-3 tracking-wide">
+                  <p className="mb-4 text-[10px] uppercase tracking-[0.24em] text-primary-foreground/70">LunaLux signature</p>
+                  <h2 className="text-5xl md:text-7xl font-serif text-primary-foreground mb-4 font-normal">
                     Café De Luna
                   </h2>
-                  <p className="text-white/80 text-sm md:text-base max-w-md mb-6">
+                  <p className="text-primary-foreground/75 text-sm md:text-base max-w-md mb-7 leading-7">
                     Warm-toned highlights inspired by your favourite café flavours. Rich, luxurious, and effortlessly beautiful.
                   </p>
                   <Button
                     variant="outline"
-                    className="border-white/40 text-white hover:bg-white/10 hover:border-white/60 rounded-full px-8"
+                    className="h-12 rounded-none border-primary-foreground/50 bg-transparent px-8 text-xs uppercase tracking-[0.16em] text-primary-foreground hover:bg-primary-foreground hover:text-dark"
                   >
                     Shop the Collection
                   </Button>

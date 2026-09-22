@@ -5,11 +5,11 @@ import luxuryImage from "@/assets/clip-in-hair-extension.png";
 
 export const LuxuryHairExtensionsHighlight = () => {
   return (
-    <section className="py-20 bg-card">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+    <section className="section-shell bg-background">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-0 items-stretch">
           <motion.div
-            className="relative overflow-hidden rounded-3xl shadow-xl"
+            className="relative min-h-[440px] overflow-hidden"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -20,21 +20,20 @@ export const LuxuryHairExtensionsHighlight = () => {
               alt="Clip-In Hair Extensions"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-tr from-background/70 via-transparent to-transparent" />
           </motion.div>
-          <motion.div
+          <motion.div className="flex flex-col justify-center bg-card px-7 py-12 md:px-14"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             viewport={{ once: true, margin: "-100px" }}
           >
-            <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-3">
+            <p className="eyebrow mb-4">
               Featured Product
             </p>
-            <h2 className="text-3xl md:text-4xl font-serif tracking-wider mb-4">
+            <h2 className="text-4xl md:text-6xl font-serif font-normal mb-5 leading-none">
               Virgin Hair Clip-In Extensions
             </h2>
-            <p className="text-muted-foreground leading-relaxed mb-6">
+            <p className="text-sm text-muted-foreground leading-7 mb-7">
               Experience the transformative power of premium virgin Remy Brazilian hair with our clip-in extensions.
               Crafted with ultra-thin, seamless wefts that sit flat against your scalp, these extensions deliver unparalleled comfort and a naturally blended finish. 
               Treat them like your own hair—cut, color, wash, and style with complete freedom. 
@@ -42,7 +41,7 @@ export const LuxuryHairExtensionsHighlight = () => {
               Each set is a versatile investment in your hair's potential.
 
             </p>
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="w-fit rounded-none px-7 text-xs uppercase tracking-[0.16em]">
               <Link to="/product/virgin-hair-clip-in-extensions">Order This Product</Link>
             </Button>
           </motion.div>

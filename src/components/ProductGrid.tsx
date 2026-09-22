@@ -121,16 +121,17 @@ export const ProductGrid = ({ title, searchQuery, limit = 50 }: ProductGridProps
   }
 
   return (
-    <section className="py-20 bg-card">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-serif text-center mb-4 tracking-wider">
+    <section className="section-shell bg-card">
+      <div className="mx-auto max-w-7xl">
+        <p className="eyebrow mb-3">The edit</p>
+        <h2 className="text-4xl md:text-6xl font-serif font-normal mb-4">
           {displayTitle}
         </h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+        <p className="text-muted-foreground mb-12 max-w-2xl">
           {t('bestsellerDescription')}
         </p>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-10 md:gap-x-6">
           {products.map((product) => (
             <ProductCard key={product.node.id} product={product} />
           ))}
