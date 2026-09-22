@@ -190,7 +190,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Link to={`/product/${node.handle}`} className="group focus:outline-none">
-      <div className="bg-card/95 rounded-2xl overflow-hidden transition-all duration-300 hover-lift border border-border/60 shadow-sm hover:shadow-lg hover:shadow-primary/20">
+      <div className="overflow-hidden transition-all duration-300">
         <div className="aspect-[3/4] overflow-hidden relative">
           <OptimizedImage
             src={imageUrl}
@@ -216,8 +216,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           )}
         </div>
         
-        <div className="p-5 space-y-3">
-          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
+        <div className="py-4 space-y-3">
+          <h3 className="font-serif text-xl font-normal text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
             {node.title}
           </h3>
           
@@ -259,7 +259,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
           <Button
             onClick={handleAddToCart}
-            className="w-full btn-glow bg-primary hover:bg-primary/90 transition-all duration-300"
+            className="w-full rounded-none bg-foreground text-background hover:bg-foreground/85 transition-all duration-300"
             size="sm"
           >
             <ShoppingCart className="h-4 w-4 mr-2" />
