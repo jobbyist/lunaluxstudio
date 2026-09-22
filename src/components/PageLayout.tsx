@@ -14,12 +14,12 @@ export const PageLayout = ({ children, title, subtitle }: PageLayoutProps) => {
     <div className="min-h-screen bg-background">
       <Header />
       <PageTransition>
-        <main className="pt-36 md:pt-40 pb-20">
+        <main className="pt-[136px] md:pt-[156px] pb-20">
           {(title || subtitle) && (
             <div className="container mx-auto px-4 mb-12">
-              <div className="rounded-3xl border border-border/60 bg-card/70 px-6 py-8 md:px-10 md:py-12 text-center shadow-sm">
+              <div className="border-b border-border px-6 py-8 md:px-10 md:py-12 text-center">
                 {title && (
-                  <h1 className="text-4xl md:text-5xl font-serif mb-4 tracking-tight">
+                  <h1 className="text-5xl md:text-7xl font-serif font-normal mb-4">
                     {title}
                   </h1>
                 )}
